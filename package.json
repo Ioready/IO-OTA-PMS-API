@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,10 +21,13 @@
   },
   "homepage": "https://github.com/Ioready/IO-OTA-PMS-API#readme",
   "dependencies": {
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "mongoose": "^8.13.2"
+    "http-errors-response-ts": "^1.0.0",
+    "mongoose": "^8.13.2",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
