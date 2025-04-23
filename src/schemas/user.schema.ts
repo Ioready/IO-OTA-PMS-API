@@ -10,7 +10,7 @@ interface IUser extends Document {
 const UserSchema = new Schema<IUser>({
     name: String,
     email: String,
-    password: String,
+    password: { type: String },
 }, Utils.returnSchemaOption());
 
 const UserModel = mongoose.model("user", UserSchema);

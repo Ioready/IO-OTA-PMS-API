@@ -23,12 +23,9 @@ class AuthController {
     }
 
     @Post("/login")
-    async employerLogin(req: Request, res: Response) {
-        await AuthService.login(req)
-            .then((result: any) => {
-                if (result) Responder.sendSuccessData(result, Msg.login, res)
-            })
-
+    async login(req: Request, res: Response) {
+        const result = await AuthService.login(req);
+        if (result) Responder.sendSuccessData(result, Msg.login, res)
     }
 
 }

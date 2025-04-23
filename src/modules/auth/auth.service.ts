@@ -29,13 +29,13 @@ class AuthService {
         return user
     }
     login = async (req: Request) => {
-        let data = req.body;
+        const data = req.body;
         // let validateErr: any = bodyValidation(["username", "pass"], req, res)
         // console.log(validateErr);
 
         // if (validateErr) return;
 
-        let user: any = await UserModel.findOne({ email: data.email });
+        const user: any = await UserModel.findOne({ email: data.email });
         if (!user) throw new NotFoundResponse(Msg.email404)
 
         let hashPass = await Utils.comparePassword(data.password, user.password);
@@ -43,6 +43,7 @@ class AuthService {
 
         const token = Utils.getSignedJwtToken(user);
 
+        // delete user.password;
         return { user, token }
     }
 

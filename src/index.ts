@@ -19,6 +19,6 @@ app.use(errorHandler)
 DBconnection()
 
 app.listen(port, () => {
-    console.log(`OTA service running port on ${port}`.yellow.bold);
+    console.log(`OTA service running port on ${port}`.green.bold);
 });
 
