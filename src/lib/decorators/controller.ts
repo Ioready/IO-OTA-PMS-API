@@ -6,23 +6,23 @@ import { Methods } from './Methods'
 
 import asyncHandler from '../../middleware/async'
 
-// function bodyValidators(keys: string): RequestHandler {
-//     return function (req: Request, res: Response, next: NextFunction) {
-//         if (!req.body) {
-//             res.status(422).send('Invalid request')
-//             return
-//         }
+export function bodyValidators(keys: string): RequestHandler {
+    return (req: Request, res: Response, next: NextFunction) => {
+        if (!req.body) {
+            res.status(422).send('Invalid request')
+            return
+        }
 
-//         for (let key of keys) {
-//             if (!req.body[key]) {
-//                 res.status(422).send(`Missing property ${key}`)
-//                 return
-//             }
-//         }
+        for (let key of keys) {
+            if (!req.body[key]) {
+                res.status(422).send(`Missing property ${key}`)
+                return
+            }
+        }
 
-//         next()
-//     }
-// }
+        next()
+    }
+}
 
 export function Controller(routePrefix: string): Function {
     return function (target: Function, _: string) {

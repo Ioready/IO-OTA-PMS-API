@@ -30,6 +30,6 @@ function routeBinder(method: string) {
 
 export const Get = routeBinder(Methods.get)
 export const Put = routeBinder(Methods.put)
-export const post = routeBinder(Methods.post)
+export const Post = routeBinder(Methods.post)
 export const Delete = routeBinder(Methods.del)
 export const Patch = routeBinder(Methods.patch)
