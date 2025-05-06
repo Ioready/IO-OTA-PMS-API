@@ -39,4 +39,14 @@ export const Msg = {
     role404: "Role not found",
     roles: "Roles",
     roles404: "Unable to get roles",
+
+    // Floor
+    floorCreated: "Floor created",
+    floorCreated404: "Unable to create floor",
+    floorUpdated: "Floor updated",
+    floorUpdated404: "Unable to update floor",
+    floor: "Floor",
+    floor404: "Floor not found",
+    floors: "Floors",
+    floors404: "Unable to get floors",
 }

@@ -14,7 +14,7 @@ class TicketService {
         const data = req.body;
         let validateErr: any = bodyValidation(["category", "priority"], req, res)
         if (!validateErr) return;
-        const ticket = await TicketModel.create(data);        
+        const ticket = await TicketModel.create(data);
         if (!ticket) throw new ConflictResponse(Msg.ticketCreated404)
         return ticket
     }
@@ -26,9 +26,9 @@ class TicketService {
         return ticket
     }
 
-    getTicket = async (req: Request) => {
+    getTicket = async (id: any) => {
 
-        const ticket = await Model.findOne(TicketModel, { _id: req.params.id });
+        const ticket = await Model.findOne(TicketModel, { _id: id });
         if (!ticket) throw new NotFoundResponse(Msg.ticket404)
         return ticket
     }

@@ -24,7 +24,7 @@ class RoleController {
 
     @Get("/:id")
     async getRole(req: Request, res: Response) {
-        const Role = await RoleService.getRole(req);
+        const Role = await RoleService.getRole(req.params.id);
         if (Role) Responder.sendSuccessData({ Role }, Msg.role, res)
     }
 

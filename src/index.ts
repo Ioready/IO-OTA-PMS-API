@@ -15,8 +15,7 @@ app.use(express.json());
 app.use(cors());
 const port = config.app.port || 8080;
 
-app.use(AppRouter.getInstance())
-app.use(errorHandler)
+
 
 DBconnection()
 
@@ -24,10 +23,18 @@ DBconnection()
 const limiter = rateLimit({
 	windowMs: 10 * 60 * 1000, // 10 mins
 	max: 100, // 100 request per 10 mins
+	handler: (_req, _res, next) => {
+		const error: any = new Error("Too many requests, please try again later.");
+		error.statusCode = 429;
+		next(error);
+	}
 })
 app.use(limiter)
 
+app.use(AppRouter.getInstance())
+app.use(errorHandler)
+
 app.listen(port, () => {
-    console.log(`OTA service running port on ${port}`.green.bold);
+	console.log(`OTA service running port on ${port}`.green.bold);
 });
 

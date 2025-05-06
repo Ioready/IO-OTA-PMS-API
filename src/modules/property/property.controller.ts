@@ -24,7 +24,7 @@ class PropertyController {
 
     @Get("/:id")
     async getProperty(req: Request, res: Response) {
-        const property = await PropertyService.getProperty(req);
+        const property = await PropertyService.getProperty(req.params.id);
         if (property) Responder.sendSuccessData({ property }, Msg.property, res)
     }
 

@@ -26,9 +26,9 @@ class RoleService {
         return role
     }
 
-    getRole = async (req: Request) => {
+    getRole = async (id: any) => {
 
-        const role = await Model.findOne(RoleModel, { _id: req.params.id });
+        const role = await Model.findOne(RoleModel, { _id: id });
         if (!role) throw new NotFoundResponse(Msg.role404)
         return role
     }

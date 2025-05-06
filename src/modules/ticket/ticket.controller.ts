@@ -24,7 +24,7 @@ class TicketController {
 
     @Get("/:id")
     async getTicket(req: Request, res: Response) {
-        const ticket = await TicketService.getTicket(req);
+        const ticket = await TicketService.getTicket(req.params.id);
         if (ticket) Responder.sendSuccessData({ ticket }, Msg.ticket, res)
     }
 

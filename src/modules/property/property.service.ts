@@ -14,7 +14,7 @@ class PropertyService {
         const data = req.body;
         let validateErr: any = bodyValidation(["category", "priority"], req, res)
         if (!validateErr) return;
-        const property = await PropertyModel.create(data);        
+        const property = await PropertyModel.create(data);
         if (!property) throw new ConflictResponse(Msg.propertyCreated404)
         return property
     }
@@ -26,9 +26,9 @@ class PropertyService {
         return property
     }
 
-    getProperty = async (req: Request) => {
+    getProperty = async (id: any) => {
 
-        const property = await Model.findOne(PropertyModel, { _id: req.params.id });
+        const property = await Model.findOne(PropertyModel, { _id: id });
         if (!property) throw new NotFoundResponse(Msg.property404)
         return property
     }

@@ -4,6 +4,7 @@ import { Model } from '../lib/model'
 import { Responder } from '../lib/responder'
 
 const errorHandler: ErrorRequestHandler = (err, _: Request, res, _1: NextFunction) => {
+	
 	let error = {
 		...err,
 	}
