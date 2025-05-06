@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { AppRouter } from "./AppRouter";
 import 'colors'
 import "./modules/auth/auth.controller";
+import './modules/ticket/ticket.controller'
 import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";

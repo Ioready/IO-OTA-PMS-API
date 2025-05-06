@@ -6,7 +6,7 @@ class ResponderClass {
             success: true,
             message,
             data,
-            statusCode: 202
+            statusCode: 200
         }).status(200)
     }
     public sendSuccessMessage(message: string, res: Response) {
@@ -15,7 +15,7 @@ class ResponderClass {
             message,
             statusCode: 200
         }).status(200)
-    }9
+    } 9
 
     public sendSuccessCreatedMessage(message: string, res: Response) {
         return res.send({

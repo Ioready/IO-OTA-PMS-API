@@ -143,6 +143,14 @@ class ModelClass {
         })
     }
 
+    findOneAndUpdate = async (schemaModel: any, query: any, data: any) => {
+        return await schemaModel.findOneAndUpdate(query, { $set: data }, { new: true })
+    }
+
+    findOne = async (schemaModel: any, query: any, projection: any = {}) => {
+        return await schemaModel.findOne(query, projection)
+    }
+
 
 
 }
