@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
+import { config } from '../config/env.config';
 
 class UtilsClass {
     constructor() { }
@@ -16,8 +17,8 @@ class UtilsClass {
     }
 
     getSignedJwtToken = (data: any) => {
-        return jwt.sign({ id: data._id }, process.env.JWT_SECRET!, {
-            expiresIn: process.env.JWT_EXPIRE,
+        return jwt.sign({ id: data._id }, config.jwt.secret!, {
+            expiresIn:  config.jwt.expiresIn,
         });
     };
 

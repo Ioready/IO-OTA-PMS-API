@@ -4,6 +4,7 @@ import asyncHandler from '../../middleware/async'
 import { UserModel } from '../../schemas'
 import { UnauthorizedResponse } from 'http-errors-response-ts/lib'
 import { Msg } from '../../resources'
+import { config } from '../../config/env.config'
 
 export const protect = asyncHandler(
 	async (req: Request, _: Response, next: NextFunction) => {
@@ -28,7 +29,7 @@ export const protect = asyncHandler(
 		try {
 
 			// Verify token
-			const decoded = jwt.verify(token, process.env.JWT_SECRET!)
+			const decoded = jwt.verify(token, config.jwt.secret!)
 
 			const user:any = await UserModel.findById(decoded.id);
 

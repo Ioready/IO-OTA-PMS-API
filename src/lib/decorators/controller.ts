@@ -5,6 +5,7 @@ import { MetadataKeys } from './MetadataKeys'
 import { Methods } from './Methods'
 
 import asyncHandler from '../../middleware/async'
+import { config } from '../../config/env.config';
 
 export function bodyValidators(keys: string): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -55,7 +56,7 @@ export function Controller(routePrefix: string): Function {
             
             if (path) {
                 router[method](
-                    `${process.env.API_VERSION_PATH}${routePrefix}${path}`, // API_VERSION_PATH=/api/v1 routePrefix=auth path=/login
+                    `${config.app.apiPrefix}${routePrefix}${path}`, // API_VERSION_PATH=/api/v1 routePrefix=auth path=/login
                     ...middlewares,
                     // validator,
                     asyncHandler(routeHandler)
