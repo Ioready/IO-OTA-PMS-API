@@ -49,6 +49,6 @@ Thumbs.db
 *.wmv
 
 
-# .gitattributes
-* text=auto eol=lf
+.gitattributes
+
 

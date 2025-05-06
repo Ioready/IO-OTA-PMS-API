@@ -4,33 +4,33 @@ import { Responder } from '../../lib/responder';
 import { Msg } from '../../resources';
 
 import { Request, Response } from "express"
-import TickerService from './ticker.service';
+import TicketService from './ticket.service';
 
 @Controller("/ticket")
 // @ts-ignore
-class AuthController {
+class TicketController {
 
     @Post('/')
     async createTicket(req: Request, res: Response) {
-        const result = await TickerService.createTicket(req, res);
+        const result = await TicketService.createTicket(req, res);
         if (result) Responder.sendSuccessCreatedMessage(Msg.ticketCreated, res);
     }
 
     @Patch("/:id")
     async editTicket(req: Request, res: Response) {
-        const result = await TickerService.editTicket(req);
+        const result = await TicketService.editTicket(req);
         if (result) Responder.sendSuccessMessage(Msg.ticketUpdated, res)
     }
 
     @Get("/:id")
     async getTicket(req: Request, res: Response) {
-        const ticket = await TickerService.getTicket(req);
+        const ticket = await TicketService.getTicket(req);
         if (ticket) Responder.sendSuccessData({ ticket }, Msg.ticket, res)
     }
 
     @Get("/")
     async getTickets(req: Request, res: Response) {
-        const result = await TickerService.getTickets(req);
+        const result = await TicketService.getTickets(req);
         if (result) Responder.sendSuccessData(result, Msg.tickets, res)
     }
 
