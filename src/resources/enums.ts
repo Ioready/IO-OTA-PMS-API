@@ -4,3 +4,4 @@ export enum UserStatus {
     DECEASED = "deceased",
     TERMINATED = "terminated"
 }
+

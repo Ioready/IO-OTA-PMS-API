@@ -13,7 +13,6 @@ class TicketService {
 
         const data = req.body;
         let validateErr: any = bodyValidation(["category", "priority"], req, res)
-        
         if (!validateErr) return;
         const ticket = await TicketModel.create(data);        
         if (!ticket) throw new ConflictResponse(Msg.ticketCreated404)
