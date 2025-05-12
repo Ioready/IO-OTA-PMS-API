@@ -49,4 +49,12 @@ export const Msg = {
     floor404: "Floor not found",
     floors: "Floors",
     floors404: "Unable to get floors",
+
+    //Token
+    invalidToken: "Invalid token",
+    tokenExpired: "Token expired",
+    tokenVerified: "Token verified",
+    sentMail: "OTP sent successfully to your email.",
+    password: "Password set successfully",
+    invalidOtp: "Invalid OTP"
 }

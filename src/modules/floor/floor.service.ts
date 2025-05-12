@@ -19,12 +19,12 @@ class FloorService {
         return floor
     }
 
-    editFloor = async (req: Request) => {
+    editFloor = async (req: Request) => { 
 
         const floor = await Model.findOneAndUpdate(FloorModel, { _id: req.params.id }, req.body);
         if (!floor) throw new NotFoundResponse(Msg.floor404)
         return floor
-    }
+    }  
 
     getFloor = async (id: any) => {
 

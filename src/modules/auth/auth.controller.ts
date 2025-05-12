@@ -19,13 +19,46 @@ class AuthController {
 
     @Post('/')
     async createUser(req: Request, res: Response) {
-        await AuthService.createUser(req, res).then((_result: any) => Responder.sendSuccessMessage(Msg.userCreated, res))
+        const result = await AuthService.createUser(req, res);
+        if (result) Responder.sendSuccessMessage(Msg.userCreated, res)
     }
 
     @Post("/login")
     async login(req: Request, res: Response) {
-        const result = await AuthService.login(req);
-        if (result) Responder.sendSuccessData(result, Msg.login, res)
+        const result = await AuthService.login(req, res);
+        if (result) Responder.sendSuccessMessage(Msg.sentMail, res)
     }
+
+    @Post("/verify-url")
+    async verifyAndExpiryUrl(req: Request, res: Response) {
+        const result: any = await AuthService.verifyAndExpiryUrl(req);
+        if (result.type === "verify") Responder.sendSuccessData(result, Msg.tokenVerified, res)
+        if (result.type === "expiry") Responder.sendSuccessMessage(Msg.tokenExpired, res)
+    }
+
+    @Post("/resent")
+    async resent(req: Request, res: Response) {
+        const result: any = await AuthService.resendOtp(req, res);
+        if (result) Responder.sendSuccessMessage(Msg.sentMail, res)
+    }
+
+    @Post("/forgot-password")
+    async forgotPassword(req: Request, res: Response) {
+        const result: any = await AuthService.forgotPassword(req);
+        if (result) Responder.sendSuccessMessage(Msg.sentMail, res)
+    }
+
+    @Post("/set-password")
+    async setPassword(req: Request, res: Response) {
+        const result: any = await AuthService.setPassword(req, res);
+        if (result) Responder.sendSuccessMessage(Msg.password, res)
+    }
+
+    @Post("/verify-otp")
+    async verifyOtp(req: Request, res: Response) {
+        const result: any = await AuthService.verifyOtp(req, res);
+        if (result) Responder.sendSuccessData(result, Msg.login, res);
+    }
+
 
 }

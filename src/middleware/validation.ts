@@ -9,8 +9,8 @@ export function bodyValidation(keys: string[], req: Request, res: Response) {
     for (let key of keys) {
 
         if (!req.body[key]) {
-            return Responder.sendFailureMessage(`Missing property ${key}`, 422, res)
-
+            Responder.sendFailureMessage(`${key} is required`, 422, res);
+            return
         }
     }
 

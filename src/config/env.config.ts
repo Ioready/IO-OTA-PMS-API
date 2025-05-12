@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { url } from 'inspector';
 import path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
@@ -20,5 +21,10 @@ export const config = {
     jwt: {
         secret: process.env.JWT_SECRET,
         expiresIn: process.env.JWT_EXPIRES_IN || '1h',
+        refreshTexpiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+        cookieExpiry: process.env.COOKIE_EXPIRY,
     },
+    url: {
+        base: process.env.BASE_URL
+    }
 };
