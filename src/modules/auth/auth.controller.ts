@@ -75,5 +75,11 @@ class AuthController {
         if (user) Responder.sendSuccessData(user, Msg.login, res);
     }
 
+    @Post("/google")
+    async oAuthsignIn(req: Request, res: Response) {
+        const result: any = await AuthService.oAuthsignIn(req, res);
+        if (result) Responder.sendSuccessData(result, Msg.login, res);
+    }
+
 
 }

@@ -10,6 +10,7 @@ import { config } from '../../config/env.config';
 import { CONSTANTS } from '../../lib/constants';
 import { bodyValidation } from '../../middleware/validation';
 // import { config } from '../../config/env.config';
+import { OAuth2Client } from 'google-auth-library';
 
 class AuthService {
     // @ts-ignore
@@ -170,7 +171,7 @@ class AuthService {
     }
 
     // oAuth = () => {
-    //     import { OAuth2Client } from 'google-auth-library';
+    //     
 
     //     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -185,6 +186,28 @@ class AuthService {
 
     // }
 
+    oAuthsignIn = async (req: Request, res: Response) => {
+        const data = req.body;
+        const userData = await Utils.getGoogleAuth(data.access_token)
+        let user: any;
+        if (userData) {
+            user = await UserModel.findOne({ email: userData.email })
+            if (!user) {
+                const userObj: any = {
+                    groupId: await Utils.newObjectId(),
+                    fullName: userData.name,
+                    email: userData.email
+                };
+
+                user = await UserModel.create(userObj);
+            }
+            const deviceId = await Utils.createDevice(user, req, res);
+            await Utils.updateKeepsignToken(user, deviceId, req, res)
+            const tokenDoc = Utils.generateToken(user, res);
+            return tokenDoc;
+        }
+
+    }
 
 
 }

@@ -30,5 +30,8 @@ export const config = {
     },
     url: {
         base: process.env.BASE_URL
+    },
+    oauth: {
+        google: process.env.GOOGLE_OAUTH
     }
 };

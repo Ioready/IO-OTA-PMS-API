@@ -5,7 +5,7 @@ import { DeviceModel, TokenModel } from '../schemas';
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from "express"
-
+import axios from 'axios';
 class UtilsClass {
     constructor() { }
 
@@ -119,7 +119,7 @@ class UtilsClass {
 
     updateKeepsignToken = async (user: any, deviceId: any, req: Request, res: Response) => {
         if (!deviceId) deviceId = await Utils.createDevice(user, req, res);
-        
+
         const device = await DeviceModel.findOne({ deviceId: deviceId });
         if (device) {
             const tokens = await this.generateTokens({
@@ -133,6 +133,18 @@ class UtilsClass {
             await this.setCookies('refreshToken', tokens.refreshToken, cookieExpiry, res);
         }
 
+    }
+
+    getGoogleAuth = async (token: any) => {
+        console.log("here");
+        
+        const user = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+       return  user.data;
     }
 
 }
