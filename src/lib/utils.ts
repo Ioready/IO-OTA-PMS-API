@@ -58,7 +58,7 @@ class UtilsClass {
             role: user.role
         });
 
-        this.setCookies('refreshToken', tokens.refreshToken, config.jwt.cookieExpiry, res);
+        this.setCookies('refreshToken', tokens.refreshToken, config.cookie.oneDay, res);
         return { accessToken: tokens.accessToken }
     }
 
@@ -84,28 +84,14 @@ class UtilsClass {
         return new mongoose.Types.ObjectId()
     }
 
-    setCookieRefreshToken = (refreshToken: any, res: Response) => {
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            maxAge: parseInt(config.jwt.cookieExpiry),
-        });
-    }
-
     createDevice = async (user: any, req: Request, res: Response) => {
-        let deviceId = req.cookies?.deviceId;
+        let deviceId = req?.cookies?.deviceId;
+
 
         if (!deviceId) {
             deviceId = uuidv4();
             await this.setCookies('deviceId', deviceId, 30 * 24 * 60 * 60 * 1000, res);
-            //     httpOnly: true,
-            //     sameSite: 'strict',
-            //     secure: true,
-            //     maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
-            // });
         }
-
         // Attach to request
         (req as any).deviceId = deviceId;
 
@@ -117,6 +103,8 @@ class UtilsClass {
             userAgent: req.headers['user-agent'],
         }, { upsert: true, new: true })
 
+        return deviceId;
+
     }
 
     setCookies = async (name: any, value: any, expiry: any, res: Response) => {
@@ -124,12 +112,15 @@ class UtilsClass {
             httpOnly: true,
             sameSite: 'strict',
             secure: true,
-            maxAge: expiry // 30 days
+            maxAge: expiry
         });
+
     }
 
-    updateKeepsignToken = async (user: any, deviceId: string, res: Response) => {
-        const device = await DeviceModel.findOne({ deviceId });
+    updateKeepsignToken = async (user: any, deviceId: any, req: Request, res: Response) => {
+        if (!deviceId) deviceId = await Utils.createDevice(user, req, res);
+        
+        const device = await DeviceModel.findOne({ deviceId: deviceId });
         if (device) {
             const tokens = await this.generateTokens({
                 id: user._id,

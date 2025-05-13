@@ -117,31 +117,22 @@ class AuthService {
     }
 
     setPassword = async (req: Request, res: Response) => {
-        try {
-            const { email, password } = req.body;
+        const { email, password } = req.body;
 
-            let validateErr: any = bodyValidation(["email", "password"], req, res)
-            if (!validateErr) return;
+        let validateErr: any = bodyValidation(["email", "password"], req, res)
+        if (!validateErr) return;
 
-            const user: any = await UserModel.findOne({ email: email });
-            if (!user) throw new NotFoundResponse(Msg.user404)
+        const user: any = await UserModel.findOne({ email: email });
+        if (!user) throw new NotFoundResponse(Msg.user404)
 
-            user.password = await Utils.encryptPassword(password);
-            user.isVerified = true;
-            user.save();
-            await Utils.createDevice(user, req, res);
-			await Utils.updateKeepsignToken(req.user, req.cookies.deviceId, res)
-            const tokenDoc = Utils.generateToken(user, res);
-            return tokenDoc;
-        } catch (err) {
-            // if (err.name === 'TokenExpiredError') {
-            //     throw new UnauthorizedResponse(Msg.tokenExpired)
-            // } else {
-            //     throw new UnauthorizedResponse(Msg.invalidToken)
-            // }
-            throw new InternalServerResponse(err.Message)
+        user.password = await Utils.encryptPassword(password);
+        user.isVerified = true;
+        user.save();
+        const deviceId = await Utils.createDevice(user, req, res);
 
-        }
+        const tokenDoc = Utils.generateToken(user, res);
+        await Utils.updateKeepsignToken(user, deviceId, req, res)
+        return tokenDoc;
     }
 
 

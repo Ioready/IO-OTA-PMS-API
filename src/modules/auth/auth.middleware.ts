@@ -34,11 +34,11 @@ export const protect = asyncHandler(
 			}
 
 			req.user = user; // Attach user to request
-			await Utils.updateKeepsignToken(req.user, req.cookies.deviceId, res)
+			await Utils.updateKeepsignToken(req.user, req.cookies.deviceId, req, res)
 			next();
 		} catch (err) {
-			console.log({err});
-			
+			console.log({ err });
+
 			throw new UnauthorizedResponse(Msg.invalidCred)
 		}
 	}
