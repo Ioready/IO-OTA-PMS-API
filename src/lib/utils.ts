@@ -1,8 +1,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { config } from '../config/env.config';
-import { TokenModel } from '../schemas';
+import { DeviceModel, TokenModel } from '../schemas';
 import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid'
+import { Request, Response } from "express"
 
 class UtilsClass {
     constructor() { }
@@ -48,7 +50,7 @@ class UtilsClass {
         return OTP;
     };
 
-    generateToken = async (user: any, res: any) => {
+    generateToken = async (user: any, res: Response) => {
 
         const tokens = await this.generateTokens({
             id: user._id,
@@ -56,12 +58,7 @@ class UtilsClass {
             role: user.role
         });
 
-        res.cookie("refreshToken", tokens.refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "Strict",
-            maxAge: config.jwt.cookieExpiry,
-        });
+        this.setCookies('refreshToken', tokens.refreshToken, config.jwt.cookieExpiry, res);
         return { accessToken: tokens.accessToken }
     }
 
@@ -87,6 +84,65 @@ class UtilsClass {
         return new mongoose.Types.ObjectId()
     }
 
+    setCookieRefreshToken = (refreshToken: any, res: Response) => {
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: parseInt(config.jwt.cookieExpiry),
+        });
+    }
+
+    createDevice = async (user: any, req: Request, res: Response) => {
+        let deviceId = req.cookies?.deviceId;
+
+        if (!deviceId) {
+            deviceId = uuidv4();
+            await this.setCookies('deviceId', deviceId, 30 * 24 * 60 * 60 * 1000, res);
+            //     httpOnly: true,
+            //     sameSite: 'strict',
+            //     secure: true,
+            //     maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+            // });
+        }
+
+        // Attach to request
+        (req as any).deviceId = deviceId;
+
+        await DeviceModel.findOneAndUpdate({ deviceId }, {
+            deviceId,
+            user: user._id,
+            ip: req.ip,
+            keepMeSigned: req.body.keepMeSigned,
+            userAgent: req.headers['user-agent'],
+        }, { upsert: true, new: true })
+
+    }
+
+    setCookies = async (name: any, value: any, expiry: any, res: Response) => {
+        res.cookie(name, value, {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: true,
+            maxAge: expiry // 30 days
+        });
+    }
+
+    updateKeepsignToken = async (user: any, deviceId: string, res: Response) => {
+        const device = await DeviceModel.findOne({ deviceId });
+        if (device) {
+            const tokens = await this.generateTokens({
+                id: user._id,
+                type: user.type,
+                role: user.role
+            });
+            var cookieExpiry: any;
+            if (device.keepMeSigned) cookieExpiry = config.cookie.oneDay
+            else cookieExpiry = config.cookie.oneHour
+            await this.setCookies('refreshToken', tokens.refreshToken, cookieExpiry, res);
+        }
+
+    }
 
 }
 export const Utils = new UtilsClass();

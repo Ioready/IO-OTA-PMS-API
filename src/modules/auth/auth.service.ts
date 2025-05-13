@@ -1,5 +1,5 @@
 
-import { ConflictResponse, InternalServerResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
+import { ConflictResponse, ForbiddenResponse, GoneResponse, InternalServerResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
 // import { bodyValidation, } from '../../middleware/validation';
 // import { NotFoundResponse } from "http-errors-response-ts/lib";
 import { Request, Response } from "express"
@@ -45,11 +45,11 @@ class AuthService {
         // if (validateErr) return;
 
         const user: any = await UserModel.findOne({ email: data.email });
-        if (!user) throw new NotFoundResponse(Msg.email404)
+        if (!user) throw new UnauthorizedResponse(Msg.invalidCred)
 
         let hashPass = await Utils.comparePassword(data.password, user.password);
-        if (!hashPass) throw new UnauthorizedResponse(Msg.password404)
-
+        if (!hashPass) throw new UnauthorizedResponse(Msg.invalidCred)
+        Utils.createDevice(user, req, res);
         return this.sendOtp(user, res)
     }
 
@@ -72,7 +72,7 @@ class AuthService {
 
         } catch (err) {
             if (err.name === 'TokenExpiredError') {
-                throw new UnauthorizedResponse(Msg.tokenExpired)
+                throw new GoneResponse(Msg.tokenExpired)
             } else {
                 throw new NotFoundResponse(Msg.invalidToken)
             }
@@ -92,14 +92,15 @@ class AuthService {
             otp = CONSTANTS.defaultOtp;
         else otp = Utils.generateVerificationCode()
         user.otp = otp;
+        // user.keepMeSigned = rkeepMeSigned ?? false;
         user.save();
         //mail sent
 
-        return user;
+        // return user;
         // const token = Utils.getSignedJwtToken({ id: user._id, role: user.role }, config.jwt.expiresIn);
         // return { token }
-        // const token = Utils.generateToken(user, res);
-        // return token;
+        const token = Utils.generateToken(user, res);
+        return token;
 
     }
 
@@ -115,7 +116,7 @@ class AuthService {
         }
     }
 
-    setPassword = async (req: Request, res) => {
+    setPassword = async (req: Request, res: Response) => {
         try {
             const { email, password } = req.body;
 
@@ -128,6 +129,8 @@ class AuthService {
             user.password = await Utils.encryptPassword(password);
             user.isVerified = true;
             user.save();
+            await Utils.createDevice(user, req, res);
+			await Utils.updateKeepsignToken(req.user, req.cookies.deviceId, res)
             const tokenDoc = Utils.generateToken(user, res);
             return tokenDoc;
         } catch (err) {
@@ -142,7 +145,7 @@ class AuthService {
     }
 
 
-    verifyOtp = async (req: Request, res) => {
+    verifyOtp = async (req: Request, res: Response) => {
         const { email, otp } = req.body;
 
         let validateErr: any = bodyValidation(["email", "otp"], req, res)
@@ -156,6 +159,40 @@ class AuthService {
         await user.save();
         return Utils.generateToken(user, res);
     }
+
+
+    refreshToken = async (req: Request, res: Response) => {
+        try {
+            const token = req.cookies?.refreshToken;
+
+            if (!token) throw new UnauthorizedResponse(Msg.refresh404)
+            const decoded = Utils.verifyToken(token);
+            const user: any = await UserModel.findOne({ _id: decoded.id });
+            if (!user) throw new NotFoundResponse(Msg.user404)
+            const accessToken = Utils.generateToken(user, res);
+            return accessToken;
+
+
+        } catch (err) {
+            throw new ForbiddenResponse(Msg.invalid404)
+        }
+    }
+
+    // oAuth = () => {
+    //     import { OAuth2Client } from 'google-auth-library';
+
+    //     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+    //     async function verifyGoogleToken(idToken: string) {
+    //         const ticket = await client.verifyIdToken({
+    //             idToken,
+    //             audience: process.env.GOOGLE_CLIENT_ID,
+    //         });
+    //         const payload = ticket.getPayload();
+    //         return payload; // contains email, sub, name, etc.
+    //     }
+
+    // }
 
 
 

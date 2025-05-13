@@ -24,6 +24,10 @@ export const config = {
         refreshTexpiresIn: process.env.REFRESH_TOKEN_EXPIRY,
         cookieExpiry: process.env.COOKIE_EXPIRY,
     },
+    cookie: {
+        oneDay: process.env.COOKIE_1D_EXPIRY,
+        oneHour: process.env.COOKIE_1H_EXPIRY
+    },
     url: {
         base: process.env.BASE_URL
     }

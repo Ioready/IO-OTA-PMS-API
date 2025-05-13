@@ -56,5 +56,7 @@ export const Msg = {
     tokenVerified: "Token verified",
     sentMail: "OTP sent successfully to your email.",
     password: "Password set successfully",
-    invalidOtp: "Invalid OTP"
+    invalidOtp: "Invalid OTP",
+    refresh404: "Refresh token is required",
+    invalid404: "Invalid or expired refresh token"
 }

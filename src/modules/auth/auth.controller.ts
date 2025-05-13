@@ -1,7 +1,9 @@
 
 import { Controller, Get, Post } from '../../lib/decorators';
+import { use } from '../../lib/decorators/use';
 import { Responder } from '../../lib/responder';
 import { Msg } from '../../resources';
+import { protect } from './auth.middleware';
 import AuthService from './auth.service'
 import { Request, Response } from "express"
 
@@ -58,6 +60,19 @@ class AuthController {
     async verifyOtp(req: Request, res: Response) {
         const result: any = await AuthService.verifyOtp(req, res);
         if (result) Responder.sendSuccessData(result, Msg.login, res);
+    }
+
+    @Post("/refresh-token")
+    async refreshToken(req: Request, res: Response) {
+        const result: any = await AuthService.refreshToken(req, res);
+        if (result) Responder.sendSuccessData(result, Msg.login, res);
+    }
+
+    @Get("/me")
+    @use(protect)
+    async getMe(req: Request, res: Response) {
+        const user = req.user;
+        if (user) Responder.sendSuccessData(user, Msg.login, res);
     }
 
 
