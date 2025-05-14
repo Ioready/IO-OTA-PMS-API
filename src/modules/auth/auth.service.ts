@@ -1,16 +1,12 @@
 
-import { ConflictResponse, ForbiddenResponse, GoneResponse, InternalServerResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
-// import { bodyValidation, } from '../../middleware/validation';
-// import { NotFoundResponse } from "http-errors-response-ts/lib";
+import { ConflictResponse, ForbiddenResponse, GoneResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
-import { TokenModel, UserModel } from '../../schemas';
+import { DeviceModel, TokenModel, UserModel } from '../../schemas';
 import { LoginType, Msg } from '../../resources';
 import { Utils } from '../../lib/utils';
 import { config } from '../../config/env.config';
 import { CONSTANTS } from '../../lib/constants';
 import { bodyValidation } from '../../middleware/validation';
-// import { config } from '../../config/env.config';
-import { OAuth2Client } from 'google-auth-library';
 
 class AuthService {
     // @ts-ignore
@@ -40,18 +36,15 @@ class AuthService {
     }
     login = async (req: Request, res: Response) => {
         const data = req.body;
-        // let validateErr: any = bodyValidation(["username", "pass"], req, res)
-        // console.log(validateErr);
+        let validateErr: any = bodyValidation(["email", "password"], req, res)
+        if (!validateErr) return;
 
-        // if (validateErr) return;
-
-        const user: any = await UserModel.findOne({ email: data.email });
+        const user: any = await UserModel.findOne({ email: data.email }).select("+password");
         if (!user) throw new UnauthorizedResponse(Msg.invalidCred)
 
         let hashPass = await Utils.comparePassword(data.password, user.password);
         if (!hashPass) throw new UnauthorizedResponse(Msg.invalidCred)
-        Utils.createDevice(user, req, res);
-        return this.sendOtp(user, res)
+        return this.sendOtp(user)
     }
 
 
@@ -80,28 +73,28 @@ class AuthService {
         }
     }
 
-    resendOtp = async (req: Request, res: Response) => {
+    resendOtp = async (req: Request) => {
         const user: any = await UserModel.findOne({ email: req.body.email });
         if (!user) throw new NotFoundResponse(Msg.user404)
-        return this.sendOtp(user, res)
+        return this.sendOtp(user)
     }
 
-    sendOtp = async (user: any, res: Response) => {
-
+    sendOtp = async (user: any) => {
         var otp: string;
         if (config.app.env === "development")
             otp = CONSTANTS.defaultOtp;
         else otp = Utils.generateVerificationCode()
         user.otp = otp;
         user.otpExpiry = Date.now() + CONSTANTS.otpExpiry;
-        user.save();
+        await user.save({ validateBeforeSave: false });
+
         //mail sent
 
         // return user;
         // const token = Utils.getSignedJwtToken({ id: user._id, role: user.role }, config.jwt.expiresIn);
         // return { token }
-        const token = Utils.generateToken(user, res);
-        return token;
+        // const token = Utils.generateToken(user, res);
+        return user;
 
     }
 
@@ -125,13 +118,14 @@ class AuthService {
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
-        user.lastLogin = new Date();
-        user.save();
-        const deviceId = await Utils.createDevice(user, req, res);
+        await user.save();        
+        await this.sendOtp(user);
+        await DeviceModel.deleteMany({ user: user._id })
+        // const deviceId = await Utils.createDevice(user, req, res);
 
-        const tokenDoc = Utils.generateToken(user, res);
-        await Utils.updateKeepsignToken(user, deviceId, req, res)
-        return tokenDoc;
+        // const tokenDoc = Utils.generateToken(user, res);
+        // await Utils.updateKeepsignToken(user, deviceId, res)
+        return user;
     }
 
 
@@ -151,8 +145,9 @@ class AuthService {
         user.lastLogin = new Date();
 
         await user.save();
-        await Utils.updateKeepsignToken(user, req.cookies.deviceId, req, res)
-        return Utils.generateToken(user, res);
+        const deviceId = await Utils.createDevice(user, req);
+        await Utils.updateKeepsignToken(user, deviceId, res)
+        return Utils.generateToken(user, deviceId, res);
     }
 
 
@@ -164,7 +159,7 @@ class AuthService {
             const decoded = Utils.verifyToken(token);
             const user: any = await UserModel.findOne({ _id: decoded.id });
             if (!user) throw new NotFoundResponse(Msg.user404)
-            const accessToken = Utils.generateToken(user, res);
+            const accessToken = Utils.generateToken(user, decoded.deviceId, res);
             return accessToken;
 
 
@@ -207,9 +202,9 @@ class AuthService {
 
                 user = await UserModel.create(userObj);
             }
-            const deviceId = await Utils.createDevice(user, req, res);
-            const tokenDoc = Utils.generateToken(user, res);
-            await Utils.updateKeepsignToken(user, deviceId, req, res)
+            const deviceId = await Utils.createDevice(user, req);
+            const tokenDoc = Utils.generateToken(user, deviceId, res);
+            await Utils.updateKeepsignToken(user, deviceId, res)
             return tokenDoc;
         }
 

@@ -61,5 +61,6 @@ export const Msg = {
     invalid404: "Invalid or expired refresh token",
 
     sentLinkMail: "Reset password link sent successfully to your email",
-    otp404: "OTP has expired"
+    otp404: "OTP has expired",
+    sentMail404: "Unable sent OTP to your email.",
 }

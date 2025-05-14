@@ -29,6 +29,8 @@ class AuthController {
     async login(req: Request, res: Response) {
         const result = await AuthService.login(req, res);
         if (result) Responder.sendSuccessMessage(Msg.sentMail, res)
+        else Responder.sendSuccessMessage(Msg.sentMail404, res)
+
     }
 
     @Post("/verify-url")
@@ -40,8 +42,10 @@ class AuthController {
 
     @Post("/resent")
     async resent(req: Request, res: Response) {
-        const result: any = await AuthService.resendOtp(req, res);
+        const result: any = await AuthService.resendOtp(req);
         if (result) Responder.sendSuccessMessage(Msg.sentMail, res)
+        else Responder.sendSuccessMessage(Msg.sentMail404, res)
+
     }
 
     @Post("/forgot-password")
@@ -53,7 +57,8 @@ class AuthController {
     @Post("/set-password")
     async setPassword(req: Request, res: Response) {
         const result: any = await AuthService.setPassword(req, res);
-        if (result) Responder.sendSuccessData(result, Msg.password, res)
+        if (result) Responder.sendSuccessMessage(Msg.sentMail, res);
+        else Responder.sendSuccessMessage(Msg.sentMail404, res)
     }
 
     @Post("/verify-otp")

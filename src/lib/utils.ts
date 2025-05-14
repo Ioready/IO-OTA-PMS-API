@@ -50,12 +50,13 @@ class UtilsClass {
         return OTP;
     };
 
-    generateToken = async (user: any, res: Response) => {
+    generateToken = async (user: any, deviceId: any, res: Response) => {
 
         const tokens = await this.generateTokens({
             id: user._id,
             type: user.type,
-            role: user.role
+            role: user.role,
+            deviceId
         });
 
         // this.setCookies('refreshToken', tokens.refreshToken, config.cookie.oneDay, res);
@@ -84,17 +85,11 @@ class UtilsClass {
         return new mongoose.Types.ObjectId()
     }
 
-    createDevice = async (user: any, req: Request, res: Response) => {
-        let deviceId = req?.cookies?.deviceId;
+    createDevice = async (user: any, req: Request) => {
 
 
-        if (!deviceId) {
-            deviceId = uuidv4();
-            await this.setCookies('deviceId', deviceId, 30 * 24 * 60 * 60 * 1000, res);
-        }
-        // Attach to request
+        let deviceId = uuidv4();
         (req as any).deviceId = deviceId;
-
         await DeviceModel.findOneAndUpdate({ deviceId }, {
             deviceId,
             user: user._id,
@@ -117,9 +112,7 @@ class UtilsClass {
 
     }
 
-    updateKeepsignToken = async (user: any, deviceId: any, req: Request, res: Response) => {
-        if (!deviceId) deviceId = await Utils.createDevice(user, req, res);
-
+    updateKeepsignToken = async (user: any, deviceId: any, res: Response) => {
         const device = await DeviceModel.findOne({ deviceId: deviceId });
         if (device) {
             const tokens = await this.generateTokens({
@@ -150,7 +143,7 @@ class UtilsClass {
         var obj = {
             groupId: user.groupId
         };
-        if(user.type != "admin") user
+        if (user.type != "admin") user
 
         const property = await PropertyModel.find(obj)
     }

@@ -50,7 +50,8 @@ const errorHandler: ErrorRequestHandler = (err, _: Request, res, _1: NextFunctio
 	}
 	
 	if (err.status === 401) error = new ErrorResponse(Msg.invalidCred, 401)
-
+	console.log(err);
+	
 	Responder.sendFailureMessage(error.messageWithField || error.message || 'Server Error', error.statusCode, res)
 }
 
