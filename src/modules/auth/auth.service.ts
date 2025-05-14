@@ -4,7 +4,7 @@ import { ConflictResponse, ForbiddenResponse, GoneResponse, InternalServerRespon
 // import { NotFoundResponse } from "http-errors-response-ts/lib";
 import { Request, Response } from "express"
 import { TokenModel, UserModel } from '../../schemas';
-import { Msg } from '../../resources';
+import { LoginType, Msg } from '../../resources';
 import { Utils } from '../../lib/utils';
 import { config } from '../../config/env.config';
 import { CONSTANTS } from '../../lib/constants';
@@ -25,8 +25,8 @@ class AuthService {
     createUser = async (req: Request, res: Response) => {
         const data = req.body;
 
-        let validateErr: any = bodyValidation(["fullName", "email"], req, res)
-        if (!validateErr) return
+        // let validateErr: any = bodyValidation(["fullName", "email"], req, res)
+        // if (!validateErr) return
         // data.password = await Utils.encryptPassword(data.password)
         const exUser = await UserModel.findOne({ email: data.email })
         if (exUser) throw new ConflictResponse(Msg.email404)
@@ -93,7 +93,7 @@ class AuthService {
             otp = CONSTANTS.defaultOtp;
         else otp = Utils.generateVerificationCode()
         user.otp = otp;
-        // user.keepMeSigned = rkeepMeSigned ?? false;
+        user.otpExpiry = Date.now() + CONSTANTS.otpExpiry;
         user.save();
         //mail sent
 
@@ -125,6 +125,7 @@ class AuthService {
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
+        user.lastLogin = new Date();
         user.save();
         const deviceId = await Utils.createDevice(user, req, res);
 
@@ -144,7 +145,11 @@ class AuthService {
         if (!user) throw new NotFoundResponse(Msg.user404)
 
         if (user.otp != otp) throw new NotFoundResponse(Msg.invalidOtp)
+        if (user.otpExpiry < new Date()) throw new GoneResponse(Msg.otp404)
         user.otp = "";
+        user.otpExpiry = "";
+        user.lastLogin = new Date();
+
         await user.save();
         await Utils.updateKeepsignToken(user, req.cookies.deviceId, req, res)
         return Utils.generateToken(user, res);
@@ -195,7 +200,9 @@ class AuthService {
                     groupId: await Utils.newObjectId(),
                     fullName: userData.name,
                     email: userData.email,
-                    isVerified: true
+                    isVerified: true,
+                    loginType: LoginType.GOOGLE,
+                    lastLogin: new Date()
                 };
 
                 user = await UserModel.create(userObj);
@@ -207,7 +214,6 @@ class AuthService {
         }
 
     }
-
 
 }
 

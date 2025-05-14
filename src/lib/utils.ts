@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { config } from '../config/env.config';
-import { DeviceModel, TokenModel } from '../schemas';
+import { DeviceModel, PropertyModel, TokenModel } from '../schemas';
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from "express"
@@ -135,14 +135,24 @@ class UtilsClass {
 
     }
 
-    getGoogleAuth = async (token: any) => {        
+    getGoogleAuth = async (token: any) => {
         const user = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
 
-       return  user.data;
+        return user.data;
+    }
+
+    checkProperty = async (user: any) => {
+
+        var obj = {
+            groupId: user.groupId
+        };
+        if(user.type != "admin") user
+
+        const property = await PropertyModel.find(obj)
     }
 
 }

@@ -5,3 +5,8 @@ export enum UserStatus {
     TERMINATED = "terminated"
 }
 
+export enum LoginType {
+    GOOGLE = "google",
+    NORMAL = "normal"
+}
+

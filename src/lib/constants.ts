@@ -1,4 +1,5 @@
 
 export const CONSTANTS = {
-  defaultOtp : "123456"
+  defaultOtp: "123456",
+  otpExpiry: 900000
 }

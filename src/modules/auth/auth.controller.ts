@@ -1,5 +1,5 @@
 
-import { Controller, Get, Post } from '../../lib/decorators';
+import { Controller, Get, Patch, Post } from '../../lib/decorators';
 import { use } from '../../lib/decorators/use';
 import { Responder } from '../../lib/responder';
 import { Msg } from '../../resources';
