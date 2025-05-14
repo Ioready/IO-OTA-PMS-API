@@ -58,7 +58,7 @@ class UtilsClass {
             role: user.role
         });
 
-        this.setCookies('refreshToken', tokens.refreshToken, config.cookie.oneDay, res);
+        // this.setCookies('refreshToken', tokens.refreshToken, config.cookie.oneDay, res);
         return { accessToken: tokens.accessToken }
     }
 
@@ -135,9 +135,7 @@ class UtilsClass {
 
     }
 
-    getGoogleAuth = async (token: any) => {
-        console.log("here");
-        
+    getGoogleAuth = async (token: any) => {        
         const user = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
             headers: {
                 Authorization: `Bearer ${token}`

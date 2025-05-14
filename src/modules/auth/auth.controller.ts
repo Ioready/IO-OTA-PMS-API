@@ -47,13 +47,13 @@ class AuthController {
     @Post("/forgot-password")
     async forgotPassword(req: Request, res: Response) {
         const result: any = await AuthService.forgotPassword(req);
-        if (result) Responder.sendSuccessMessage(Msg.sentMail, res)
+        if (result) Responder.sendSuccessMessage(Msg.sentLinkMail, res)
     }
 
     @Post("/set-password")
     async setPassword(req: Request, res: Response) {
         const result: any = await AuthService.setPassword(req, res);
-        if (result) Responder.sendSuccessMessage(Msg.password, res)
+        if (result) Responder.sendSuccessData(result, Msg.password, res)
     }
 
     @Post("/verify-otp")

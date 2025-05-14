@@ -106,15 +106,12 @@ class AuthService {
     }
 
     forgotPassword = async (req: Request) => {
-        try {
 
-            const user: any = await UserModel.findOne({ email: req.body.email });
-            if (!user) throw new NotFoundResponse(Msg.user404)
-            // this.generateTokenAndMail(user, "forgot")
-            return true;
-        } catch (err) {
-            throw new InternalServerResponse(err.Message)
-        }
+        const user: any = await UserModel.findOne({ email: req.body.email });
+        if (!user) throw new NotFoundResponse(Msg.user404)
+        Utils.generateTokenAndMail(user, "forgot")
+        return true;
+
     }
 
     setPassword = async (req: Request, res: Response) => {
@@ -149,6 +146,7 @@ class AuthService {
         if (user.otp != otp) throw new NotFoundResponse(Msg.invalidOtp)
         user.otp = "";
         await user.save();
+        await Utils.updateKeepsignToken(user, req.cookies.deviceId, req, res)
         return Utils.generateToken(user, res);
     }
 
@@ -196,14 +194,15 @@ class AuthService {
                 const userObj: any = {
                     groupId: await Utils.newObjectId(),
                     fullName: userData.name,
-                    email: userData.email
+                    email: userData.email,
+                    isVerified: true
                 };
 
                 user = await UserModel.create(userObj);
             }
             const deviceId = await Utils.createDevice(user, req, res);
-            await Utils.updateKeepsignToken(user, deviceId, req, res)
             const tokenDoc = Utils.generateToken(user, res);
+            await Utils.updateKeepsignToken(user, deviceId, req, res)
             return tokenDoc;
         }
 

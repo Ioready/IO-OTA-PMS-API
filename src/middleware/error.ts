@@ -2,9 +2,10 @@ import { ErrorRequestHandler, NextFunction, Request } from 'express'
 import ErrorResponse from '../utils/errorResponse'
 import { Model } from '../lib/model'
 import { Responder } from '../lib/responder'
+import { Msg } from '../resources'
 
 const errorHandler: ErrorRequestHandler = (err, _: Request, res, _1: NextFunction) => {
-	
+
 	let error = {
 		...err,
 	}
@@ -47,6 +48,7 @@ const errorHandler: ErrorRequestHandler = (err, _: Request, res, _1: NextFunctio
 		let errObj: any = errFields[errFields.length - 1]
 		error = new ErrorResponse(errObj['message'], 400)
 	}
+	if (err.status === 401) error = new ErrorResponse(Msg.invalidCred, 401)
 
 	Responder.sendFailureMessage(error.messageWithField || error.message || 'Server Error', error.statusCode, res)
 }

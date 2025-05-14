@@ -12,7 +12,6 @@ interface IUser extends Document {
     groupId: ObjectId,
     type: string,
     otp: string,
-    keepMeSigned: boolean,
     status: string,
 }
 
@@ -26,7 +25,6 @@ const UserSchema = new Schema<IUser>({
     groupId: { type: mongoose.Schema.Types.ObjectId, default: null },
     type: { type: String, default: "admin" },
     otp: String,
-    keepMeSigned: { type: Boolean, default: true },
     status: String,
 
 }, Utils.returnSchemaOption());
