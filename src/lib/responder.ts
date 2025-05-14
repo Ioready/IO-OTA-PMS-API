@@ -15,14 +15,14 @@ class ResponderClass {
             message,
             statusCode: 200
         }).status(200)
-    } 9
+    } 
 
     public sendSuccessCreatedMessage(message: string, res: Response) {
-        return res.send({
+        return res .status(201).send({
             success: true,
             message,
             statusCode: 201
-        }).status(201)
+        })
     }
 
     public sendFailureMessage(message: string, code: number = 200, res: Response) {

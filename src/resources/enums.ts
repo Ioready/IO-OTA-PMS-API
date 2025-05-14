@@ -4,4 +4,8 @@ export enum UserStatus {
     DECEASED = "deceased",
     TERMINATED = "terminated"
 }
+export enum CommonStatus {
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+}
 

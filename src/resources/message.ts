@@ -58,5 +58,6 @@ export const Msg = {
     password: "Password set successfully",
     invalidOtp: "Invalid OTP",
     refresh404: "Refresh token is required",
-    invalid404: "Invalid or expired refresh token"
+    invalid404: "Invalid or expired refresh token",
+    roleName404: "Role name already exists"
 }
