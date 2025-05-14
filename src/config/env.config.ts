@@ -33,5 +33,15 @@ export const config = {
     },
     oauth: {
         google: process.env.GOOGLE_OAUTH
+    },
+    smpt: {
+        host: process.env.GOOGLE_OAUTH,
+        port: process.env.SMTP_PORT,
+        email: process.env.SMTP_EMAIL,
+        password: process.env.SMTP_PASSWORD,
+    },
+    email: {
+        name: process.env.FROM_NAME,
+        from: process.env.FROM_EMAIL,
     }
 };

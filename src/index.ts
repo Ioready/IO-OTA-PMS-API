@@ -10,6 +10,7 @@ import './modules/ticket/ticket.controller'
 import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";
+import sendEmail from "./utils/sendEmail";
 
 const app = express();
 app.use(express.json());
@@ -34,7 +35,13 @@ app.use(limiter)
 
 app.use(AppRouter.getInstance())
 app.use(errorHandler)
-
+sendEmail({
+				template: 'Test',
+				email: "ioreadyrajapandi@gmail.com",
+				locals: {
+					
+				},
+			})
 app.listen(port, () => {
 	console.log(`OTA service running port on ${port}`.green.bold);
 });
