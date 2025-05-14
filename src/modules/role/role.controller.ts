@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch } from "../../lib/decorators";
+import { Controller, Get, Post, Patch, Delete } from "../../lib/decorators";
 import { Responder } from "../../lib/responder";
 import { Msg } from "../../resources";
 
@@ -35,4 +35,10 @@ class RoleController {
     const result = await RoleService.getRoles(req);
     if (result) Responder.sendSuccessData(result, Msg.roles, res);
   }
+  @Delete("/:id")
+  async deleteRole(req: Request, res: Response) {
+    const result = await RoleService.deleteRole(req.params.id);
+    if (result) Responder.sendSuccessMessage(Msg.roleDeleted, res)
+  }
+
 }

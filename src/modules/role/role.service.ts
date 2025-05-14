@@ -13,7 +13,6 @@ class RoleService {
       name: Utils.returnRegExp(data.name),
     });
 
-
     if (exRole) throw new ConflictResponse(Msg.roleName404);
     data.groupId = req.user.groupId;
     const role = await RoleModel.create(data);
@@ -25,7 +24,6 @@ class RoleService {
     const data = req.body;
 
     if (data.name) {
-      
       const exRole = await Model.findOne(RoleModel, {
         name: Utils.returnRegExp(data.name), _id: { $ne: req.params.id }
       });
@@ -33,8 +31,8 @@ class RoleService {
         throw new ConflictResponse(Msg.roleName404);
       }
     }
+
     const role = await Model.findOneAndUpdate(RoleModel, { _id: req.params.id }, data);
-    
     if (!role) throw new NotFoundResponse(Msg.role404);
     return role;
   };
@@ -50,6 +48,13 @@ class RoleService {
     const roles = await Model.find(RoleModel, req.query, {});
     if (!roles) throw new NotFoundResponse(Msg.roles404);
     return { Roles: roles.data, total: roles.total };
+  };
+
+  deleteRole = async (id: any) => {
+    // this.getRole(id)
+    const role = await RoleModel.findByIdAndDelete({ _id: id });
+    if (!role) throw new NotFoundResponse(Msg.roleDeleted404);
+    return role;
   };
 }
 

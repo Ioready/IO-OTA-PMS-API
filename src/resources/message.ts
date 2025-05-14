@@ -39,6 +39,8 @@ export const Msg = {
     role404: "Role not found",
     roles: "Roles",
     roles404: "Unable to get roles",
+    roleDeleted: "Role deleted",
+    roleDeleted404: "Unable to delete role",
 
     // Floor
     floorCreated: "Floor created",
