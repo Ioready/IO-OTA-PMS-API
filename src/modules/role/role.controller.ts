@@ -24,10 +24,16 @@ class RoleController {
     if (result) Responder.sendSuccessMessage(Msg.roleUpdated, res);
   }
 
+    @Get("/all")
+  async getAllRoles(req: Request, res: Response) {
+    const result = await RoleService.getAllRoles(req);
+    if (result) Responder.sendSuccessData(result, Msg.roles, res);
+  }
+
   @Get("/:id")
   async getRole(req: Request, res: Response) {
-    const Role = await RoleService.getRole(req.params.id);
-    if (Role) Responder.sendSuccessData({ Role }, Msg.role, res);
+    const role = await RoleService.getRole(req.params.id);
+    if (role) Responder.sendSuccessData({ role }, Msg.role, res);
   }
 
   @Get("/")
@@ -40,5 +46,6 @@ class RoleController {
     const result = await RoleService.deleteRole(req.params.id);
     if (result) Responder.sendSuccessMessage(Msg.roleDeleted, res)
   }
+
 
 }

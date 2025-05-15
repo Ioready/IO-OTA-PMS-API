@@ -55,7 +55,7 @@ class ZohoApiClass {
             "htmlbody": "<div><b> Test email sent successfully.</b></div>",
         }).then((resp) => console.log("success")).catch((error) => {
             console.log(error);
-            
+
             console.log("error")
         });
     }

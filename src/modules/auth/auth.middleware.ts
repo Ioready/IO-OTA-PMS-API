@@ -33,7 +33,7 @@ export const protect = asyncHandler(
 				throw new UnauthorizedResponse(Msg.user404);
 			}
 
-			const device: any = await UserModel.findById(decoded.deviceId);
+			const device: any = await UserModel.findOne({ deviceId: decoded.deviceId });
 
 			if (!device) {
 				throw new UnauthorizedResponse(Msg.invalidCred);

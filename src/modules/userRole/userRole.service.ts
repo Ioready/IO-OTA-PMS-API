@@ -3,6 +3,7 @@ import { Request } from "express";
 import { UserModel } from "../../schemas";
 import { Msg, UserType } from "../../resources";
 import { Model } from "../../lib/model";
+import { Utils } from "../../lib/utils";
 
 
 
@@ -30,6 +31,39 @@ class UserRoleService {
         return userRole;
     }
 
+    getUserRole = async (id: any) => {
+        const userRole = await Model.findOne(UserModel, { _id: id });
+        if (!userRole) throw new NotFoundResponse(Msg.user404);
+        return { userRole };
+    }
+
+    deleteUserRole = async (id: any) => {
+        const UserRole = await UserModel.findByIdAndDelete({ _id: id });
+        if (!UserRole) throw new NotFoundResponse(Msg.userDeleted404);
+        return UserRole;
+    }
+
+    listUserRole = async (req: Request) => {
+        const query = req.query;
+
+        query.type = query.type === UserType.USER ? UserType.USER : UserType.HOUSEKEEPING;
+   
+        
+        const userRole = await Model.find(UserModel, query, {})
+         if (!userRole) throw new NotFoundResponse(Msg.user404);
+            return { userRole: userRole.data, total: userRole.total };
+    }
+
+    listHousekeeping = async (req: Request) => {
+        const query = req.query;
+
+        query.type = UserType.HOUSEKEEPING;
+   
+        
+        const housekeepings = await Model.findAll(UserModel, query, {_id:1,fullName:1},{sort:{_id:-1}})
+         if (!housekeepings) throw new NotFoundResponse(Msg.housekeepings404);
+            return { housekeepings };
+    }
 
 }
 
