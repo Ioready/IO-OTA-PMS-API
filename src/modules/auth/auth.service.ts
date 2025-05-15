@@ -140,8 +140,8 @@ class AuthService {
 
         if (user.otp != otp) throw new NotFoundResponse(Msg.invalidOtp)
         if (user.otpExpiry < new Date()) throw new GoneResponse(Msg.otp404)
-        user.otp = "";
-        user.otpExpiry = "";
+        // user.otp = "";
+        // user.otpExpiry = "";
         user.lastLogin = new Date();
 
         await user.save();

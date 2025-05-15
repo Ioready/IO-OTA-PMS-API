@@ -60,7 +60,7 @@ class UtilsClass {
         });
 
         // this.setCookies('refreshToken', tokens.refreshToken, config.cookie.oneDay, res);
-        return { accessToken: tokens.accessToken }
+        return { accessToken: tokens.accessToken, route: await this.checkProperty(user) }
     }
 
     generateTokens = async (payload: any) => {
@@ -143,9 +143,17 @@ class UtilsClass {
         var obj = {
             groupId: user.groupId
         };
-        if (user.type != "admin") user
+        var route = "property";
+        if (user.type === "admin") {
 
-        const property = await PropertyModel.find(obj)
+            const property: any = await PropertyModel.find(obj)
+            if (property.length === 1) {
+                if (property[0].step === "6")
+                    route = "dashboard"
+            }
+        }
+        else route = "dashboard";
+        return route;
     }
 
 }
