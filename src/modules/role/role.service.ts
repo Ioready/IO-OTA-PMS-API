@@ -43,7 +43,7 @@ class RoleService {
     return role;
   };
 
- 
+
   getRoles = async (req: Request) => {
     const roles = await Model.find(RoleModel, req.query, {});
     if (!roles) throw new NotFoundResponse(Msg.roles404);
@@ -58,10 +58,10 @@ class RoleService {
     }
     const role = await RoleModel.findByIdAndDelete({ _id: id });
     if (!role) throw new NotFoundResponse(Msg.roleDeleted404);
-    return {role};
+    return { role };
   };
 
-  
+
   getAllRoles = async (req: Request) => {
     const query = req.query;
     query.status = CommonStatus.ACTIVE
@@ -70,7 +70,7 @@ class RoleService {
     return { roles };
   };
 
- 
+
 }
 
 export default new RoleService();

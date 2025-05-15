@@ -1,16 +1,17 @@
 
-import { Controller, Get, Post, Patch } from '../../lib/decorators';
+import { Controller, Get, Post, Patch ,Delete } from '../../lib/decorators';
 import { Responder } from '../../lib/responder';
 import { Msg } from '../../resources';
 
 import { Request, Response } from "express"
 import FloorService from './floor.service';
+import { reset } from 'colors';
 
 @Controller("/floor")
 // @ts-ignore
 class FloorController {
 
-    @Post('/')
+    @Post("/")
     async createFloor(req: Request, res: Response) {
         const result = await FloorService.createFloor(req, res);
         if (result) Responder.sendSuccessCreatedMessage(Msg.floorCreated, res);
@@ -32,6 +33,12 @@ class FloorController {
     async getFloors(req: Request, res: Response) {
         const result = await FloorService.getFloors(req);
         if (result) Responder.sendSuccessData(result, Msg.floors, res)
+    }
+    
+    @Delete("/:id") 
+    async deleteFloor(req: Request ,res: Response) {
+        const Floor = await FloorService.deleteFloor(req.params.id);
+        if (Floor) Responder.sendSuccessMessage(Msg.floorDeleted ,res)
     }
 
 }
