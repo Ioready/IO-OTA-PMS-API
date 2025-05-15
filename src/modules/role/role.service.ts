@@ -1,7 +1,7 @@
 import { ConflictResponse, NotFoundResponse } from "../../lib/decorators";
 import { Request, Response } from "express";
 import { RoleModel, UserModel } from "../../schemas";
-import { Msg } from "../../resources";
+import { CommonStatus, Msg } from "../../resources";
 import { Model } from "../../lib/model";
 import { Utils } from "../../lib/utils";
 
@@ -43,7 +43,7 @@ class RoleService {
     return role;
   };
 
-  // @ts-ignore
+ 
   getRoles = async (req: Request) => {
     const roles = await Model.find(RoleModel, req.query, {});
     if (!roles) throw new NotFoundResponse(Msg.roles404);
@@ -58,8 +58,19 @@ class RoleService {
     }
     const role = await RoleModel.findByIdAndDelete({ _id: id });
     if (!role) throw new NotFoundResponse(Msg.roleDeleted404);
-    return role;
+    return {role};
   };
+
+  
+  getAllRoles = async (req: Request) => {
+    const query = req.query;
+    query.status = CommonStatus.ACTIVE
+    const roles = await Model.findAll(RoleModel, query, { _id: 1, name: 1 }, { sort: { _id: -1 } });
+    if (!roles) throw new NotFoundResponse(Msg.roles404);
+    return { roles };
+  };
+
+ 
 }
 
 export default new RoleService();

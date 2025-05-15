@@ -10,6 +10,13 @@ export const Msg = {
     emailExist: "Email already exists",
     userUpdated: "User updated",
     userUpdated404: "Unable to update user",
+    users: "Users",
+    userDeleted: "User role deleted",
+    userDeleted404: "Unable to delete user role",
+    housekeepings: "Housekeepings ",
+    housekeepings404:"Unable to get housekeepings",
+    
+    
 
     //Ticket
     ticketCreated: "Ticket created",
