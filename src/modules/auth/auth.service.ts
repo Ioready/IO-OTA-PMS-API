@@ -21,10 +21,6 @@ class AuthService {
     // @ts-ignore
     createUser = async (req: Request, res: Response) => {
         const data = req.body;
-
-        // let validateErr: any = bodyValidation(["fullName", "email"], req, res)
-        // if (!validateErr) return
-        // data.password = await Utils.encryptPassword(data.password)
         const exUser = await UserModel.findOne({ email: data.email })
         if (exUser) throw new ConflictResponse(Msg.email404)
 
@@ -45,6 +41,7 @@ class AuthService {
 
         let hashPass = await Utils.comparePassword(data.password, user.password);
         if (!hashPass) throw new UnauthorizedResponse(Msg.invalidCred)
+        await Utils.setCookies('keepMeSigned', data.keepMeSigned, config.cookie.oneHour, res);
         return this.sendOtp(user)
     }
 
@@ -99,11 +96,11 @@ class AuthService {
 
     }
 
-    forgotPassword = async (req: Request) => {
+    forgotPassword = async (req: Request, type: string) => {
 
         const user: any = await UserModel.findOne({ email: req.body.email });
         if (!user) throw new NotFoundResponse(Msg.user404)
-        Utils.generateTokenAndMail(user, "forgot")
+        Utils.generateTokenAndMail(user, type)
         return true;
 
     }

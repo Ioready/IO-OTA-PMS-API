@@ -75,5 +75,6 @@ export const Msg = {
     sentLinkMail: "Reset password link sent successfully to your email",
     otp404: "OTP has expired",
     sentMail404: "Unable sent OTP to your email.",
-    roleName404: "Role name already exists"
+    roleName404: "Role name already exists",
+    createPassLinkMail: "Create password link sent successfully to your email",
 }

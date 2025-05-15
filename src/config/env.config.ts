@@ -23,6 +23,9 @@ export const config = {
         expiresIn: process.env.JWT_EXPIRES_IN || '1h',
         refreshTexpiresIn: process.env.REFRESH_TOKEN_EXPIRY,
         cookieExpiry: process.env.COOKIE_EXPIRY,
+        oneDay: process.env.JWT_1D_EXPIRY,
+        fifteenMins: process.env.JWT_15m_EXPIRY
+
     },
     cookie: {
         oneDay: process.env.COOKIE_1D_EXPIRY,
@@ -48,7 +51,9 @@ export const config = {
         token: process.env.EMAIL_TOKEN,
         url: process.env.EMAIL_BASE_URL,
         template: {
-            otp: process.env.TEMP_OTP
+            otp: process.env.TEMP_OTP,
+            forgot: process.env.TEMP_FORGOT,
+            create: process.env.TEMP_CREATE,
         }
     },
 };

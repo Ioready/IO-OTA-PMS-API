@@ -22,7 +22,7 @@ class AuthController {
     @Post('/')
     async createUser(req: Request, res: Response) {
         const result = await AuthService.createUser(req, res);
-        if (result) Responder.sendSuccessMessage(Msg.userCreated, res)
+        if (result) Responder.sendSuccessMessage(Msg.createPassLinkMail, res)
     }
 
     @Post("/login")
@@ -50,7 +50,7 @@ class AuthController {
 
     @Post("/forgot-password")
     async forgotPassword(req: Request, res: Response) {
-        const result: any = await AuthService.forgotPassword(req);
+        const result: any = await AuthService.forgotPassword(req, "forgot");
         if (result) Responder.sendSuccessMessage(Msg.sentLinkMail, res)
     }
 
@@ -59,6 +59,12 @@ class AuthController {
         const result: any = await AuthService.setPassword(req, res);
         if (result) Responder.sendSuccessMessage(Msg.sentMail, res);
         else Responder.sendSuccessMessage(Msg.sentMail404, res)
+    }
+
+    @Post("/create-password")
+    async createPassword(req: Request, res: Response) {
+        const result: any = await AuthService.forgotPassword(req, "create-password");
+        if (result) Responder.sendSuccessMessage(Msg.createPassLinkMail, res)
     }
 
     @Post("/verify-otp")
@@ -70,7 +76,7 @@ class AuthController {
     @Post("/refresh-token")
     async refreshToken(req: Request, res: Response) {
         const result: any = await AuthService.refreshToken(req, res);
-        if (result) Responder.sendSuccessData(result, Msg.login, res);
+        if (result) Responder.sendSuccessData({accessToken: result.accessToken}, Msg.login, res);
     }
 
     @Get("/me")

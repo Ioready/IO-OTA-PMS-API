@@ -26,8 +26,8 @@ interface IUser extends Document {
 
 const UserSchema = new Schema<IUser>({
     name: String,
-    fullName: { type: String },
-    email: String,
+    fullName: { type: String, required: [true, "Name is required"] },
+    email: { type: String, required: [true, "Email is required"] },
     password: {
         type: String, select: false,
         // minlength: 8,

@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from "express"
 import axios from 'axios';
+import { ZohoApi } from '../utils/zohoApi';
 class UtilsClass {
   constructor() { }
 
@@ -71,8 +72,8 @@ class UtilsClass {
       type: user.type,
       role: user.role,
       deviceId
+      
     });
-
     // this.setCookies('refreshToken', tokens.refreshToken, config.cookie.oneDay, res);
     return { accessToken: tokens.accessToken, route: await this.checkProperty(user) }
   }
@@ -84,10 +85,24 @@ class UtilsClass {
   };
 
   generateTokenAndMail = async (user: any, type: any) => {
-    const token = this.getSignedJwtToken({ id: user._id, }, config.jwt.expiresIn);
+    var set: string, expiry: any, template: any;
+    if (type === "create" || type === "forgot") set = "set-password";
+    if (type === "create-password") set = "create-password";
+
+    if (type === "create") {
+      expiry = config.jwt.oneDay;
+      template = config.zeptoMail.template.create;
+      // login.loginLink = `${config.url.base}/en/admin/login`
+    }
+    else {
+      expiry = config.jwt.fifteenMins;
+      template = config.zeptoMail.template.forgot;
+    }
+    const token = this.getSignedJwtToken({ id: user._id, type: set }, expiry);
     await TokenModel.create({ token })
-    // const url = `${config.url.base}/ ${type}  ?token=${token}`;
-    // //send mail
+    const url = `${config.url.base}/token-verify?token=${token}`;
+    //send mail
+    ZohoApi.sendMailTemplate(user.email, user.fullName, template, { product: "Otlesoft", link: url, name: user.fullName })
 
   }
 
@@ -108,7 +123,7 @@ class UtilsClass {
       deviceId,
       user: user._id,
       ip: req.ip,
-      keepMeSigned: req.body.keepMeSigned,
+      keepMeSigned: req.cookies.keepMeSigned,
       userAgent: req.headers['user-agent'],
     }, { upsert: true, new: true })
 
