@@ -43,5 +43,12 @@ export const config = {
     email: {
         name: process.env.FROM_NAME,
         from: process.env.FROM_EMAIL,
-    }
+    },
+    zeptoMail: {
+        token: process.env.EMAIL_TOKEN,
+        url: process.env.EMAIL_BASE_URL,
+        template: {
+            otp: process.env.TEMP_OTP
+        }
+    },
 };

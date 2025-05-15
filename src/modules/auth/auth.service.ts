@@ -7,6 +7,7 @@ import { Utils } from '../../lib/utils';
 import { config } from '../../config/env.config';
 import { CONSTANTS } from '../../lib/constants';
 import { bodyValidation } from '../../middleware/validation';
+import { ZohoApi } from '../../utils/zohoApi';
 
 class AuthService {
     // @ts-ignore
@@ -88,7 +89,7 @@ class AuthService {
         user.otpExpiry = Date.now() + CONSTANTS.otpExpiry;
         await user.save({ validateBeforeSave: false });
 
-        //mail sent
+        ZohoApi.sendMailTemplate(user.email, user.fullName, config.zeptoMail.template.otp, { OTP: otp, product: "Otlesoft" })
 
         // return user;
         // const token = Utils.getSignedJwtToken({ id: user._id, role: user.role }, config.jwt.expiresIn);
@@ -118,7 +119,7 @@ class AuthService {
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
-        await user.save();        
+        await user.save();
         await this.sendOtp(user);
         await DeviceModel.deleteMany({ user: user._id })
         // const deviceId = await Utils.createDevice(user, req, res);

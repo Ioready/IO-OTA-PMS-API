@@ -1,35 +1,36 @@
 
 
 import { SendMailClient } from "zeptomail";
+import { config } from "../config/env.config";
 
-const url = "api.zeptomail.in/";
-const token = "Zoho-enczapikey PHtE6r0LQe7ug2Ys8BUHsPTsHsPyPIon/OhkeAMR5Y1KX/5RTU1Q/dAsljWx+kp7UfJLEPWZyo1q57iftemGJGvvN2pJX2qyqK3sx/VYSPOZsbq6x00UsFkffkHdUYXqe9Zi1SPVu9nTNA==";
+const url = config.zeptoMail.url;
+const token = config.zeptoMail.token;
 
 let client = new SendMailClient({ url, token });
-console.log(client);
 
 class ZohoApiClass {
 
 
-    // sendMailTemplate = (email: any, name: any, template: any, mergeInfo: any) => {
-    sendMailTemplate = (email: any, name: any) => {
+    sendMailTemplate = (email: any, name: any, template: any, mergeInfo: any) => {
+        // sendMailTemplate = (email: any, name: any) => {
 
         return client.sendMailWithTemplate({
-            "template_key": "2518b.a07fd80a3de39dd.k1.40e5a930-3146-11f0-994a-ae9c7e0b6a9f.196d23b5343",
+            "template_key": template,
             "from": {
-                "address": "noreply@ioready.io"
+                "address": config.email.from,
+                name: config.email.name
             },
             "to": [
                 {
                     "email_address": {
                         "address": email,
-                        "name": "Rajapandi"
+                        "name": name
                     }
                 }
             ],
             "merge_info": {
                 name,
-                // ...mergeInfo
+                ...mergeInfo
             }
         })
     }
@@ -55,7 +56,7 @@ class ZohoApiClass {
             "htmlbody": "<div><b> Test email sent successfully.</b></div>",
         }).then((resp) => console.log("success")).catch((error) => {
             console.log(error);
-            
+
             console.log("error")
         });
     }
