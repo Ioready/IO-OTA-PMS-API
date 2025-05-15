@@ -1,10 +1,9 @@
 
 import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
-import { PropertyModel } from '../../schemas';
+import { PropertyModel, UserModel } from '../../schemas';
 import { Msg } from '../../resources';
 import { Model } from '../../lib/model';
-import { bodyValidation } from '../../middleware/validation';
 
 class PropertyService {
 
@@ -12,10 +11,10 @@ class PropertyService {
     createProperty = async (req: Request, res: Response) => {
 
         const data = req.body;
-        let validateErr: any = bodyValidation(["category", "priority"], req, res)
-        if (!validateErr) return;
+        data.groupId = req.user.groupId;
         const property = await PropertyModel.create(data);
         if (!property) throw new ConflictResponse(Msg.propertyCreated404)
+        await Model.findOneAndUpdate(UserModel, { _id: req.user._id }, { currentProperty: property._id })
         return property
     }
 
@@ -33,12 +32,16 @@ class PropertyService {
         return property
     }
 
-    // @ts-ignore
     getProperties = async (req: Request) => {
-
         const properties = await Model.find(PropertyModel, req.query, {});
         if (!properties) throw new NotFoundResponse(Msg.properties404)
-        return { Propertys: properties.data, total: properties.total }
+        return { properties: properties.data, total: properties.total }
+    }
+
+    getAllProperties = async () => {
+        const properties = await Model.findAll(PropertyModel, {}, { name: 1 }, { sort: { _id: -1 } });
+        if (!properties) throw new NotFoundResponse(Msg.properties404)
+        return { properties }
     }
 
 }

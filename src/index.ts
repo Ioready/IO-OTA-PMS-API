@@ -9,11 +9,11 @@ import "./modules/auth/auth.controller";
 import './modules/ticket/ticket.controller'
 import "./modules/role/role.controller"
 import "./modules/userRole/userRole.controller"
+
+import "./modules/property/property.controller"
 import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";
-import sendEmail from "./utils/sendEmail";
-import { ZohoApi } from "./utils/zohoApi";
 
 const app = express();
 app.use(express.json());
@@ -38,18 +38,6 @@ app.use(limiter)
 
 app.use(AppRouter.getInstance())
 app.use(errorHandler)
-// ZohoApi.sendMailTemplate("ioreadyrajapandi@gmail.com", "Raja")
-// ZohoApi.sendMailTemplate("ioreadyrajapandi@gmail.com", "Raja")
-//   .then(res => {
-//     console.log("Email sent successfully:", res);
-//   })
-// 	.catch(err => {
-// 	  console.log(err);
-	  
-//     console.error("Email sending failed:", err?.response?.data || err);
-//   });
-
-// ZohoApi.sendMail()
 app.listen(port, () => {
 	console.log(`OTA service running port on ${port}`.green.bold);
 });

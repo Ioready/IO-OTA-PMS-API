@@ -19,6 +19,7 @@ interface IUser extends Document {
     keepMeSigned: boolean,
     isDeleted: boolean;
     phone: any
+    currentProperty: ObjectId,
     status: string,
 
 
@@ -47,6 +48,7 @@ const UserSchema = new Schema<IUser>({
     keepMeSigned: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
     phone: Utils.returnPhoneSchema(),
+    currentProperty: { type: mongoose.Schema.Types.ObjectId, ref: "property", },
     status: String,
 
 }, Utils.returnSchemaOption());

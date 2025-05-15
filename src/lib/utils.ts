@@ -72,7 +72,7 @@ class UtilsClass {
       type: user.type,
       role: user.role,
       deviceId
-      
+
     });
     // this.setCookies('refreshToken', tokens.refreshToken, config.cookie.oneDay, res);
     return { accessToken: tokens.accessToken, route: await this.checkProperty(user) }
@@ -123,7 +123,7 @@ class UtilsClass {
       deviceId,
       user: user._id,
       ip: req.ip,
-      keepMeSigned: req.cookies.keepMeSigned,
+      keepMeSigned: req.cookies.keepMeSigned ?? false,
       userAgent: req.headers['user-agent'],
     }, { upsert: true, new: true })
 
@@ -177,7 +177,7 @@ class UtilsClass {
 
       const property: any = await PropertyModel.find(obj)
       if (property.length === 1) {
-        if (property[0].step === "6")
+        if (property[0].step === 6)
           route = "dashboard"
       }
     }

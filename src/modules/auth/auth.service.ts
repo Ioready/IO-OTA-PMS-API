@@ -41,7 +41,7 @@ class AuthService {
 
         let hashPass = await Utils.comparePassword(data.password, user.password);
         if (!hashPass) throw new UnauthorizedResponse(Msg.invalidCred)
-        await Utils.setCookies('keepMeSigned', data.keepMeSigned, config.cookie.oneHour, res);
+        await Utils.setCookies('keepMeSigned', data.keepMeSigned ?? false, config.cookie.oneHour, res);
         return this.sendOtp(user)
     }
 
@@ -86,7 +86,7 @@ class AuthService {
         user.otpExpiry = Date.now() + CONSTANTS.otpExpiry;
         await user.save({ validateBeforeSave: false });
 
-        ZohoApi.sendMailTemplate(user.email, user.fullName, config.zeptoMail.template.otp, { OTP: otp, product: "Otlesoft" })
+        // ZohoApi.sendMailTemplate(user.email, user.fullName, config.zeptoMail.template.otp, { OTP: otp, product: "Otlesoft" })
 
         // return user;
         // const token = Utils.getSignedJwtToken({ id: user._id, role: user.role }, config.jwt.expiresIn);
@@ -127,7 +127,7 @@ class AuthService {
     }
 
 
-    verifyOtp = async (req: Request, res: Response) => {
+    verifyOtp = async (req: Request, res: Response) => {        
         const { email, otp } = req.body;
 
         let validateErr: any = bodyValidation(["email", "otp"], req, res)

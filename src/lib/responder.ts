@@ -15,12 +15,21 @@ class ResponderClass {
             message,
             statusCode: 200
         }).status(200)
-    } 
+    }
 
     public sendSuccessCreatedMessage(message: string, res: Response) {
-        return res .status(201).send({
+        return res.status(201).send({
             success: true,
             message,
+            statusCode: 201
+        })
+    }
+
+    public sendSuccessCreatedDate(data: any, message: string, res: Response) {
+        return res.status(201).send({
+            success: true,
+            message,
+            data,
             statusCode: 201
         })
     }
