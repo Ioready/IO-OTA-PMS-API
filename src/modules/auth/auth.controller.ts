@@ -34,8 +34,8 @@ class AuthController {
     @Post("/verify-url")
     async verifyAndExpiryUrl(req: Request, res: Response) {
         const result: any = await AuthService.verifyAndExpiryUrl(req);
-        if (result.type === "verify") Responder.sendSuccessData(result, Msg.tokenVerified, res)
-        if (result.type === "expiry") Responder.sendSuccessMessage(Msg.tokenExpired, res)
+        if (result.url === "verify") Responder.sendSuccessData(result, Msg.tokenVerified, res)
+        if (result.url === "expiry") Responder.sendSuccessMessage(Msg.tokenExpired, res)
     }
 
     @Post("/resent")

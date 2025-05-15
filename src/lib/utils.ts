@@ -102,7 +102,7 @@ class UtilsClass {
     await TokenModel.create({ token })
     const url = `${config.url.base}/token-verify?token=${token}`;
     //send mail
-    ZohoApi.sendMailTemplate(user.email, user.fullName, template, { product: "Otlesoft", link: url, name: user.fullName })
+    // ZohoApi.sendMailTemplate(user.email, user.fullName, template, { product: "Otlesoft", link: url, name: user.fullName })
 
   }
 

@@ -54,12 +54,12 @@ class AuthService {
             const decoded = Utils.verifyToken(rawToken);
             const user: any = await UserModel.findOne({ _id: decoded.id });
             if (!user) throw new NotFoundResponse(Msg.user404)
-            if (type === 'verify') {
-                return { email: user.email, type }
+            if (type === 'verify') {                
+                return { email: user.email, type: decoded.type, url: type }
             }
             if (type === 'expiry') {
                 await TokenModel.deleteOne({ token: rawToken })
-                return { type };
+                return { type: decoded.type, url: type };
             }
 
         } catch (err) {
@@ -127,7 +127,7 @@ class AuthService {
     }
 
 
-    verifyOtp = async (req: Request, res: Response) => {        
+    verifyOtp = async (req: Request, res: Response) => {
         const { email, otp } = req.body;
 
         let validateErr: any = bodyValidation(["email", "otp"], req, res)
