@@ -8,4 +8,9 @@ export enum CommonStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
 }
+export enum UserType{
+  ADMIN = "admin",
+  USER = "user",
+  HOUSEKEEPING ="housekeeping"
+}
 

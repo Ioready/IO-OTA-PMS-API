@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from "express"
 import axios from 'axios';
 class UtilsClass {
-  constructor() {}
+  constructor() { }
 
   returnSchemaOption = () => {
     return {
@@ -174,10 +174,18 @@ class UtilsClass {
     return user.data;
   };
 
-  returnRegExp =  (value: any) => {
+  returnRegExp = (value: any) => {
     return {
       $regex: new RegExp(value, "i"),
     };
   };
+
+  returnPhoneSchema = () => {
+    return {
+      countryCode: String,
+      nationalNumber: String,
+      is_verified: Boolean
+    };
+  }
 }
 export const Utils = new UtilsClass();

@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import "./modules/auth/auth.controller";
 import './modules/ticket/ticket.controller'
 import "./modules/role/role.controller"
+import "./modules/userRole/userRole.controller"
 import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";

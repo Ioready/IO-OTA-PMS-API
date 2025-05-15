@@ -13,7 +13,11 @@ interface IUser extends Document {
     type: string,
     otp: string,
     keepMeSigned: boolean,
+     isDeleted: boolean;
+    phone:any
     status: string,
+   
+
 }
 
 const UserSchema = new Schema<IUser>({
@@ -27,6 +31,8 @@ const UserSchema = new Schema<IUser>({
     type: { type: String, default: "admin" },
     otp: String,
     keepMeSigned: { type: Boolean, default: true },
+    isDeleted: { type: Boolean, default: false },
+    phone:Utils.returnPhoneSchema(),
     status: String,
 
 }, Utils.returnSchemaOption());

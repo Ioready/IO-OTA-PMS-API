@@ -1,6 +1,6 @@
 import { ConflictResponse, NotFoundResponse } from "../../lib/decorators";
 import { Request, Response } from "express";
-import { RoleModel } from "../../schemas";
+import { RoleModel, UserModel } from "../../schemas";
 import { Msg } from "../../resources";
 import { Model } from "../../lib/model";
 import { Utils } from "../../lib/utils";
@@ -52,6 +52,10 @@ class RoleService {
 
   deleteRole = async (id: any) => {
     // this.getRole(id)
+    const userCount = await Model.countDocuments(UserModel, { role: id })
+    if (userCount >= 1) {
+      throw new NotFoundResponse(Msg.roleDeleted404)
+    }
     const role = await RoleModel.findByIdAndDelete({ _id: id });
     if (!role) throw new NotFoundResponse(Msg.roleDeleted404);
     return role;

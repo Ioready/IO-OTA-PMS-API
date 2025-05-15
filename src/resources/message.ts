@@ -7,6 +7,9 @@ export const Msg = {
     password404: "Incorrect password",
     email404: "Email not exists",
     userUnAuth: "Unauthorization",
+    emailExist: "Email already exists",
+    userUpdated: "User updated",
+    userUpdated404: "Unable to update user",
 
     //Ticket
     ticketCreated: "Ticket created",
