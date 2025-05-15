@@ -16,8 +16,11 @@ interface IUser extends Document {
     otpExpiry: any,
     loginType: string,
     lastLogin: any,
-
+    keepMeSigned: boolean,
+    isDeleted: boolean;
+    phone: any
     status: string,
+
 
 }
 
@@ -41,6 +44,9 @@ const UserSchema = new Schema<IUser>({
     otpExpiry: Date,
     loginType: { type: String, default: LoginType.NORMAL },
     lastLogin: Date,
+    keepMeSigned: { type: Boolean, default: true },
+    isDeleted: { type: Boolean, default: false },
+    phone: Utils.returnPhoneSchema(),
     status: String,
 
 }, Utils.returnSchemaOption());

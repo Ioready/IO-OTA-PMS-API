@@ -7,6 +7,9 @@ export const Msg = {
     password404: "Incorrect password",
     email404: "Email not exists",
     userUnAuth: "Unauthorization",
+    emailExist: "Email already exists",
+    userUpdated: "User updated",
+    userUpdated404: "Unable to update user",
 
     //Ticket
     ticketCreated: "Ticket created",
@@ -39,6 +42,8 @@ export const Msg = {
     role404: "Role not found",
     roles: "Roles",
     roles404: "Unable to get roles",
+    roleDeleted: "Role deleted",
+    roleDeleted404: "Unable to delete role",
 
     // Floor
     floorCreated: "Floor created",
@@ -63,4 +68,5 @@ export const Msg = {
     sentLinkMail: "Reset password link sent successfully to your email",
     otp404: "OTP has expired",
     sentMail404: "Unable sent OTP to your email.",
+    roleName404: "Role name already exists"
 }
