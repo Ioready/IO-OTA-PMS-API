@@ -46,20 +46,20 @@ class AuthService {
 
     verifyAndExpiryUrl = async (req: Request) => {
         try {
-            const { token: rawToken, type } = req.query;
+            const { token: rawToken, type: checkType } = req.query;
             const token = await TokenModel.findOne({ token: rawToken });
             if (!token) throw new NotFoundResponse(Msg.invalidToken)
             const decoded = Utils.verifyToken(rawToken);
-            const { deviceId } = (decoded as { deviceId: string });
+            const { deviceId, type } = (decoded as { deviceId: string, type: string });
 
             const user: any = await UserModel.findOne({ _id: deviceId });
             if (!user) throw new NotFoundResponse(Msg.user404)
-            if (type === 'verify') {
-                return { email: user.email, type: decoded.type, url: type }
+            if (checkType === 'verify') {
+                return { email: user.email, type: type, url: checkType }
             }
-            if (type === 'expiry') {
+            if (checkType === 'expiry') {
                 await TokenModel.deleteOne({ token: rawToken })
-                return { type: decoded.type, url: type };
+                return { type: type, url: checkType };
             }
 
         } catch (err) {
@@ -159,7 +159,7 @@ class AuthService {
 
             const user: any = await UserModel.findOne({ _id: deviceId });
             if (!user) throw new NotFoundResponse(Msg.user404)
-            const accessToken = Utils.generateToken(user, decoded.deviceId, res);
+            const accessToken = Utils.generateToken(user, deviceId, res);
             return accessToken;
 
 
