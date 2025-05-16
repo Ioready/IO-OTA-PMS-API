@@ -1,6 +1,12 @@
 import { Response } from 'express'
-
+import i18n from '../i18n';
 class ResponderClass {
+
+    private translate = (key: string, req: Request) => {
+        const locale = req.headers['lang']?.toString() || 'en';
+        return i18n.__({ phrase: key, locale });
+    };
+
     public sendSuccessData(data: any, message: string, res: Response) {
         return res.send({
             success: true,
@@ -48,6 +54,15 @@ class ResponderClass {
             data,
             statusCode: code
         }).status(code)
+    }
+
+    public sendSuccessMessageTest(message: string, req: Request, res: Response) {
+        var message = this.translate(message, req);
+        return res.send({
+            success: true,
+            message,
+            statusCode: 200
+        }).status(200)
     }
 };
 
