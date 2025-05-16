@@ -50,9 +50,9 @@ class AuthService {
             const token = await TokenModel.findOne({ token: rawToken });
             if (!token) throw new NotFoundResponse(Msg.invalidToken)
             const decoded = Utils.verifyToken(rawToken);
-            const { deviceId, type } = (decoded as { deviceId: string, type: string });
+            const { id, type } = (decoded as { id: string, type: string });
 
-            const user: any = await UserModel.findOne({ _id: deviceId });
+            const user: any = await UserModel.findOne({ _id: id });
             if (!user) throw new NotFoundResponse(Msg.user404)
             if (checkType === 'verify') {
                 return { email: user.email, type: type, url: checkType }
