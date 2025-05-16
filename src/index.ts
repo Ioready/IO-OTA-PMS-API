@@ -20,7 +20,12 @@ import { config } from "./config/env.config";
 const app = express();
 app.use(express.json());
 app.use(cookieParser())
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({
+	origin: 'http://localhost:5000', // your frontend origin
+	credentials: true
+}));
 
 const port = config.app.port || 8080;
 
