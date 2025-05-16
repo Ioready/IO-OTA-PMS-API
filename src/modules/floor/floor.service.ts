@@ -11,12 +11,9 @@ class FloorService {
     // @ts-ignore
     createFloor = async (req: Request, res: Response) => {
 
-        const data = req.body;
-        let validateErr: any = bodyValidation(["category", "priority"], req, res)
-        if (!validateErr) return;
-        const floor = await FloorModel.create(data);
+        const floor = await FloorModel.create(req.body);
         if (!floor) throw new ConflictResponse(Msg.floorCreated404)
-        return floor
+        return {floor}
     }
 
     editFloor = async (req: Request) => { 
@@ -40,6 +37,13 @@ class FloorService {
         if (!floors) throw new NotFoundResponse(Msg.floors404)
         return { floors: floors.data, total: floors.total }
     }
+
+    deleteFloor = async (id: any) => { 
+
+         const UserRole = await FloorModel.findOneAndDelete({ _id:id});
+        if (!UserRole) throw new NotFoundResponse(Msg.userDeleted404);
+        return UserRole;
+    }  
 
 }
 

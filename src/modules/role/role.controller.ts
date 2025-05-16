@@ -24,7 +24,7 @@ class RoleController {
     if (result) Responder.sendSuccessMessage(Msg.roleUpdated, res);
   }
 
-    @Get("/all")
+  @Get("/all")
   async getAllRoles(req: Request, res: Response) {
     const result = await RoleService.getAllRoles(req);
     if (result) Responder.sendSuccessData(result, Msg.roles, res);

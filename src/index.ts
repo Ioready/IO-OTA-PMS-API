@@ -9,7 +9,8 @@ import "./modules/auth/auth.controller";
 import './modules/ticket/ticket.controller'
 import "./modules/role/role.controller"
 import "./modules/userRole/userRole.controller"
-
+import "./modules/floor/floor.controller"
+import "./modules/roomType/roomType.controller"
 import "./modules/property/property.controller"
 import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";

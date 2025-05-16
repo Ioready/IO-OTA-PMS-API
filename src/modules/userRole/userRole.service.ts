@@ -1,7 +1,7 @@
 import { ConflictResponse, NotFoundResponse } from "../../lib/decorators";
 import { Request } from "express";
 import { UserModel } from "../../schemas";
-import { Msg, UserType } from "../../resources";
+import { CommonStatus, Msg, UserType } from "../../resources";
 import { Model } from "../../lib/model";
 import { Utils } from "../../lib/utils";
 
@@ -38,31 +38,31 @@ class UserRoleService {
     }
 
     deleteUserRole = async (id: any) => {
-        const UserRole = await UserModel.findByIdAndDelete({ _id: id });
+        const UserRole = await UserModel.findOneAndUpdate({ _id: id }, { isDeleted: true });
         if (!UserRole) throw new NotFoundResponse(Msg.userDeleted404);
         return UserRole;
     }
 
     listUserRole = async (req: Request) => {
-        const query = req.query;
+        const query: any = req.query;
 
         query.type = query.type === UserType.USER ? UserType.USER : UserType.HOUSEKEEPING;
-   
-        
+        query.isDeleted = false;
+
         const userRole = await Model.find(UserModel, query, {})
-         if (!userRole) throw new NotFoundResponse(Msg.user404);
-            return { userRole: userRole.data, total: userRole.total };
+        if (!userRole) throw new NotFoundResponse(Msg.user404);
+        return { userRole: userRole.data, total: userRole.total };
     }
 
     listHousekeeping = async (req: Request) => {
-        const query = req.query;
+        const query: any = req.query;
 
         query.type = UserType.HOUSEKEEPING;
-   
-        
-        const housekeepings = await Model.findAll(UserModel, query, {_id:1,fullName:1},{sort:{_id:-1}})
-         if (!housekeepings) throw new NotFoundResponse(Msg.housekeepings404);
-            return { housekeepings };
+        query.isDeleted = false;
+
+        const housekeepings = await Model.findAll(UserModel, query, { _id: 1, fullName: 1 }, { sort: { _id: -1 } })
+        if (!housekeepings) throw new NotFoundResponse(Msg.housekeepings404);
+        return { housekeepings };
     }
 
 }

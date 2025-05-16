@@ -61,6 +61,7 @@ export const Msg = {
     floor404: "Floor not found",
     floors: "Floors",
     floors404: "Unable to get floors",
+    floorDeleted:"Floor Deleted",
 
     //Token
     invalidToken: "Invalid token",
@@ -77,4 +78,8 @@ export const Msg = {
     sentMail404: "Unable sent OTP to your email.",
     roleName404: "Role name already exists",
     createPassLinkMail: "Create password link sent successfully to your email",
+
+    //RoomType
+    roomTypeCreated404: "Unable to create room type",
+     roomTypeCreated: "room type created",
 }

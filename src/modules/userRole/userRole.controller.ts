@@ -24,7 +24,7 @@ class UserRoleController {
 
     @Get("/housekeeping")
     @use(protect)
-    async listHousekeeping(req: Request , res:Response) {
+    async listHousekeeping(req: Request, res: Response) {
         const result = await userRoleService.listHousekeeping(req)
         if (result) Responder.sendSuccessData(result, Msg.housekeepings, res);
     }
@@ -46,16 +46,16 @@ class UserRoleController {
     @Delete("/:id")
     @use(protect)
     async deleteUserRole(req: Request, res: Response) {
-          const result = await userRoleService.deleteUserRole(req.params.id);
-            if (result) Responder.sendSuccessMessage(Msg.userDeleted, res)
+        const result = await userRoleService.deleteUserRole(req.params.id);
+        if (result) Responder.sendSuccessMessage(Msg.userDeleted, res)
     }
-    
+
     @Get("/")
     @use(protect)
-    async listUserRole(req: Request , res:Response) {
+    async listUserRole(req: Request, res: Response) {
         const result = await userRoleService.listUserRole(req)
         if (result) Responder.sendSuccessData(result, Msg.users, res);
     }
 
-    
+
 }
