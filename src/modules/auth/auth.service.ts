@@ -7,8 +7,6 @@ import { Utils } from '../../lib/utils';
 import { config } from '../../config/env.config';
 import { CONSTANTS } from '../../lib/constants';
 import { bodyValidation } from '../../middleware/validation';
-import { ZohoApi } from '../../utils/zohoApi';
-
 class AuthService {
     // @ts-ignore
     getUser(req, res) {
@@ -52,9 +50,11 @@ class AuthService {
             const token = await TokenModel.findOne({ token: rawToken });
             if (!token) throw new NotFoundResponse(Msg.invalidToken)
             const decoded = Utils.verifyToken(rawToken);
-            const user: any = await UserModel.findOne({ _id: decoded.id });
+            const { deviceId } = (decoded as { deviceId: string });
+
+            const user: any = await UserModel.findOne({ _id: deviceId });
             if (!user) throw new NotFoundResponse(Msg.user404)
-            if (type === 'verify') {                
+            if (type === 'verify') {
                 return { email: user.email, type: decoded.type, url: type }
             }
             if (type === 'expiry') {
@@ -155,7 +155,9 @@ class AuthService {
 
             if (!token) throw new UnauthorizedResponse(Msg.refresh404)
             const decoded = Utils.verifyToken(token);
-            const user: any = await UserModel.findOne({ _id: decoded.id });
+            const { deviceId } = (decoded as { deviceId: string });
+
+            const user: any = await UserModel.findOne({ _id: deviceId });
             if (!user) throw new NotFoundResponse(Msg.user404)
             const accessToken = Utils.generateToken(user, decoded.deviceId, res);
             return accessToken;

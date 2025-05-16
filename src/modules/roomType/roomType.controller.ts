@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete } from "../../lib/decorators";
+import { Controller, Post } from "../../lib/decorators";
 import { Responder } from "../../lib/responder";
 import { Msg } from "../../resources";
 import { Request, Response } from "express";

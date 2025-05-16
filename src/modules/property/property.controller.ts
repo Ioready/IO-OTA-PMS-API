@@ -25,7 +25,9 @@ class PropertyController {
         if (result) Responder.sendSuccessMessage(Msg.propertyUpdated, res)
     }
 
+
     @Get("/all")
+    // @ts-ignore
     async getAllProperties(req: Request, res: Response) {
         const result = await PropertyService.getAllProperties();
         if (result) Responder.sendSuccessData(result, Msg.properties, res)

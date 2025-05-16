@@ -35,31 +35,31 @@ class ZohoApiClass {
         })
     }
 
-    sendMail = () => {
-        client.sendMail({
-            "from":
-            {
-                "address": "noreply@ioready.io",
-                "name": "noreply"
-            },
-            "to":
-                [
-                    {
-                        "email_address":
-                        {
-                            "address": "muhammad_kabir@ioready.io",
-                            "name": "Kabir"
-                        }
-                    }
-                ],
-            "subject": "Test Email",
-            "htmlbody": "<div><b> Test email sent successfully.</b></div>",
-        }).then((resp) => console.log("success")).catch((error) => {
-            console.log(error);
+    // sendMail = () => {
+    //     client.sendMail({
+    //         "from":
+    //         {
+    //             "address": "noreply@ioready.io",
+    //             "name": "noreply"
+    //         },
+    //         "to":
+    //             [
+    //                 {
+    //                     "email_address":
+    //                     {
+    //                         "address": "muhammad_kabir@ioready.io",
+    //                         "name": "Kabir"
+    //                     }
+    //                 }
+    //             ],
+    //         "subject": "Test Email",
+    //         "htmlbody": "<div><b> Test email sent successfully.</b></div>",
+    //     }).then((resp) => console.log("success")).catch((error) => {
+    //         console.log(error);
 
-            console.log("error")
-        });
-    }
+    //         console.log("error")
+    //     });
+    // }
 }
 
 

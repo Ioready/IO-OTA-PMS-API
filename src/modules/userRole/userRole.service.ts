@@ -1,10 +1,8 @@
 import { ConflictResponse, NotFoundResponse } from "../../lib/decorators";
 import { Request } from "express";
 import { UserModel } from "../../schemas";
-import { CommonStatus, Msg, UserType } from "../../resources";
+import {  Msg, UserType } from "../../resources";
 import { Model } from "../../lib/model";
-import { Utils } from "../../lib/utils";
-
 
 
 class UserRoleService {

@@ -5,7 +5,6 @@ import { Msg } from '../../resources';
 
 import { Request, Response } from "express"
 import FloorService from './floor.service';
-import { reset } from 'colors';
 
 @Controller("/floor")
 // @ts-ignore

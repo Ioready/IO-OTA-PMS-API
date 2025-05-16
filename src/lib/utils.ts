@@ -65,6 +65,7 @@ class UtilsClass {
     return OTP;
   };
 
+  // @ts-ignore
   generateToken = async (user: any, deviceId: any, res: Response) => {
 
     const tokens = await this.generateTokens({
