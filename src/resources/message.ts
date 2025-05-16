@@ -85,4 +85,8 @@ export const Msg = {
     //RoomType
     roomTypeCreated404: "Unable to create room type",
     roomTypeCreated: "room type created",
+    roomTypeUpdated: "Room type updated",
+    roomTypeUpdated404: "Room type not found",
+    roomType: "Room type",
+    roomType404: "Room type not found",
 }
