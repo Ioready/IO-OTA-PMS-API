@@ -2,12 +2,13 @@ import { Response } from 'express'
 import i18n from '../i18n';
 class ResponderClass {
 
-    private translate = (key: string, req: Request) => {
-        const locale = req.headers['lang']?.toString() || 'en';
+    private translate = (key: string) => {
+        const locale = globalThis.currentReq?.language || 'en';
         return i18n.__({ phrase: key, locale });
     };
 
     public sendSuccessData(data: any, message: string, res: Response) {
+        var message = this.translate(message);
         return res.send({
             success: true,
             message,
@@ -16,6 +17,7 @@ class ResponderClass {
         }).status(200)
     }
     public sendSuccessMessage(message: string, res: Response) {
+        var message = this.translate(message);
         return res.send({
             success: true,
             message,
@@ -24,6 +26,7 @@ class ResponderClass {
     }
 
     public sendSuccessCreatedMessage(message: string, res: Response) {
+        var message = this.translate(message);
         return res.status(201).send({
             success: true,
             message,
@@ -32,6 +35,7 @@ class ResponderClass {
     }
 
     public sendSuccessCreatedDate(data: any, message: string, res: Response) {
+        var message = this.translate(message);
         return res.status(201).send({
             success: true,
             message,
@@ -41,6 +45,7 @@ class ResponderClass {
     }
 
     public sendFailureMessage(message: string, code: number = 200, res: Response) {
+        var message = this.translate(message);
         return res.status(code).send({
             success: false,
             message,
@@ -56,8 +61,8 @@ class ResponderClass {
         }).status(code)
     }
 
-    public sendSuccessMessageTest(message: string, req: Request, res: Response) {
-        var message = this.translate(message, req);
+    public sendSuccessMessageTest(message: string, res: Response) {
+        var message = this.translate(message);
         return res.send({
             success: true,
             message,
