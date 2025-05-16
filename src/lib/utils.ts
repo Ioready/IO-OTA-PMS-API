@@ -1,12 +1,13 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { config } from '../config/env.config';
-import { DeviceModel, PropertyModel, TokenModel } from '../schemas';
+import { DeviceModel, PropertyModel, TokenModel, UserModel } from '../schemas';
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from "express"
 import axios from 'axios';
 import { ZohoApi } from '../utils/zohoApi';
+import { Model } from './model';
 class UtilsClass {
   constructor() { }
 
@@ -76,7 +77,7 @@ class UtilsClass {
 
     });
     // this.setCookies('refreshToken', tokens.refreshToken, config.cookie.oneDay, res);
-    return { accessToken: tokens.accessToken, route: await this.checkProperty(user) }
+    return { accessToken: tokens.accessToken, ... await this.checkProperty(user) }
   }
 
   generateTokens = async (payload: any) => {
@@ -173,17 +174,23 @@ class UtilsClass {
     var obj = {
       groupId: user.groupId
     };
-    var route = "property";
+    var route = "property", propertyId = null;
     if (user.type === "admin") {
 
       const property: any = await PropertyModel.find(obj)
       if (property.length === 1) {
         if (property[0].step === 6)
           route = "dashboard"
+        else propertyId = property[0]._id;
+      }
+      else {
+        const property = await PropertyModel.create({ groupId: user.groupId, step: 1 });
+        propertyId = property._id;
+        await Model.findOneAndUpdate(UserModel, { _id: user.id }, { currentProperty: propertyId })
       }
     }
     else route = "dashboard";
-    return route;
+    return { route, propertyId: propertyId };
   }
 
 }

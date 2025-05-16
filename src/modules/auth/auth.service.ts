@@ -73,7 +73,7 @@ class AuthService {
 
     resendOtp = async (req: Request) => {
         const user: any = await UserModel.findOne({ email: req.body.email });
-        if (!user) throw new NotFoundResponse(Msg.user404)
+        if (!user) throw new NotFoundResponse(Msg.account404)
         return this.sendOtp(user)
     }
 
@@ -99,7 +99,7 @@ class AuthService {
     forgotPassword = async (req: Request, type: string) => {
 
         const user: any = await UserModel.findOne({ email: req.body.email });
-        if (!user) throw new NotFoundResponse(Msg.user404)
+        if (!user) throw new NotFoundResponse(Msg.account404)
         Utils.generateTokenAndMail(user, type)
         return true;
 
@@ -112,7 +112,7 @@ class AuthService {
         if (!validateErr) return;
 
         const user: any = await UserModel.findOne({ email: email });
-        if (!user) throw new NotFoundResponse(Msg.user404)
+        if (!user) throw new NotFoundResponse(Msg.account404)
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
@@ -134,7 +134,7 @@ class AuthService {
         if (!validateErr) return;
 
         const user: any = await UserModel.findOne({ email: email });
-        if (!user) throw new NotFoundResponse(Msg.user404)
+        if (!user) throw new NotFoundResponse(Msg.account404)
 
         if (user.otp != otp) throw new NotFoundResponse(Msg.invalidOtp)
         if (user.otpExpiry < new Date()) throw new GoneResponse(Msg.otp404)

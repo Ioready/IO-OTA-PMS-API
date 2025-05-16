@@ -12,6 +12,7 @@ import "./modules/userRole/userRole.controller"
 import "./modules/floor/floor.controller"
 import "./modules/roomType/roomType.controller"
 import "./modules/property/property.controller"
+import "./modules/user/user.controller"
 import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";

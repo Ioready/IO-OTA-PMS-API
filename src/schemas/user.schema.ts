@@ -20,6 +20,7 @@ interface IUser extends Document {
     isDeleted: boolean;
     phone: any
     currentProperty: ObjectId,
+    referralSource: any,
     status: string,
 
 
@@ -49,6 +50,7 @@ const UserSchema = new Schema<IUser>({
     isDeleted: { type: Boolean, default: false },
     phone: Utils.returnPhoneSchema(),
     currentProperty: { type: mongoose.Schema.Types.ObjectId, ref: "property", },
+    referralSource: { type: String, required: [true, "Please select how you heard about us"] },
     status: String,
 
 }, Utils.returnSchemaOption());

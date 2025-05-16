@@ -5,7 +5,7 @@ export const Msg = {
     userCreated404: "Unable to create user",
     userCreated: "User created",
     password404: "Incorrect password",
-    email404: "Email not exists",
+    email404: "Email already exists",
     userUnAuth: "Unauthorization",
     emailExist: "Email already exists",
     userUpdated: "User updated",
@@ -14,9 +14,12 @@ export const Msg = {
     userDeleted: "User role deleted",
     userDeleted404: "Unable to delete user role",
     housekeepings: "Housekeepings ",
-    housekeepings404:"Unable to get housekeepings",
-    
-    
+    housekeepings404: "Unable to get housekeepings",
+    account404: "Account not found",
+    profile: "profile",
+    profile404: "Profile not found",
+
+
 
     //Ticket
     ticketCreated: "Ticket created",
@@ -61,7 +64,7 @@ export const Msg = {
     floor404: "Floor not found",
     floors: "Floors",
     floors404: "Unable to get floors",
-    floorDeleted:"Floor Deleted",
+    floorDeleted: "Floor Deleted",
 
     //Token
     invalidToken: "Invalid token",
@@ -81,5 +84,5 @@ export const Msg = {
 
     //RoomType
     roomTypeCreated404: "Unable to create room type",
-     roomTypeCreated: "room type created",
+    roomTypeCreated: "room type created",
 }
