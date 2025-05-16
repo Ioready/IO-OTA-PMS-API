@@ -16,13 +16,13 @@ class PropertyController {
     @use(protect)
     async createProperty(req: Request, res: Response) {
         const result = await PropertyService.createProperty(req, res);
-        if (result) Responder.sendSuccessCreatedDate({ property: result._id }, Msg.propertyCreated, res);
+        if (result) Responder.sendSuccessCreatedDate({ property: result._id }, 'property:success.create', res);
     }
 
     @Patch("/:id")
     async editProperty(req: Request, res: Response) {
         const result = await PropertyService.editProperty(req);
-        if (result) Responder.sendSuccessMessage(Msg.propertyUpdated, res)
+        if (result) Responder.sendSuccessMessage('property:success.update', res)
     }
 
 
@@ -30,19 +30,19 @@ class PropertyController {
     // @ts-ignore
     async getAllProperties(req: Request, res: Response) {
         const result = await PropertyService.getAllProperties();
-        if (result) Responder.sendSuccessData(result, Msg.properties, res)
+        if (result) Responder.sendSuccessData(result, 'property:success.list', res)
     }
 
     @Get("/:id")
     async getProperty(req: Request, res: Response) {
         const property = await PropertyService.getProperty(req.params.id);
-        if (property) Responder.sendSuccessData({ property }, Msg.property, res)
+        if (property) Responder.sendSuccessData({ property }, 'property:success.detail', res)
     }
 
     @Get("/")
     async getProperties(req: Request, res: Response) {
         const result = await PropertyService.getProperties(req);
-        if (result) Responder.sendSuccessData(result, Msg.properties, res)
+        if (result) Responder.sendSuccessData(result, 'property:success.list', res)
     }
 
 }

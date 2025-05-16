@@ -1,6 +1,11 @@
 {
     "user": {
         "invalidCred": "Geçersiz giriş bilgileri",
+        "login": "Giriş başarılı",
+        "failure": {
+        "invalidCred": "Geçersiz giriş bilgileri",
         "login": "Giriş başarılı"
     }
+    }
+
 }

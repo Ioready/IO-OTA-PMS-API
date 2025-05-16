@@ -1,0 +1,12 @@
+{
+  "success": {
+    "create": "Room type created",
+    "update": "Room type updated",
+    "detail": "Room type"
+  },
+  "failure": {
+    "create": "Unable to create room type",
+    "update": "Room type not found",
+    "detail": "Room type not found"
+  }
+}

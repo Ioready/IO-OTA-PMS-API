@@ -2,13 +2,22 @@ import { Response } from 'express'
 import i18n from '../i18n';
 class ResponderClass {
 
-    private translate = (key: string) => {
+    // private translate = (key: string) => {
+    //     console.log(key);
+
+    //     const locale = globalThis.currentReq?.language || 'en';
+    //     return i18n.__({ phrase: key, locale });
+    // };
+
+    private translate = (key: string, ns = 'user') => {
         const locale = globalThis.currentReq?.language || 'en';
-        return i18n.__({ phrase: key, locale });
+        return i18n.t(key, { lng: locale, ns });
     };
 
     public sendSuccessData(data: any, message: string, res: Response) {
         var message = this.translate(message);
+        // console.log({ message });
+
         return res.send({
             success: true,
             message,

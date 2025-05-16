@@ -1,5 +1,5 @@
 
-import { Controller, Get, Post, Patch ,Delete } from '../../lib/decorators';
+import { Controller, Get, Post, Patch, Delete } from '../../lib/decorators';
 import { Responder } from '../../lib/responder';
 import { Msg } from '../../resources';
 
@@ -13,31 +13,31 @@ class FloorController {
     @Post("/")
     async createFloor(req: Request, res: Response) {
         const result = await FloorService.createFloor(req, res);
-        if (result) Responder.sendSuccessCreatedMessage(Msg.floorCreated, res);
+        if (result) Responder.sendSuccessCreatedMessage('floor:success.create', res);
     }
 
     @Patch("/:id")
     async editFloor(req: Request, res: Response) {
         const result = await FloorService.editFloor(req);
-        if (result) Responder.sendSuccessMessage(Msg.floorUpdated, res)
+        if (result) Responder.sendSuccessMessage('floor:success.update', res)
     }
 
     @Get("/:id")
     async getFloor(req: Request, res: Response) {
         const Floor = await FloorService.getFloor(req.params.id);
-        if (Floor) Responder.sendSuccessData({ Floor }, Msg.floor, res)
+        if (Floor) Responder.sendSuccessData({ Floor }, 'floor:success.detail', res)
     }
 
     @Get("/")
     async getFloors(req: Request, res: Response) {
         const result = await FloorService.getFloors(req);
-        if (result) Responder.sendSuccessData(result, Msg.floors, res)
+        if (result) Responder.sendSuccessData(result, 'floor:success.list', res)
     }
-    
-    @Delete("/:id") 
-    async deleteFloor(req: Request ,res: Response) {
+
+    @Delete("/:id")
+    async deleteFloor(req: Request, res: Response) {
         const Floor = await FloorService.deleteFloor(req.params.id);
-        if (Floor) Responder.sendSuccessMessage(Msg.floorDeleted ,res)
+        if (Floor) Responder.sendSuccessMessage('floor:success.delete', res)
     }
 
 }
