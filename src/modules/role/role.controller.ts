@@ -23,23 +23,30 @@ class RoleController {
   }
 
   @Get("/all")
+  @use(protect)
   async getAllRoles(req: Request, res: Response) {
+    console.log("here");
+
     const result = await RoleService.getAllRoles(req);
     if (result) Responder.sendSuccessData(result, 'role:success.list', res);
   }
 
   @Get("/:id")
+  @use(protect)
   async getRole(req: Request, res: Response) {
     const role = await RoleService.getRole(req.params.id);
     if (role) Responder.sendSuccessData({ role }, 'role:success.detail', res);
   }
 
   @Get("/")
+  @use(protect)
   async getRoles(req: Request, res: Response) {
     const result = await RoleService.getRoles(req);
     if (result) Responder.sendSuccessData(result, 'role:success.list', res);
   }
+
   @Delete("/:id")
+  @use(protect)
   async deleteRole(req: Request, res: Response) {
     const result = await RoleService.deleteRole(req.params.id);
     if (result) Responder.sendSuccessMessage('role:success.delete', res)

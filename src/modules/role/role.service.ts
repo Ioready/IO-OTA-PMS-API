@@ -9,9 +9,7 @@ class RoleService {
   // @ts-ignore
   createRole = async (req: Request, res: Response) => {
     const data = req.body;
-    const exRole = await Model.findOne(RoleModel, {
-      name: Utils.returnRegExp(data.name),
-    });
+    const exRole = await Model.findOne(RoleModel, { name: Utils.returnRegExp(data.name), });
 
     if (exRole) throw new ConflictResponse('role:failure.name');
     data.groupId = req.user.groupId;
@@ -22,18 +20,15 @@ class RoleService {
 
   editRole = async (req: Request) => {
     const data = req.body;
-
+    const roleId = req.params.id;
+    await this.getRole(roleId)
     if (data.name) {
-      const exRole = await Model.findOne(RoleModel, {
-        name: Utils.returnRegExp(data.name), _id: { $ne: req.params.id }
-      });
-      if (exRole) {
-        throw new ConflictResponse('role:failure.detail');
-      }
+      const exRole = await Model.findOne(RoleModel, { name: Utils.returnRegExp(data.name), _id: { $ne: roleId } });
+      if (exRole) throw new ConflictResponse('role:failure.name');
     }
 
-    const role = await Model.findOneAndUpdate(RoleModel, { _id: req.params.id }, data);
-    if (!role) throw new NotFoundResponse('role:failure.detail');
+    const role = await Model.findOneAndUpdate(RoleModel, { _id: roleId }, data);
+    if (!role) throw new NotFoundResponse('role:failure.update');
     return role;
   };
 
@@ -45,13 +40,33 @@ class RoleService {
 
 
   getRoles = async (req: Request) => {
-    const roles = await Model.find(RoleModel, req.query, {});
+    const query: any = req.query;
+    const pipeline = [
+      Utils.lookupField("users", "_id", "role", "users"),
+      {
+        $addFields: {
+          totalUsers: {
+            $size: "$users"
+          }
+        }
+      }
+    ];
+    const projection = {
+      _id: 1,
+      name: 1,
+      description: 1,
+      status: 1,
+      createdAt: 1,
+      totalUsers: 1,
+    }
+    let pageLimit = Utils.returnPageLimit(query);
+    const roles = await Model.aggregate(RoleModel, pipeline, projection, pageLimit)
     if (!roles) throw new NotFoundResponse('role:failure.list');
-    return { Roles: roles.data, total: roles.total };
+    return { roles: roles.data, total: roles.total };
   };
 
   deleteRole = async (id: any) => {
-    // this.getRole(id)
+    await this.getRole(id)
     const userCount = await Model.countDocuments(UserModel, { role: id })
     if (userCount >= 1) {
       throw new NotFoundResponse('role:failure.delete')

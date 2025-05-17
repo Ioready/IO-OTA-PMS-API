@@ -3,13 +3,15 @@
         "create": "Property created",
         "update": "Property updated",
         "detail": "Property",
-        "list": "Properties"
+        "list": "Properties",
+        "switch": "Property switched"
     },
     "failure": {
         "create": "Unable to create property",
         "update": "Unable to update property",
         "detail": "Property not found",
         "list": "Unable to get properties",
-        "add": "First complete property"
+        "add": "First complete property",
+        "switch": "Unable to  switch property"
     }
 }

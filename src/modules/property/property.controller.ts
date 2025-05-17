@@ -18,6 +18,7 @@ class PropertyController {
     }
 
     @Patch("/:id")
+    @use(protect)
     async editProperty(req: Request, res: Response) {
         const result = await PropertyService.editProperty(req);
         if (result) Responder.sendSuccessMessage('property:success.update', res)
@@ -25,6 +26,7 @@ class PropertyController {
 
 
     @Get("/all")
+    @use(protect)
     // @ts-ignore
     async getAllProperties(req: Request, res: Response) {
         const result = await PropertyService.getAllProperties();
@@ -32,15 +34,24 @@ class PropertyController {
     }
 
     @Get("/:id")
+    @use(protect)
     async getProperty(req: Request, res: Response) {
         const property = await PropertyService.getProperty(req.params.id);
         if (property) Responder.sendSuccessData({ property }, 'property:success.detail', res)
     }
 
     @Get("/")
+    @use(protect)
     async getProperties(req: Request, res: Response) {
         const result = await PropertyService.getProperties(req);
         if (result) Responder.sendSuccessData(result, 'property:success.list', res)
+    }
+
+    @Patch("/switch/:id")
+    @use(protect)
+    async switchProperty(req: Request, res: Response) {        
+        const result = await PropertyService.switchProperty(req.params.id, req.user.id);
+        if (result) Responder.sendSuccessMessage('property:success.switch', res)
     }
 
 }

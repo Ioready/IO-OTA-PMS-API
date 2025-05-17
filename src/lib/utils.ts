@@ -194,5 +194,60 @@ class UtilsClass {
     return { redirectUrl, propertyId: propertyId };
   }
 
+  lookupField = (from: string, local: string, foreign: string, result = "") => {
+    return {
+      $lookup: {
+        from: from,
+        localField: local,
+        foreignField: foreign,
+
+        as: result || local,
+      },
+    };
+  }
+
+  lookupSelectedField = (from: string, local: string, foreign: string, projection: any, result = "") => {
+    return {
+      $lookup: {
+        from: from,
+        localField: local,
+        foreignField: foreign,
+        pipeline: [
+          {
+            $project: {
+              ...projection
+            },
+          },
+        ],
+        as: result || local,
+      },
+    };
+  }
+
+  unwind = (path: string) => {
+    return {
+      $unwind: {
+        path: path,
+        preserveNullAndEmptyArrays: true,
+      },
+    };
+  };
+
+  returnPageLimit = (query: any) => {
+    let { page, limit }: any = query;
+    page = Number(page) || 0;
+    limit = Number(limit) || 10;
+    // let page: any = (query.page ?? 1) - 1;
+    // let limit: any = query.limit ?? 10;
+    delete query.page;
+    delete query.limit;
+    return {
+      page: page,
+      limit: limit,
+    };
+  };
+
+
+
 }
 export const Utils = new UtilsClass();

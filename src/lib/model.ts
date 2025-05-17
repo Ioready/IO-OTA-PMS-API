@@ -50,7 +50,9 @@ class ModelClass {
         const skipLimit = (page > 1 ? page - 1 : 0) * limit;
         delete query.page
         delete query.limit
-        
+
+        options.sort = options?.sort === undefined ? { _id: -1 } : options.sort;
+
         let result = await schemaModel.find(query, projection, {
             ...options,
             skip: skipLimit,
@@ -149,7 +151,7 @@ class ModelClass {
     findOne = async (schemaModel: any, query: any, projection: any = {}) => {
         return await schemaModel.findOne(query, projection)
     }
-     findOneAndDelete = async (schemaModel: any, query: any) => {
+    findOneAndDelete = async (schemaModel: any, query: any) => {
         return await schemaModel.findOneAndDelete(query)
     }
 
