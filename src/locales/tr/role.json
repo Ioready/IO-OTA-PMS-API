@@ -1,17 +1,17 @@
 {
   "success": {
-    "create": "Role created",
-    "update": "Role updated",
-    "detail": "Role",
-    "list": "Roles",
-    "delete": "Role deleted"
+    "create": "Rol oluşturuldu",
+    "update": "Rol güncellendi",
+    "detail": "Rol",
+    "list": "Roller",
+    "delete": "Rol silindi"
   },
   "failure": {
-    "create": "Unable to create role",
-    "update": "Unable to update role",
-    "detail": "Role not found",
-    "list": "Unable to get roles",
-    "delete": "Unable to delete role",
-    "name": "Role name already exists"
+    "create": "Rol oluşturulamadı",
+    "update": "Rol güncellenemedi",
+    "detail": "Rol bulunamadı",
+    "list": "Roller alınamadı",
+    "delete": "Rol silinemedi",
+    "name": "Rol adı zaten mevcut"
   }
 }

@@ -1,14 +1,14 @@
 {
   "success": {
-    "create": "Room type created",
-    "update": "Room type updated",
-    "detail": "Room type",
-    "delete": "Room type deleted"
+    "create": "Oda türü oluşturuldu",
+    "update": "Oda türü güncellendi",
+    "detail": "Oda türü",
+    "delete": "Oda türü silindi"
   },
   "failure": {
-    "create": "Unable to create room type",
-    "update": "Unable to update room type",
-    "detail": "Room type not found",
-    "delete": "Unable to delete room type"
+    "create": "Oda türü oluşturulamadı",
+    "update": "Oda türü güncellenemedi",
+    "detail": "Oda türü bulunamadı",
+    "delete": "Oda türü silinemedi"
   }
 }

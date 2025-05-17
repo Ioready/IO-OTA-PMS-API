@@ -1,16 +1,16 @@
 {
   "success": {
-    "create": "Floor created",
-    "update": "Floor updated",
-    "detail": "Floor",
-    "list": "Floors",
-    "delete": "Floor deleted"
+    "create": "Kat oluşturuldu",
+    "update": "Kat güncellendi",
+    "detail": "Kat",
+    "list": "Katlar",
+    "delete": "Kat silindi"
   },
   "failure": {
-    "create": "Unable to create floor",
-    "update": "Unable to update floor",
-    "detail": "Floor not found",
-    "list": "Unable to get floors",
-    "delete": "Unable to delete floor"
+    "create": "Kat oluşturulamadı",
+    "update": "Kat güncellenemedi",
+    "detail": "Kat bulunamadı",
+    "list": "Katlar alınamadı",
+    "delete": "Kat silinemedi"
   }
 }

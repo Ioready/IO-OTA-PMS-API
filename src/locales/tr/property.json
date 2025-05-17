@@ -1,14 +1,14 @@
 {
     "success": {
-        "create": "Property created",
-        "update": "Property updated",
-        "detail": "Property",
-        "list": "Properties"
+        "create": "Mülk oluşturuldu",
+        "update": "Mülk güncellendi",
+        "detail": "Mülk",
+        "list": "Mülkler"
     },
     "failure": {
-        "create": "Unable to create property",
-        "update": "Unable to update property",
-        "detail": "Property not found",
-        "list": "Unable to get properties"
+        "create": "Mülk oluşturulamadı",
+        "update": "Mülk güncellenemedi",
+        "detail": "Mülk bulunamadı",
+        "list": "Mülkler alınamadı"
     }
 }
