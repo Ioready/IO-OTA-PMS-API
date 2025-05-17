@@ -150,6 +150,9 @@ class ModelClass {
     findOne = async (schemaModel: any, query: any, projection: any = {}) => {
         return await schemaModel.findOne(query, projection)
     }
+     findOneAndDelete = async (schemaModel: any, query: any) => {
+        return await schemaModel.findOneAndDelete(query)
+    }
 
 
 
