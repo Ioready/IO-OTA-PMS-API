@@ -1,0 +1,14 @@
+{
+  "success": {
+    "create": "Ticket created",
+    "update": "Ticket updated",
+    "detail": "Ticket",
+    "list": "Tickets"
+  },
+  "failure": {
+    "create": "Unable to create ticket",
+    "update": "Unable to update ticket",
+    "detail": "Ticket not found",
+    "list": "Unable to get tickets"
+  }
+}

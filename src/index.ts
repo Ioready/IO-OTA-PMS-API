@@ -16,16 +16,17 @@ import "./modules/user/user.controller"
 import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";
+import { setLanguage } from "./middleware/setLanguages";
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser())
-// app.use(cors());
 
 app.use(cors({
 	origin: 'http://localhost:5000', // your frontend origin
 	credentials: true
 }));
+app.use(setLanguage);
 
 const port = config.app.port || 8080;
 
@@ -42,6 +43,11 @@ const limiter = rateLimit({
 	}
 })
 app.use(limiter)
+
+app.use((req, _res, next) => {
+	globalThis.currentReq = req;
+	next();
+});
 
 app.use(AppRouter.getInstance())
 app.use(errorHandler)

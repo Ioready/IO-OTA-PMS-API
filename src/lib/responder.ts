@@ -1,7 +1,23 @@
 import { Response } from 'express'
-
+import i18n from '../i18n';
 class ResponderClass {
+
+    // private translate = (key: string) => {
+    //     console.log(key);
+
+    //     const locale = globalThis.currentReq?.language || 'en';
+    //     return i18n.__({ phrase: key, locale });
+    // };
+
+    private translate = (key: string) => {
+        const locale = globalThis.currentReq?.language || 'en';
+        return i18n.t(key, { lng: locale, });
+    };
+
     public sendSuccessData(data: any, message: string, res: Response) {
+        var message = this.translate(message);
+        // console.log({ message });
+
         return res.send({
             success: true,
             message,
@@ -10,6 +26,7 @@ class ResponderClass {
         }).status(200)
     }
     public sendSuccessMessage(message: string, res: Response) {
+        var message = this.translate(message);
         return res.send({
             success: true,
             message,
@@ -18,6 +35,7 @@ class ResponderClass {
     }
 
     public sendSuccessCreatedMessage(message: string, res: Response) {
+        var message = this.translate(message);
         return res.status(201).send({
             success: true,
             message,
@@ -26,6 +44,7 @@ class ResponderClass {
     }
 
     public sendSuccessCreatedDate(data: any, message: string, res: Response) {
+        var message = this.translate(message);
         return res.status(201).send({
             success: true,
             message,
@@ -35,6 +54,7 @@ class ResponderClass {
     }
 
     public sendFailureMessage(message: string, code: number = 200, res: Response) {
+        var message = this.translate(message);
         return res.status(code).send({
             success: false,
             message,
@@ -49,6 +69,17 @@ class ResponderClass {
             statusCode: code
         }).status(code)
     }
+
+    public sendSuccessMessageTest(message: string, res: Response) {
+        var message = this.translate(message);
+        return res.send({
+            success: true,
+            message,
+            statusCode: 200
+        }).status(200)
+    }
+
+    
 };
 
 export const Responder = new ResponderClass();

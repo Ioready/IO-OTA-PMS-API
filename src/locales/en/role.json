@@ -1,0 +1,17 @@
+{
+  "success": {
+    "create": "Role created",
+    "update": "Role updated",
+    "detail": "Role",
+    "list": "Roles",
+    "delete": "Role deleted"
+  },
+  "failure": {
+    "create": "Unable to create role",
+    "update": "Unable to update role",
+    "detail": "Role not found",
+    "list": "Unable to get roles",
+    "delete": "Unable to delete role",
+    "name": "Role name already exists"
+  }
+}

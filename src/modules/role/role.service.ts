@@ -13,10 +13,10 @@ class RoleService {
       name: Utils.returnRegExp(data.name),
     });
 
-    if (exRole) throw new ConflictResponse(Msg.roleName404);
+    if (exRole) throw new ConflictResponse('role:failure.name');
     data.groupId = req.user.groupId;
     const role = await RoleModel.create(data);
-    if (!role) throw new ConflictResponse(Msg.roleCreated404);
+    if (!role) throw new ConflictResponse('role:failure.create');
     return role;
   };
 
@@ -28,25 +28,25 @@ class RoleService {
         name: Utils.returnRegExp(data.name), _id: { $ne: req.params.id }
       });
       if (exRole) {
-        throw new ConflictResponse(Msg.roleName404);
+        throw new ConflictResponse('role:failure.detail');
       }
     }
 
     const role = await Model.findOneAndUpdate(RoleModel, { _id: req.params.id }, data);
-    if (!role) throw new NotFoundResponse(Msg.role404);
+    if (!role) throw new NotFoundResponse('role:failure.detail');
     return role;
   };
 
   getRole = async (id: any) => {
     const role = await Model.findOne(RoleModel, { _id: id });
-    if (!role) throw new NotFoundResponse(Msg.role404);
+    if (!role) throw new NotFoundResponse('role:failure.detail');
     return role;
   };
 
 
   getRoles = async (req: Request) => {
     const roles = await Model.find(RoleModel, req.query, {});
-    if (!roles) throw new NotFoundResponse(Msg.roles404);
+    if (!roles) throw new NotFoundResponse('role:failure.list');
     return { Roles: roles.data, total: roles.total };
   };
 
@@ -54,10 +54,10 @@ class RoleService {
     // this.getRole(id)
     const userCount = await Model.countDocuments(UserModel, { role: id })
     if (userCount >= 1) {
-      throw new NotFoundResponse(Msg.roleDeleted404)
+      throw new NotFoundResponse('role:failure.delete')
     }
     const role = await RoleModel.findByIdAndDelete({ _id: id });
-    if (!role) throw new NotFoundResponse(Msg.roleDeleted404);
+    if (!role) throw new NotFoundResponse('role:failure.delete');
     return { role };
   };
 
@@ -66,7 +66,7 @@ class RoleService {
     const query = req.query;
     query.status = CommonStatus.ACTIVE
     const roles = await Model.findAll(RoleModel, query, { _id: 1, name: 1 }, { sort: { _id: -1 } });
-    if (!roles) throw new NotFoundResponse(Msg.roles404);
+    if (!roles) throw new NotFoundResponse('role:failure.list');
     return { roles };
   };
 

@@ -13,10 +13,10 @@ class UserRoleService {
         data.groupId = req.user.groupId
         data.type = UserType.USER
         const exEmail = await UserModel.findOne({ email: data.email });
-        if (exEmail) throw new ConflictResponse(Msg.emailExist);
+        if (exEmail) throw new ConflictResponse('user:failure.emailExist');
 
         const role = await UserModel.create(data);
-        if (!role) throw new ConflictResponse(Msg.userCreated404);
+        if (!role) throw new ConflictResponse('user:failure.create');
         return role;
     }
 
@@ -24,20 +24,20 @@ class UserRoleService {
     editUserRole = async (req: Request) => {
         const data = req.body;
 
-        const userRole = await Model.findOneAndUpdate(UserModel, { _id: req.params.id }, data);
-        if (!userRole) throw new NotFoundResponse(Msg.userUpdated404)
-        return userRole;
+        const user = await Model.findOneAndUpdate(UserModel, { _id: req.params.id }, data);
+        if (!user) throw new NotFoundResponse('user:failure.update')
+        return user;
     }
 
     getUserRole = async (id: any) => {
-        const userRole = await Model.findOne(UserModel, { _id: id });
-        if (!userRole) throw new NotFoundResponse(Msg.user404);
-        return { userRole };
+        const user = await Model.findOne(UserModel, { _id: id });
+        if (!user) throw new NotFoundResponse('user:failure.detail');
+        return { user };
     }
 
     deleteUserRole = async (id: any) => {
         const UserRole = await UserModel.findOneAndUpdate({ _id: id }, { isDeleted: true });
-        if (!UserRole) throw new NotFoundResponse(Msg.userDeleted404);
+        if (!UserRole) throw new NotFoundResponse('user:failure.delete');
         return UserRole;
     }
 
@@ -47,9 +47,9 @@ class UserRoleService {
         query.type = query.type === UserType.USER ? UserType.USER : UserType.HOUSEKEEPING;
         query.isDeleted = false;
 
-        const userRole = await Model.find(UserModel, query, {})
-        if (!userRole) throw new NotFoundResponse(Msg.user404);
-        return { userRole: userRole.data, total: userRole.total };
+        const users = await Model.find(UserModel, query, {})
+        if (!users) throw new NotFoundResponse('user:failure.list');
+        return { users: users.data, total: users.total };
     }
 
     listHousekeeping = async (req: Request) => {
@@ -59,7 +59,7 @@ class UserRoleService {
         query.isDeleted = false;
 
         const housekeepings = await Model.findAll(UserModel, query, { _id: 1, fullName: 1 }, { sort: { _id: -1 } })
-        if (!housekeepings) throw new NotFoundResponse(Msg.housekeepings404);
+        if (!housekeepings) throw new NotFoundResponse('user:failure.housekeepings');
         return { housekeepings };
     }
 

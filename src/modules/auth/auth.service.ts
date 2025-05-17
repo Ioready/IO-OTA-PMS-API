@@ -20,11 +20,11 @@ class AuthService {
     createUser = async (req: Request, res: Response) => {
         const data = req.body;
         const exUser = await UserModel.findOne({ email: data.email })
-        if (exUser) throw new ConflictResponse(Msg.email404)
+        if (exUser) throw new ConflictResponse('user:failure.email')
 
         data.groupId = await Utils.newObjectId()
         const user = await UserModel.create(data);
-        if (!user) throw new ConflictResponse(Msg.userCreated404)
+        if (!user) throw new ConflictResponse('user:failure.create')
         Utils.generateTokenAndMail(user, "create")
 
         return user
@@ -35,10 +35,10 @@ class AuthService {
         if (!validateErr) return;
 
         const user: any = await UserModel.findOne({ email: data.email }).select("+password");
-        if (!user) throw new UnauthorizedResponse(Msg.invalidCred)
+        if (!user) throw new UnauthorizedResponse('user:failure.invalidCred')
 
         let hashPass = await Utils.comparePassword(data.password, user.password);
-        if (!hashPass) throw new UnauthorizedResponse(Msg.invalidCred)
+        if (!hashPass) throw new UnauthorizedResponse('user:failure.invalidCred')
         await Utils.setCookies('keepMeSigned', data.keepMeSigned ?? false, config.cookie.oneHour, res);
         return this.sendOtp(user)
     }
@@ -48,12 +48,12 @@ class AuthService {
         try {
             const { token: rawToken, type: checkType } = req.query;
             const token = await TokenModel.findOne({ token: rawToken });
-            if (!token) throw new NotFoundResponse(Msg.invalidToken)
+            if (!token) throw new NotFoundResponse('user:failure.invalidToken')
             const decoded = Utils.verifyToken(rawToken);
             const { id, type } = (decoded as { id: string, type: string });
 
             const user: any = await UserModel.findOne({ _id: id });
-            if (!user) throw new NotFoundResponse(Msg.user404)
+            if (!user) throw new NotFoundResponse('user:failure.account')
             if (checkType === 'verify') {
                 return { email: user.email, type: type, url: checkType }
             }
@@ -64,16 +64,16 @@ class AuthService {
 
         } catch (err) {
             if (err.name === 'TokenExpiredError') {
-                throw new GoneResponse(Msg.tokenExpired)
+                throw new GoneResponse('user:failure.tokenExpired')
             } else {
-                throw new NotFoundResponse(Msg.invalidToken)
+                throw new NotFoundResponse('user:failure.invalidToken')
             }
         }
     }
 
     resendOtp = async (req: Request) => {
         const user: any = await UserModel.findOne({ email: req.body.email });
-        if (!user) throw new NotFoundResponse(Msg.account404)
+        if (!user) throw new NotFoundResponse('user:failure.account')
         return this.sendOtp(user)
     }
 
@@ -99,7 +99,7 @@ class AuthService {
     forgotPassword = async (req: Request, type: string) => {
 
         const user: any = await UserModel.findOne({ email: req.body.email });
-        if (!user) throw new NotFoundResponse(Msg.account404)
+        if (!user) throw new NotFoundResponse('user:failure.account')
         Utils.generateTokenAndMail(user, type)
         return true;
 
@@ -112,7 +112,7 @@ class AuthService {
         if (!validateErr) return;
 
         const user: any = await UserModel.findOne({ email: email });
-        if (!user) throw new NotFoundResponse(Msg.account404)
+        if (!user) throw new NotFoundResponse('user:failure.account')
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
@@ -134,10 +134,10 @@ class AuthService {
         if (!validateErr) return;
 
         const user: any = await UserModel.findOne({ email: email });
-        if (!user) throw new NotFoundResponse(Msg.account404)
+        if (!user) throw new NotFoundResponse('user:failure.account')
 
-        if (user.otp != otp) throw new NotFoundResponse(Msg.invalidOtp)
-        if (user.otpExpiry < new Date()) throw new GoneResponse(Msg.otp404)
+        if (user.otp != otp) throw new NotFoundResponse('user:failure.invalidOtp')
+        if (user.otpExpiry < new Date()) throw new GoneResponse('user:failure.otp')
         // user.otp = "";
         // user.otpExpiry = "";
         user.lastLogin = new Date();
@@ -153,18 +153,18 @@ class AuthService {
         try {
             const token = req.cookies?.refreshToken;
 
-            if (!token) throw new UnauthorizedResponse(Msg.refresh404)
+            if (!token) throw new UnauthorizedResponse('user:failure.refresh')
             const decoded = Utils.verifyToken(token);
             const { deviceId } = (decoded as { deviceId: string });
 
             const user: any = await UserModel.findOne({ _id: deviceId });
-            if (!user) throw new NotFoundResponse(Msg.user404)
+            if (!user) throw new NotFoundResponse('user:failure.account')
             const accessToken = Utils.generateToken(user, deviceId, res);
             return accessToken;
 
 
         } catch (err) {
-            throw new ForbiddenResponse(Msg.invalid404)
+            throw new ForbiddenResponse('user:failure.invalid')
         }
     }
 
