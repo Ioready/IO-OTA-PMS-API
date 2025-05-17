@@ -9,9 +9,9 @@ class ResponderClass {
     //     return i18n.__({ phrase: key, locale });
     // };
 
-    private translate = (key: string) => {
+    private translate = (key: string, ns?: string) => {
         const locale = globalThis.currentReq?.language || 'en';
-        return i18n.t(key, { lng: locale, });
+        return i18n.t(key, { lng: locale, ns });
     };
 
     public sendSuccessData(data: any, message: string, res: Response) {
@@ -79,7 +79,7 @@ class ResponderClass {
         }).status(200)
     }
 
-    
+
 };
 
 export const Responder = new ResponderClass();
