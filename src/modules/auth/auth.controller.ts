@@ -89,10 +89,10 @@ class AuthController {
         if (result) Responder.sendSuccessData(result, 'user:success.login', res);
     }
 
-    @Get("/test/lang")
-    async Test(req: Request, res: Response) {
-        Responder.sendSuccessMessageTest('user:login', res);
-    }
+    // @Get("/test/lang")
+    // async Test(req: Request, res: Response) {
+    //     Responder.sendSuccessMessageTest('user:login', res);
+    // }
 
 
 

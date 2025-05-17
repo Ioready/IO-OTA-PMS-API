@@ -2,7 +2,6 @@ import { ErrorRequestHandler, NextFunction, Request } from 'express'
 import ErrorResponse from '../utils/errorResponse'
 import { Model } from '../lib/model'
 import { Responder } from '../lib/responder'
-import { Msg } from '../resources'
 
 const errorHandler: ErrorRequestHandler = (err, _: Request, res, _1: NextFunction) => {
 
@@ -51,7 +50,7 @@ const errorHandler: ErrorRequestHandler = (err, _: Request, res, _1: NextFunctio
 	
 
 	if (err.status === 401) error = new ErrorResponse('user:failure.invalidCred', 401)
-	console.log(err, error.message);
+	// console.log(err, error.message);
 
 	Responder.sendFailureMessage(error.messageWithField || error.message || 'Server Error', error.statusCode, res)
 }

@@ -1,7 +1,7 @@
 import { ConflictResponse, NotFoundResponse } from "../../lib/decorators";
 import { Request, Response } from "express";
 import { RoleModel, UserModel } from "../../schemas";
-import { CommonStatus, Msg } from "../../resources";
+import { CommonStatus, } from "../../resources";
 import { Model } from "../../lib/model";
 import { Utils } from "../../lib/utils";
 

@@ -1,8 +1,6 @@
 
 import { Controller, Get, Post, Patch } from '../../lib/decorators';
 import { Responder } from '../../lib/responder';
-import { Msg } from '../../resources';
-
 import { Request, Response } from "express"
 import PropertyService from './property.service';
 import { use } from '../../lib/decorators/use';

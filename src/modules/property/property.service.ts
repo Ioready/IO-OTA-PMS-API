@@ -2,7 +2,6 @@
 import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
 import { PropertyModel, UserModel } from '../../schemas';
-import { Msg } from '../../resources';
 import { Model } from '../../lib/model';
 
 class PropertyService {

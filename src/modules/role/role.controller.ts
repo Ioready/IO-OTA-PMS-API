@@ -1,7 +1,5 @@
 import { Controller, Get, Post, Patch, Delete } from "../../lib/decorators";
 import { Responder } from "../../lib/responder";
-import { Msg } from "../../resources";
-
 import { Request, Response } from "express";
 import RoleService from "./role.service";
 import { use } from "../../lib/decorators/use";
