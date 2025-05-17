@@ -30,6 +30,11 @@ class RoomTypeController {
         const result = await roomTypeService.deleteRoomType(req.params.id);
         if (result) Responder.sendSuccessMessage('roomType:success.delete', res);
     }
+    @Get("/")
+    async listRoomType(req: Request, res: Response) {
+        const result = await roomTypeService.listRoomType(req);
+        if (result) Responder.sendSuccessData(result,'roomType:success.list', res);
+    }
 
 
 }   

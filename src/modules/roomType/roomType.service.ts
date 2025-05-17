@@ -16,7 +16,9 @@ class RoomTypeService {
     }
 
     editRoomType = async (req: Request) => {
-        const roomType = await Model.findOneAndUpdate(roomTypeModel, { _id: req.params.id }, req.body);
+        const roomTypeId=req.params.id
+        await this.detailRoomType(roomTypeId)
+        const roomType = await Model.findOneAndUpdate(roomTypeModel, { _id: roomTypeId }, req.body);
         if (!roomType) throw new NotFoundResponse('roomType:failure.update')
         return { roomType };
     }
@@ -27,10 +29,17 @@ class RoomTypeService {
         return { roomType };
     }
     deleteRoomType = async (id: any) => {
+         await this.detailRoomType(id)
         const roomType = await Model.findOneAndDelete(roomTypeModel, { _id: id });
         if (!roomType) throw new NotFoundResponse('roomType:failure.delete')
         return { roomType };
     }
+    listRoomType = async (req: Request) => {
+        
+        const roomTypes = await Model.find(roomTypeModel, req.query, {  type: 1, maxGuest: 1, rate: 1,status:1});
+            if (!roomTypes) throw new NotFoundResponse('roomType:failure.delete')
+            return { roomTypes: roomTypes.data, total: roomTypes.total }
+        }
 
 }
 export default new RoomTypeService();
