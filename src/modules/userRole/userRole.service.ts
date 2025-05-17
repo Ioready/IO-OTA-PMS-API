@@ -47,9 +47,22 @@ class UserRoleService {
 
     listUserRole = async (req: Request) => {
         const query: any = req.query;
-        query.type = query.type === UserType.HOUSEKEEPING ? UserType.HOUSEKEEPING : UserType.USER;
         query.isDeleted = false;
+        const projection: any = {
+            _id: 1,
+            name: 1,
+            status: 1,
+            phone: 1,
+            email: 1,
 
+        }
+        if (query.type === UserType.HOUSEKEEPING) {
+            query.type = UserType.HOUSEKEEPING;
+            projection.property = 1;
+        } else {
+            query.type = UserType.USER
+            projection.role = 1;
+        }
         if (query.searchText) {
             const regExp = Utils.returnRegExp(query.searchText);
             query["$or"] = [
@@ -57,22 +70,27 @@ class UserRoleService {
             ];
             delete query.searchText;
         }
+
         const pipeline = [
             { $match: query },
             Utils.lookupSelectedField("roles", "role", "_id", { _id: 1, name: 1 }),
             Utils.unwind("$role"),
-
-            Utils.lookupSelectedField("properties", "properties", "_id", { _id: 1, name: 1 }, "property"),
+            {
+                $addFields: {
+                    objectProperties: {
+                        $map: {
+                            input: "$properties",
+                            as: "prop",
+                            in: { $toObjectId: "$$prop" }
+                        }
+                    }
+                }
+            },
+            Utils.lookupSelectedField("properties", "objectProperties", "_id", { _id: 1, name: 1 }, "property"),
             Utils.unwind("$property")
         ];
-        const projection = {
-            _id: 1,
-            name: 1,
-            role: 1,
-            status: 1,
-            phone: 1,
-            email: 1,
-        }
+
+
         let pageLimit = Utils.returnPageLimit(query);
         const users = await Model.aggregate(UserModel, pipeline, projection, pageLimit)
 
