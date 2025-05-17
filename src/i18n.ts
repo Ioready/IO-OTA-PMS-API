@@ -19,6 +19,8 @@ import Backend from 'i18next-fs-backend';
 import path from 'path';
 import { ModuleName } from './resources';
 
+
+
 i18next.use(Backend).init({
   lng: 'en',
   fallbackLng: 'en',
@@ -26,11 +28,12 @@ i18next.use(Backend).init({
   ns: [ModuleName.USER, ModuleName.PROPERTY, ModuleName.ROLE, ModuleName.FLOOR, ModuleName.ROOM_TYPE],
   defaultNS: ModuleName.USER,
   backend: {
-    loadPath: path.join(__dirname, 'locales/{{lng}}/{{ns}}.json')
+    loadPath: path.join(__dirname, './locales/{{lng}}/{{ns}}.json')
   },
   interpolation: {
     escapeValue: false
-  }
+  },
+  saveMissing: true
 });
 
 export default i18next;
