@@ -3,6 +3,7 @@ import { Request } from "express";
 import { UserModel } from "../../schemas";
 import { UserType } from "../../resources";
 import { Model } from "../../lib/model";
+import { Utils } from "../../lib/utils";
 
 
 class UserRoleService {
@@ -46,11 +47,37 @@ class UserRoleService {
 
     listUserRole = async (req: Request) => {
         const query: any = req.query;
-
-        query.type = query.type === UserType.USER ? UserType.USER : UserType.HOUSEKEEPING;
+        query.type = query.type === UserType.HOUSEKEEPING ? UserType.HOUSEKEEPING : UserType.USER;
         query.isDeleted = false;
 
-        const users = await Model.find(UserModel, query, {})
+        if (query.searchText) {
+            const regExp = Utils.returnRegExp(query.searchText);
+            query["$or"] = [
+                { name: regExp },
+            ];
+            delete query.searchText;
+        }
+        const pipeline = [
+            { $match: query },
+            Utils.lookupSelectedField("roles", "role", "_id", { _id: 1, name: 1 }),
+            Utils.unwind("$role"),
+
+            Utils.lookupSelectedField("properties", "properties", "_id", { _id: 1, name: 1 }, "property"),
+            Utils.unwind("$property")
+        ];
+        const projection = {
+            _id: 1,
+            name: 1,
+            role: 1,
+            status: 1,
+            phone: 1,
+            email: 1,
+        }
+        let pageLimit = Utils.returnPageLimit(query);
+        const users = await Model.aggregate(UserModel, pipeline, projection, pageLimit)
+
+
+
         if (!users) throw new NotFoundResponse('user:failure.list');
         return { users: users.data, total: users.total };
     }

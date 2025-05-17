@@ -1,5 +1,5 @@
 
-import { Controller, Get, GoneResponse, Post } from '../../lib/decorators';
+import { Controller, Delete, Get, GoneResponse, Post } from '../../lib/decorators';
 import { use } from '../../lib/decorators/use';
 import { Responder } from '../../lib/responder';
 import { protect } from './auth.middleware';
@@ -95,7 +95,7 @@ class AuthController {
         if (result) Responder.sendSuccessData(result, 'user:success.login', res);
     }
 
-    @Get('/logout')
+    @Delete('/logout')
     async logout(_req: Request, res: Response) {
         // res.cookie("refreshToken", 'none', {
         //     expires: new Date(0),
