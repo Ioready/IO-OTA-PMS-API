@@ -34,7 +34,10 @@ i18next.use(Backend).init({
     escapeValue: false
   },
   saveMissing: true
-});
+}).then(() => {
+  console.log('i18n ready:', i18next.t('floor:success.update', { lng: 'en' }));
+
+}).catch((err) => console.log(err))
 
 export default i18next;
 
