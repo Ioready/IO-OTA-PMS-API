@@ -26,6 +26,11 @@ class RoomTypeService {
         if (!roomType) throw new NotFoundResponse('floor:failure.detail')
         return { roomType };
     }
+    deleteRoomType = async (id: any) => {
+        const roomType = await Model.findOneAndDelete(roomTypeModel, { _id: id });
+        if (!roomType) throw new NotFoundResponse('floor:failure.delete')
+        return { roomType };
+    }
 
 }
 export default new RoomTypeService();

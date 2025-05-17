@@ -1,4 +1,4 @@
-import { Controller, Post, Patch, Get } from "../../lib/decorators";
+import { Controller, Post, Patch, Get, Delete } from "../../lib/decorators";
 import { Responder } from "../../lib/responder";
 import { Request, Response } from "express";
 import roomTypeService from "./roomType.service";
@@ -23,7 +23,13 @@ class RoomTypeController {
     @Get("/:id")
     async detailRoomType(req: Request, res: Response) {
         const result = await roomTypeService.detailRoomType(req.params.id);
-        if (result) Responder.sendSuccessData(result, 'floor:success.delete', res);
-
+        if (result) Responder.sendSuccessData(result, 'floor:success.detail', res);
     }
+    @Delete("/:id")
+    async deleteRoomType(req: Request, res: Response) {
+        const result = await roomTypeService.deleteRoomType(req.params.id);
+        if (result) Responder.sendSuccessMessage('floor:success.delete', res);
+    }
+
+
 }   
