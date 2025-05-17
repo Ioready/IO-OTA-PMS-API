@@ -1,6 +1,5 @@
 import { Controller, Get, NotExtendedResponse } from "../../lib/decorators";
 import { Responder } from "../../lib/responder";
-import { Msg } from "../../resources";
 import { Request, Response } from "express";
 import { protect } from "../auth/auth.middleware";
 import { use } from "../../lib/decorators/use";
@@ -20,9 +19,10 @@ class UserController {
             'referralSource',
             'role',
             'loginType',
+            "_id"
         ]);
         if (user)
-            Responder.sendSuccessData({ profile: selectedUser }, Msg.profile, res);
-        else throw new NotExtendedResponse(Msg.profile404)
+            Responder.sendSuccessData({ profile: selectedUser }, 'user:success.profile', res);
+        else throw new NotExtendedResponse('user:failure.profile')
     }
 }   

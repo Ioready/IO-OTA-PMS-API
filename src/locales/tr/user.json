@@ -12,7 +12,8 @@
         "sentLinkMail": "Şifre sıfırlama bağlantısı başarıyla e-posta adresinize gönderildi",
         "createPassLinkMail": "Şifre oluşturma bağlantısı başarıyla e-posta adresinize gönderildi",
         "tokenExpired": "Jetonun süresi doldu",
-        "tokenVerified": "Jeton doğrulandı"
+        "tokenVerified": "Jeton doğrulandı",
+        "profile": "Profil"
     },
     "failure": {
         "invalidCred": "Geçersiz giriş bilgileri",
@@ -31,6 +32,7 @@
         "sentMail": "OTP e-postanıza gönderilemedi.",
         "roleName": "Rol adı zaten mevcut",
         "account": "Hesap bulunamadı",
-        "detail": "Kullanıcı bulunamadı"
+        "detail": "Kullanıcı bulunamadı",
+        "profile": "Profil bulunamadı"
     }
 }

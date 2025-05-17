@@ -116,7 +116,7 @@ class AuthService {
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
-        await user.save();
+        await user.save({ validateBeforeSave: false });
         await this.sendOtp(user);
         await DeviceModel.deleteMany({ user: user._id })
         // const deviceId = await Utils.createDevice(user, req, res);
@@ -142,7 +142,7 @@ class AuthService {
         // user.otpExpiry = "";
         user.lastLogin = new Date();
 
-        await user.save();
+        await user.save({ validateBeforeSave: false });
         const deviceId = await Utils.createDevice(user, req);
         await Utils.updateKeepsignToken(user, deviceId, res)
         return Utils.generateToken(user, deviceId, res);

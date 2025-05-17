@@ -8,6 +8,7 @@ import { Request, Response } from "express"
 import axios from 'axios';
 import { ZohoApi } from '../utils/zohoApi';
 import { Model } from './model';
+import { CheckPropertyUrl } from '../resources';
 class UtilsClass {
   constructor() { }
 
@@ -88,10 +89,10 @@ class UtilsClass {
 
   generateTokenAndMail = async (user: any, type: any) => {
     var set: string, expiry: any, template: any;
-    if (type === "create" || type === "forgot") set = "set-password";
-    if (type === "create-password") set = "create-password";
+    if (type === "forgot") set = "set-password";
+    if (type === "create-password" || type === "create") set = "create-password";
 
-    if (type === "create") {
+    if (type === "create-password") {
       expiry = config.jwt.oneDay;
       template = config.zeptoMail.template.create;
       // login.loginLink = `${config.url.base}/en/admin/login`
@@ -174,13 +175,13 @@ class UtilsClass {
     var obj = {
       groupId: user.groupId
     };
-    var route = "property", propertyId = null;
+    var redirectUrl = CheckPropertyUrl.PROPERTY, propertyId = null;
     if (user.type === "admin") {
 
       const property: any = await PropertyModel.find(obj)
       if (property.length === 1) {
         if (property[0].step === 6)
-          route = "dashboard"
+          redirectUrl = CheckPropertyUrl.DASHBOARD;
         else propertyId = property[0]._id;
       }
       else {
@@ -189,8 +190,8 @@ class UtilsClass {
         await Model.findOneAndUpdate(UserModel, { _id: user.id }, { currentProperty: propertyId })
       }
     }
-    else route = "dashboard";
-    return { route, propertyId: propertyId };
+    else redirectUrl = CheckPropertyUrl.DASHBOARD;
+    return { redirectUrl, propertyId: propertyId };
   }
 
 }

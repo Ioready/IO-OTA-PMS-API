@@ -50,8 +50,7 @@ class ModelClass {
         const skipLimit = (page > 1 ? page - 1 : 0) * limit;
         delete query.page
         delete query.limit
-
-
+        
         let result = await schemaModel.find(query, projection, {
             ...options,
             skip: skipLimit,

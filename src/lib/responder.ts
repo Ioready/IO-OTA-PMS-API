@@ -10,7 +10,7 @@ class ResponderClass {
     // };
 
     private translate = (key: string, ns?: string) => {
-        const locale = globalThis.currentReq?.language || 'en';
+        const locale = globalThis.currentReq?.language || 'en';        
         return i18n.t(key, { lng: locale, ns });
     };
 

@@ -3,6 +3,7 @@ import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
 import { PropertyModel, UserModel } from '../../schemas';
 import { Model } from '../../lib/model';
+import { Utils } from '../../lib/utils';
 
 class PropertyService {
 
@@ -32,7 +33,26 @@ class PropertyService {
     }
 
     getProperties = async (req: Request) => {
-        const properties = await Model.find(PropertyModel, req.query, {});
+        const query: any = req.query;
+        let projection: any;
+        projection = {
+            name: 1,
+            ownerInfo: 1,
+            address: 1,
+            room: 1
+        }
+        if (query.searchText) {
+            const regExp = Utils.returnRegExp(query.searchText);
+            query["$or"] = [
+                { name: regExp },
+                { "ownerInfo.name.first": regExp },
+                { "ownerInfo.name.last": regExp },
+
+            ];
+            delete query.searchText;
+        }
+        query.step = 6;        
+        const properties = await Model.find(PropertyModel, query, projection);
         if (!properties) throw new NotFoundResponse('property:failure.list')
         return { properties: properties.data, total: properties.total }
     }

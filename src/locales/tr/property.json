@@ -9,6 +9,7 @@
         "create": "Mülk oluşturulamadı",
         "update": "Mülk güncellenemedi",
         "detail": "Mülk bulunamadı",
-        "list": "Mülkler alınamadı"
+        "list": "Mülkler alınamadı",
+        "add": "Önce mülkü tamamlayın"
     }
 }
