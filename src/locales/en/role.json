@@ -11,6 +11,7 @@
     "update": "Unable to update role",
     "detail": "Role not found",
     "list": "Unable to get roles",
-    "delete": "Unable to delete role"
+    "delete": "Unable to delete role",
+    "name": "Role name already exists"
   }
 }

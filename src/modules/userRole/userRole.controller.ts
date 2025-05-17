@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Patch, Delete } from "../../lib/decorators";
 import { Responder } from "../../lib/responder";
-import { Msg } from "../../resources";
 
 import { Request, Response } from "express";
 
@@ -19,42 +18,44 @@ class UserRoleController {
     @use(protect)
     async createUserRole(req: Request, res: Response) {
         const result = await userRoleService.createUserRole(req);
-        if (result) Responder.sendSuccessCreatedMessage(Msg.userCreated, res)
+        if (result) Responder.sendSuccessCreatedMessage('user:success.create', res)
     }
 
     @Get("/housekeeping")
     @use(protect)
     async listHousekeeping(req: Request, res: Response) {
         const result = await userRoleService.listHousekeeping(req)
-        if (result) Responder.sendSuccessData(result, Msg.housekeepings, res);
+        if (result) Responder.sendSuccessData(result, 'user:success.housekeepings', res);
     }
 
     @Patch("/:id")
     @use(protect)
     async editUserRole(req: Request, res: Response) {
         const result = await userRoleService.editUserRole(req);
-        if (result) Responder.sendSuccessMessage(Msg.userUpdated, res);
+        if (result) Responder.sendSuccessMessage('user:success.update', res);
 
     }
 
     @Get("/:id")
     @use(protect)
     async getUserRole(req: Request, res: Response) {
+        console.log("sss");
+
         const result = await userRoleService.getUserRole(req.params.id);
-        if (result) Responder.sendSuccessData(result, Msg.users, res);
+        if (result) Responder.sendSuccessData(result, 'user:success.list', res);
     }
     @Delete("/:id")
     @use(protect)
     async deleteUserRole(req: Request, res: Response) {
         const result = await userRoleService.deleteUserRole(req.params.id);
-        if (result) Responder.sendSuccessMessage(Msg.userDeleted, res)
+        if (result) Responder.sendSuccessMessage('user:success.delete', res)
     }
 
     @Get("/")
     @use(protect)
     async listUserRole(req: Request, res: Response) {
         const result = await userRoleService.listUserRole(req)
-        if (result) Responder.sendSuccessData(result, Msg.users, res);
+        if (result) Responder.sendSuccessData(result, 'user:success.list', res);
     }
 
 

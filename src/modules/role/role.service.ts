@@ -13,10 +13,10 @@ class RoleService {
       name: Utils.returnRegExp(data.name),
     });
 
-    if (exRole) throw new ConflictResponse(Msg.roleName404);
+    if (exRole) throw new ConflictResponse('role:failure.name');
     data.groupId = req.user.groupId;
     const role = await RoleModel.create(data);
-    if (!role) throw new ConflictResponse(Msg.roleCreated404);
+    if (!role) throw new ConflictResponse('role:failure.create');
     return role;
   };
 
@@ -57,7 +57,7 @@ class RoleService {
       throw new NotFoundResponse('role:failure.delete')
     }
     const role = await RoleModel.findByIdAndDelete({ _id: id });
-    if (!role) throw new NotFoundResponse('role:failure.detail');
+    if (!role) throw new NotFoundResponse('role:failure.delete');
     return { role };
   };
 

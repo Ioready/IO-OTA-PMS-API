@@ -3,8 +3,9 @@
         "login": "Login Successful",
         "create": "User created",
         "update": "User updated",
-        "users": "Users",
+        "list": "Users",
         "delete": "User role deleted",
+        "detail": "User",
         "housekeepings": "Housekeepings ",
         "sentMail": "OTP sent successfully to your email",
         "password": "Password set successfully",
@@ -29,6 +30,7 @@
         "otp": "OTP has expired",
         "sentMail": "Unable sent OTP to your email.",
         "roleName": "Role name already exists",
-        "account": "Account not found"
+        "account": "Account not found",
+        "detail": "User not found"
     }
 }

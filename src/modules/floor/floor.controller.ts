@@ -1,7 +1,6 @@
 
 import { Controller, Get, Post, Patch, Delete } from '../../lib/decorators';
 import { Responder } from '../../lib/responder';
-import { Msg } from '../../resources';
 
 import { Request, Response } from "express"
 import FloorService from './floor.service';
@@ -24,8 +23,8 @@ class FloorController {
 
     @Get("/:id")
     async getFloor(req: Request, res: Response) {
-        const Floor = await FloorService.getFloor(req.params.id);
-        if (Floor) Responder.sendSuccessData({ Floor }, 'floor:success.detail', res)
+        const floor = await FloorService.getFloor(req.params.id);
+        if (floor) Responder.sendSuccessData({ floor }, 'floor:success.detail', res)
     }
 
     @Get("/")

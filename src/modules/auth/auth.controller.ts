@@ -1,5 +1,5 @@
 
-import { Controller, Get, Post } from '../../lib/decorators';
+import { Controller, Get, GoneResponse, Post } from '../../lib/decorators';
 import { use } from '../../lib/decorators/use';
 import { Responder } from '../../lib/responder';
 import { protect } from './auth.middleware';
@@ -34,7 +34,7 @@ class AuthController {
     async verifyAndExpiryUrl(req: Request, res: Response) {
         const result: any = await AuthService.verifyAndExpiryUrl(req);
         if (result.url === "verify") Responder.sendSuccessData(result, 'user:success.tokenVerified', res)
-        if (result.url === "expiry") Responder.sendSuccessMessage('user:success.tokenExpired', res)
+        if (result.url === "expiry") throw new GoneResponse('user:success.tokenExpired')
     }
 
     @Post("/resent")

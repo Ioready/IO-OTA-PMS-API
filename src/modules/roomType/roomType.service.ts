@@ -1,7 +1,5 @@
 import { ConflictResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
-
-import { Msg } from '../../resources';
 import { roomTypeModel } from '../../schemas/roomType.schema';
 
 
@@ -12,7 +10,7 @@ class RoomTypeService {
     createRoomType = async (req: Request, res: Response) => {
 
         const floor = await roomTypeModel.create(req.body);
-        if (!floor) throw new ConflictResponse(Msg.roomTypeCreated404)
+        if (!floor) throw new ConflictResponse('floor:failure.create')
         return { floor }
     }
 

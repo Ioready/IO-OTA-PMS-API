@@ -17,13 +17,14 @@
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 import path from 'path';
+import { ModuleName } from './resources';
 
 i18next.use(Backend).init({
   lng: 'en',
   fallbackLng: 'en',
   preload: ['en', 'tr'],
-  ns: ['user', 'property'],
-  defaultNS: 'user',
+  ns: [ModuleName.USER, ModuleName.PROPERTY, ModuleName.ROLE, ModuleName.FLOOR, ModuleName.ROOM_TYPE],
+  defaultNS: ModuleName.USER,
   backend: {
     loadPath: path.join(__dirname, 'locales/{{lng}}/{{ns}}.json')
   },
