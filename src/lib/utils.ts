@@ -102,7 +102,8 @@ class UtilsClass {
       template = config.zeptoMail.template.forgot;
     }
     const token = this.getSignedJwtToken({ id: user._id, type: set }, expiry);
-    await TokenModel.create({ token })
+    await TokenModel.deleteMany({ user: user.id, type })
+    await TokenModel.create({ token, user: user.id, type })
     const url = `${config.url.base}/token-verify?token=${token}`;
     //send mail
     ZohoApi.sendMailTemplate(user.email, user.fullName, template, { product: "Otlesoft", link: url, name: user.fullName })
@@ -246,6 +247,13 @@ class UtilsClass {
       limit: limit,
     };
   };
+
+  removeCookie = async (name: any, res: Response) => {
+    res.cookie(name, 'none', {
+      expires: new Date(0),
+      httpOnly: true,
+    })
+  }
 
 
 

@@ -41,7 +41,16 @@ class RoleService {
 
   getRoles = async (req: Request) => {
     const query: any = req.query;
+
+    if (query.searchText) {
+      const regExp = Utils.returnRegExp(query.searchText);
+      query["$or"] = [
+        { name: regExp },
+      ];
+      delete query.searchText;
+    }
     const pipeline = [
+      { $match: query },
       Utils.lookupField("users", "_id", "role", "users"),
       {
         $addFields: {

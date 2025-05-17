@@ -13,7 +13,8 @@
         "createPassLinkMail": "Create password link sent successfully to your email",
         "tokenExpired": "Token expired",
         "tokenVerified": "Token verified",
-        "profile": "Profile"
+        "profile": "Profile",
+        "logout": "Logout Successful"
     },
     "failure": {
         "invalidCred": "Invalid Login credentials",

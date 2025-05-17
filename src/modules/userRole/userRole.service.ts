@@ -1,7 +1,7 @@
 import { ConflictResponse, NotFoundResponse } from "../../lib/decorators";
 import { Request } from "express";
 import { UserModel } from "../../schemas";
-import {  UserType } from "../../resources";
+import { UserType } from "../../resources";
 import { Model } from "../../lib/model";
 
 
@@ -15,15 +15,17 @@ class UserRoleService {
         const exEmail = await UserModel.findOne({ email: data.email });
         if (exEmail) throw new ConflictResponse('user:failure.emailExist');
 
-        const role = await UserModel.create(data);
-        if (!role) throw new ConflictResponse('user:failure.create');
-        return role;
+        // const role = await UserModel.create(data);
+        const user = new UserModel(data);
+        const savedUser = await user.save({ validateBeforeSave: false });
+        if (!savedUser) throw new ConflictResponse('user:failure.create');
+        return savedUser;
     }
 
 
     editUserRole = async (req: Request) => {
         const data = req.body;
-
+        await this.getUserRole(req.params.id)
         const user = await Model.findOneAndUpdate(UserModel, { _id: req.params.id }, data);
         if (!user) throw new NotFoundResponse('user:failure.update')
         return user;
@@ -36,6 +38,7 @@ class UserRoleService {
     }
 
     deleteUserRole = async (id: any) => {
+        await this.getUserRole(id)
         const UserRole = await UserModel.findOneAndUpdate({ _id: id }, { isDeleted: true });
         if (!UserRole) throw new NotFoundResponse('user:failure.delete');
         return UserRole;

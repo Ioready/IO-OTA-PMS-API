@@ -17,6 +17,7 @@ import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";
 import { setLanguage } from "./middleware/setLanguages";
+import { Utils } from "./lib/utils";
 
 const app = express();
 app.use(express.json());
@@ -29,7 +30,6 @@ app.use(cors({
 app.use(setLanguage);
 
 const port = config.app.port || 8080;
-
 DBconnection()
 
 // Rate limiting

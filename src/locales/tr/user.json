@@ -13,7 +13,8 @@
         "createPassLinkMail": "Şifre oluşturma bağlantısı başarıyla e-posta adresinize gönderildi",
         "tokenExpired": "Jetonun süresi doldu",
         "tokenVerified": "Jeton doğrulandı",
-        "profile": "Profil"
+        "profile": "Profil",
+        "logout": "Logout başarılı"
     },
     "failure": {
         "invalidCred": "Geçersiz giriş bilgileri",
