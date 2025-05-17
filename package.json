@@ -6,9 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc && copyfiles -u 1 src/locales/**/* dist/locales",
-    "postbuild": "chmod -R 755 dist/locales",
-    "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postbuild": "chmod -R 755 dist/locales && ls -l dist/locales",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
