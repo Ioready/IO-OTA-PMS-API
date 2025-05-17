@@ -1,0 +1,14 @@
+{
+    "success": {
+        "create": "Property created",
+        "update": "Property updated",
+        "detail": "Property",
+        "list": "Properties"
+    },
+    "failure": {
+        "create": "Unable to create property",
+        "update": "Unable to update property",
+        "detail": "Property not found",
+        "list": "Unable to get properties"
+    }
+}

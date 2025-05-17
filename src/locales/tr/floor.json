@@ -1,0 +1,16 @@
+{
+  "success": {
+    "create": "Floor created",
+    "update": "Floor updated",
+    "detail": "Floor",
+    "list": "Floors",
+    "delete": "Floor deleted"
+  },
+  "failure": {
+    "create": "Unable to create floor",
+    "update": "Unable to update floor",
+    "detail": "Floor not found",
+    "list": "Unable to get floors",
+    "delete": "Unable to delete floor"
+  }
+}
