@@ -2,7 +2,6 @@
 import { Controller, Get, GoneResponse, Post } from '../../lib/decorators';
 import { use } from '../../lib/decorators/use';
 import { Responder } from '../../lib/responder';
-import { Utils } from '../../lib/utils';
 import { protect } from './auth.middleware';
 import AuthService from './auth.service'
 import { Request, Response } from "express"

@@ -17,7 +17,6 @@ import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";
 import { setLanguage } from "./middleware/setLanguages";
-import { Utils } from "./lib/utils";
 
 const app = express();
 app.use(express.json());
