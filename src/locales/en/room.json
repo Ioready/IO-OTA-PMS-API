@@ -1,0 +1,16 @@
+{
+  "success": {
+    "create": "Room created",
+    "update": "Room updated",
+    "detail": "Room",
+    "delete": "Room deleted",
+    "list": "Room"
+  },
+  "failure": {
+    "create": "Unable to create room ",
+    "update": "Unable to update room ",
+    "detail": "Room  not found",
+    "delete": "Unable to delete room ",
+    "list": "Unable to get room "
+  }
+}
