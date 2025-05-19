@@ -135,11 +135,20 @@ class UtilsClass {
 
   }
 
-  setCookies = async (name: any, value: any, expiry: any, res: Response) => {
+  // setCookies = async (name: any, value: any, expiry: any, res: Response) => {
+  //   res.cookie(name, value, {
+  //     httpOnly: true,
+  //     sameSite: 'none',
+  //     secure: config.app.env === "prouction",
+  //     maxAge: expiry
+  //   });
+
+  // }
+
+    setCookies = async (name: any, value: any, expiry: any, res: Response) => {
     res.cookie(name, value, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: config.app.env === "prouction",
+      sameSite: 'lax',
       maxAge: expiry
     });
 
