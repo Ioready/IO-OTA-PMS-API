@@ -50,6 +50,11 @@ class RoomService {
             ];
             delete query.searchText;
         }
+
+        if (query.roomType) {
+            query["roomType._id"] = Utils.returnObjectId(query.roomType);
+            delete query.roomType
+        }
         const pipeline = [
             Utils.lookupSelectedField("roomtypes", "roomType", "_id", { _id: 1, name: 1 }),
             Utils.unwind("$roomType"),
@@ -65,6 +70,7 @@ class RoomService {
             floor: 1,
             createdAt: 1,
             updatedAt: 1,
+            notes: 1,
             status: 1,
         }
         let pageLimit = Utils.returnPageLimit(query);

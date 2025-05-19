@@ -1,8 +1,6 @@
 import { Controller, Get, NotExtendedResponse } from "../../lib/decorators";
 import { Responder } from "../../lib/responder";
 import { Request, Response } from "express";
-import { protect } from "../auth/auth.middleware";
-import { use } from "../../lib/decorators/use";
 import lodash from 'lodash';
 
 @Controller("/user")
@@ -10,7 +8,6 @@ import lodash from 'lodash';
 class UserController {
 
     @Get("/profile")
-    @use(protect)
     async getProfile(req: Request, res: Response) {
         const user = req.user;
         const selectedUser = lodash.pick(user, [
