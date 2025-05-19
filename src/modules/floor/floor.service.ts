@@ -33,8 +33,38 @@ class FloorService {
 
     // @ts-ignore
     getFloors = async (req: Request) => {
+        const query: any = req.query;
 
-        const floors = await Model.find(FloorModel, req.query, {});
+        if (query.searchText) {
+            const regExp = Utils.returnRegExp(query.searchText);
+            query["$or"] = [
+                { name: regExp },
+                { "manager.name": regExp },
+            ];
+            delete query.searchText;
+        }
+        const pipeline = [
+            Utils.lookupSelectedField("users", "manager", "_id", { _id: 1, fullName: 1 }, "manager"),
+            Utils.unwind("$manager"),
+            Utils.lookupField("rooms", "_id", "floor", "rooms"),
+            { $match: query },
+
+            {
+                $addFields: {
+                    totalrooms: {
+                        $size: "$rooms"
+                    }
+                }
+            }
+        ];
+        const projection = {
+            _id: 1,
+            name: 1,
+            totalrooms: 1,
+            manager: 1,
+        }
+        let pageLimit = Utils.returnPageLimit(query);
+        const floors = await Model.aggregate(FloorModel, pipeline, projection, pageLimit)
         if (!floors) throw new NotFoundResponse('floor:failure.list')
         return { floors: floors.data, total: floors.total }
     }

@@ -19,10 +19,8 @@ const RoleSchema = new Schema<IRole>(
     type: String,
     groupId: { type: mongoose.Schema.Types.ObjectId },
     isDeleted: { type: Boolean, default: false },
-    status: {
-      type: String,
-      enum: [CommonStatus.ACTIVE, CommonStatus.INACTIVE],
-    },
+    status: { type: String, enum: [CommonStatus.ACTIVE, CommonStatus.INACTIVE], default: CommonStatus.ACTIVE },
+
   },
   Utils.returnSchemaOption()
 );
