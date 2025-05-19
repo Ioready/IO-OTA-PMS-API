@@ -138,8 +138,8 @@ class UtilsClass {
   setCookies = async (name: any, value: any, expiry: any, res: Response) => {
     res.cookie(name, value, {
       httpOnly: true,
-      sameSite: 'strict',
-      secure: true,
+      sameSite: 'lax',
+      secure: config.app.env === "prouction",
       maxAge: expiry
     });
 
@@ -253,6 +253,10 @@ class UtilsClass {
       expires: new Date(0),
       httpOnly: true,
     })
+  }
+
+  addPropertyId = async (data: any, req: Request) => {    
+    data.property = req.user.currentProperty;
   }
 
 

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { Utils } from "../lib/utils";
 import { ObjectId } from "mongoose";
-import { LoginType } from "../resources";
+import { CommonStatus, LoginType } from "../resources";
 
 interface IUser extends Document {
     name: string,
@@ -21,7 +21,8 @@ interface IUser extends Document {
     phone: any
     currentProperty: ObjectId,
     referralSource: any,
-    properties: any
+    properties: any,
+    setPassword: boolean,
     status: string,
 
 
@@ -53,7 +54,8 @@ const UserSchema = new Schema<IUser>({
     currentProperty: { type: mongoose.Schema.Types.ObjectId, ref: "property", },
     referralSource: { type: String, required: [true, "Please select how you heard about us"] },
     properties: [String],
-    status: String,
+    setPassword: { type: Boolean, default: false },
+    status: { type: String, default: CommonStatus.ACTIVE },
 
 }, Utils.returnSchemaOption());
 

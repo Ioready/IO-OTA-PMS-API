@@ -36,6 +36,6 @@ const roomTypeSchema = new Schema<IRoomType>({
     status: String,
 }, Utils.returnSchemaOption());
 
-const roomTypeModel = mongoose.model("roomtype", roomTypeSchema);
+const RoomTypeModel = mongoose.model("roomtype", roomTypeSchema);
 
-export { IRoomType, roomTypeModel };
+export { IRoomType, RoomTypeModel };
