@@ -53,7 +53,7 @@ class UserRoleController {
 
     @Get("/")
     @use(protect)
-    async listUserRole(req: Request, res: Response) {
+    async listUserRole(req: Request, res: Response) {        
         const result = await userRoleService.listUserRole(req)
         if (result) Responder.sendSuccessData(result, 'user:success.list', res);
     }

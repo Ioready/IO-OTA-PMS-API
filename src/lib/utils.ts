@@ -8,6 +8,7 @@ import { Request, Response } from "express"
 import axios from 'axios';
 import { ZohoApi } from '../utils/zohoApi';
 import { Model } from './model';
+import { CheckPropertyUrl } from '../resources';
 class UtilsClass {
   constructor() { }
 
@@ -88,10 +89,10 @@ class UtilsClass {
 
   generateTokenAndMail = async (user: any, type: any) => {
     var set: string, expiry: any, template: any;
-    if (type === "create" || type === "forgot") set = "set-password";
-    if (type === "create-password") set = "create-password";
+    if (type === "forgot") set = "set-password";
+    if (type === "create-password" || type === "create") set = "create-password";
 
-    if (type === "create") {
+    if (type === "create-password") {
       expiry = config.jwt.oneDay;
       template = config.zeptoMail.template.create;
       // login.loginLink = `${config.url.base}/en/admin/login`
@@ -101,7 +102,8 @@ class UtilsClass {
       template = config.zeptoMail.template.forgot;
     }
     const token = this.getSignedJwtToken({ id: user._id, type: set }, expiry);
-    await TokenModel.create({ token })
+    await TokenModel.deleteMany({ user: user.id, type })
+    await TokenModel.create({ token, user: user.id, type })
     const url = `${config.url.base}/token-verify?token=${token}`;
     //send mail
     ZohoApi.sendMailTemplate(user.email, user.fullName, template, { product: "Otlesoft", link: url, name: user.fullName })
@@ -174,13 +176,13 @@ class UtilsClass {
     var obj = {
       groupId: user.groupId
     };
-    var route = "property", propertyId = null;
+    var redirectUrl = CheckPropertyUrl.PROPERTY, propertyId = null;
     if (user.type === "admin") {
 
       const property: any = await PropertyModel.find(obj)
       if (property.length === 1) {
         if (property[0].step === 6)
-          route = "dashboard"
+          redirectUrl = CheckPropertyUrl.DASHBOARD;
         else propertyId = property[0]._id;
       }
       else {
@@ -189,9 +191,71 @@ class UtilsClass {
         await Model.findOneAndUpdate(UserModel, { _id: user.id }, { currentProperty: propertyId })
       }
     }
-    else route = "dashboard";
-    return { route, propertyId: propertyId };
+    else redirectUrl = CheckPropertyUrl.DASHBOARD;
+    return { redirectUrl, propertyId: propertyId };
   }
+
+  lookupField = (from: string, local: string, foreign: string, result = "") => {
+    return {
+      $lookup: {
+        from: from,
+        localField: local,
+        foreignField: foreign,
+
+        as: result || local,
+      },
+    };
+  }
+
+  lookupSelectedField = (from: string, local: string, foreign: string, projection: any, result = "") => {
+    return {
+      $lookup: {
+        from: from,
+        localField: local,
+        foreignField: foreign,
+        pipeline: [
+          {
+            $project: {
+              ...projection
+            },
+          },
+        ],
+        as: result || local,
+      },
+    };
+  }
+
+  unwind = (path: string) => {
+    return {
+      $unwind: {
+        path: path,
+        preserveNullAndEmptyArrays: true,
+      },
+    };
+  };
+
+  returnPageLimit = (query: any) => {
+    let { page, limit }: any = query;
+    page = Number(page) || 0;
+    limit = Number(limit) || 10;
+    // let page: any = (query.page ?? 1) - 1;
+    // let limit: any = query.limit ?? 10;
+    delete query.page;
+    delete query.limit;
+    return {
+      page: page,
+      limit: limit,
+    };
+  };
+
+  removeCookie = async (name: any, res: Response) => {
+    res.cookie(name, 'none', {
+      expires: new Date(0),
+      httpOnly: true,
+    })
+  }
+
+
 
 }
 export const Utils = new UtilsClass();

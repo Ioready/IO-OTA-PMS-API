@@ -116,7 +116,7 @@ class AuthService {
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
-        await user.save();
+        await user.save({ validateBeforeSave: false });
         await this.sendOtp(user);
         await DeviceModel.deleteMany({ user: user._id })
         // const deviceId = await Utils.createDevice(user, req, res);
@@ -142,7 +142,7 @@ class AuthService {
         // user.otpExpiry = "";
         user.lastLogin = new Date();
 
-        await user.save();
+        await user.save({ validateBeforeSave: false });
         const deviceId = await Utils.createDevice(user, req);
         await Utils.updateKeepsignToken(user, deviceId, res)
         return Utils.generateToken(user, deviceId, res);
@@ -155,16 +155,18 @@ class AuthService {
 
             if (!token) throw new UnauthorizedResponse('user:failure.refresh')
             const decoded = Utils.verifyToken(token);
-            const { deviceId } = (decoded as { deviceId: string });
+            const { deviceId, id } = (decoded as { deviceId: string, id: string });
 
-            const user: any = await UserModel.findOne({ _id: deviceId });
+            const user: any = await UserModel.findOne({ _id: id });
             if (!user) throw new NotFoundResponse('user:failure.account')
             const accessToken = Utils.generateToken(user, deviceId, res);
             return accessToken;
 
 
         } catch (err) {
-            throw new ForbiddenResponse('user:failure.invalid')
+            if (err instanceof UnauthorizedResponse || err instanceof NotFoundResponse) {
+                throw err;
+            }
         }
     }
 

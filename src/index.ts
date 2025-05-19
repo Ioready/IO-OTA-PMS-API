@@ -30,7 +30,6 @@ app.use(cors({
 app.use(setLanguage);
 
 const port = config.app.port || 8080;
-
 DBconnection()
 
 // Rate limiting

@@ -12,7 +12,9 @@
         "sentLinkMail": "Reset password link sent successfully to your email",
         "createPassLinkMail": "Create password link sent successfully to your email",
         "tokenExpired": "Token expired",
-        "tokenVerified": "Token verified"
+        "tokenVerified": "Token verified",
+        "profile": "Profile",
+        "logout": "Logout Successful"
     },
     "failure": {
         "invalidCred": "Invalid Login credentials",
@@ -31,6 +33,8 @@
         "sentMail": "Unable sent OTP to your email.",
         "roleName": "Role name already exists",
         "account": "Account not found",
-        "detail": "User not found"
+        "detail": "User not found",
+        "profile": "Profile not found",
+        "tokenExpired": "Token expired"
     }
 }

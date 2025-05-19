@@ -1,5 +1,5 @@
 
-import { Controller, Get, GoneResponse, Post } from '../../lib/decorators';
+import { Controller, Delete, Get, GoneResponse, Post } from '../../lib/decorators';
 import { use } from '../../lib/decorators/use';
 import { Responder } from '../../lib/responder';
 import { protect } from './auth.middleware';
@@ -34,7 +34,7 @@ class AuthController {
     async verifyAndExpiryUrl(req: Request, res: Response) {
         const result: any = await AuthService.verifyAndExpiryUrl(req);
         if (result.url === "verify") Responder.sendSuccessData(result, 'user:success.tokenVerified', res)
-        if (result.url === "expiry") throw new GoneResponse('user:success.tokenExpired')
+        if (result.url === "expiry") Responder.sendSuccessMessage('user:success.tokenExpired', res)
     }
 
     @Post("/resent")
@@ -64,6 +64,12 @@ class AuthController {
         if (result) Responder.sendSuccessMessage('user:success.createPassLinkMail', res)
     }
 
+    @Post("/resent-link")
+    async ResendLink(req: Request, res: Response) {
+        const result: any = await AuthService.forgotPassword(req, "create");
+        if (result) Responder.sendSuccessMessage('user:success.createPassLinkMail', res)
+    }
+
     @Post("/verify-otp")
     async verifyOtp(req: Request, res: Response) {
         const result: any = await AuthService.verifyOtp(req, res);
@@ -87,6 +93,28 @@ class AuthController {
     async oAuthsignIn(req: Request, res: Response) {
         const result: any = await AuthService.oAuthsignIn(req, res);
         if (result) Responder.sendSuccessData(result, 'user:success.login', res);
+    }
+
+    @Delete('/logout')
+    async logout(_req: Request, res: Response) {
+        // res.cookie("refreshToken", 'none', {
+        //     expires: new Date(0),
+        //     httpOnly: true,
+        // })
+        // res.cookie("keepMeSigned", 'none', {
+        //     expires: new Date(0),
+        //     httpOnly: true,
+        // })
+
+        res.clearCookie('refreshToken', {
+            path: '/',
+            httpOnly: true
+        });
+        res.clearCookie('keepMeSigned', {
+            path: '/',
+            httpOnly: true
+        });
+        Responder.sendSuccessMessage('user:success.logout', res)
     }
 
     // @Get("/test/lang")

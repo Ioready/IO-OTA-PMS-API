@@ -3,12 +3,15 @@
         "create": "Mülk oluşturuldu",
         "update": "Mülk güncellendi",
         "detail": "Mülk",
-        "list": "Mülkler"
+        "list": "Mülkler",
+        "switch": "Mülk başarıyla"
     },
     "failure": {
         "create": "Mülk oluşturulamadı",
         "update": "Mülk güncellenemedi",
         "detail": "Mülk bulunamadı",
-        "list": "Mülkler alınamadı"
+        "list": "Mülkler alınamadı",
+        "add": "Önce mülkü tamamlayın",
+        "switch": "Mülk değiştirilemedi"
     }
 }

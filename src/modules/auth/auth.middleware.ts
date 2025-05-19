@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import asyncHandler from '../../middleware/async'
 import { UserModel } from '../../schemas'
-import { UnauthorizedResponse } from 'http-errors-response-ts/lib'
-import { Msg } from '../../resources'
+import { ForbiddenResponse, UnauthorizedResponse } from 'http-errors-response-ts/lib'
+import { CheckPropertyUrl, Msg } from '../../resources'
 import { Utils } from '../../lib/utils'
 
 export const protect = asyncHandler(
@@ -41,11 +41,15 @@ export const protect = asyncHandler(
 
 			req.user = user; // Attach user to request
 			await Utils.updateKeepsignToken(req.user, decoded.deviceId, res)
+			const checkProperty = await Utils.checkProperty(user);
+			if (checkProperty.redirectUrl === CheckPropertyUrl.PROPERTY) throw new ForbiddenResponse('property:failure.add')
 			next();
 		} catch (err) {
-			console.log({ err });
-
-			throw new UnauthorizedResponse(Msg.invalidCred)
+			if (err.name === 'TokenExpiredError') {
+				throw new ForbiddenResponse('user:failure.tokenExpired')
+			} else {
+				throw new UnauthorizedResponse('user:failure.invalidToken')
+			}
 		}
 	}
 )
