@@ -22,7 +22,7 @@ export const protect = asyncHandler(
 		}
 
 
-		// try {
+		try {
 
 			// Verify token
 			const decoded: any = Utils.verifyToken(token)
@@ -44,11 +44,13 @@ export const protect = asyncHandler(
 			const checkProperty = await Utils.checkProperty(user);
 			if (checkProperty.redirectUrl === CheckPropertyUrl.PROPERTY) throw new ForbiddenResponse('property:failure.add')
 			next();
-		// } catch (err) {
-		// 	console.log({ err });
-
-		// 	throw new UnauthorizedResponse(Msg.invalidCred)
-		// }
+		} catch (err) {
+			if (err.name === 'TokenExpiredError') {
+				throw new ForbiddenResponse('user:failure.tokenExpired')
+			} else {
+				throw new UnauthorizedResponse('user:failure.invalidToken')
+			}
+		}
 	}
 )
 

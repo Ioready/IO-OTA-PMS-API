@@ -67,6 +67,8 @@ class UserRoleService {
             const regExp = Utils.returnRegExp(query.searchText);
             query["$or"] = [
                 { name: regExp },
+                { "role.name": regExp },
+                { "property.name": regExp },
             ];
             delete query.searchText;
         }

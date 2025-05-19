@@ -34,6 +34,7 @@
         "roleName": "Role name already exists",
         "account": "Account not found",
         "detail": "User not found",
-        "profile": "Profile not found"
+        "profile": "Profile not found",
+        "tokenExpired": "Token expired"
     }
 }

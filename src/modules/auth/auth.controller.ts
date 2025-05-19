@@ -34,7 +34,7 @@ class AuthController {
     async verifyAndExpiryUrl(req: Request, res: Response) {
         const result: any = await AuthService.verifyAndExpiryUrl(req);
         if (result.url === "verify") Responder.sendSuccessData(result, 'user:success.tokenVerified', res)
-        if (result.url === "expiry") throw new GoneResponse('user:success.tokenExpired')
+        if (result.url === "expiry") Responder.sendSuccessMessage('user:success.tokenExpired', res)
     }
 
     @Post("/resent")
@@ -107,12 +107,12 @@ class AuthController {
         // })
 
         res.clearCookie('refreshToken', {
-            path: '/',    
-            httpOnly: true 
+            path: '/',
+            httpOnly: true
         });
         res.clearCookie('keepMeSigned', {
-            path: '/',     
-            httpOnly: true 
+            path: '/',
+            httpOnly: true
         });
         Responder.sendSuccessMessage('user:success.logout', res)
     }
