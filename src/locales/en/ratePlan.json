@@ -1,0 +1,16 @@
+{
+  "success": {
+    "create": "Rate plan created",
+    "update": "Rate plan updated",
+    "detail": "Rate plan",
+    "delete": "Rate plan deleted",
+    "list": "Rate plan"
+  },
+  "failure": {
+    "create": "Unable to create Rate plan ",
+    "update": "Unable to update Rate plan ",
+    "detail": "Rate plan  not found",
+    "delete": "Unable to delete Rate plan ",
+    "list": "Unable to get Rate plan "
+  }
+}

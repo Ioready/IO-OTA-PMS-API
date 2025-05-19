@@ -13,7 +13,8 @@ interface IRatePlan extends Document {
     date: any,
     maxExtraChild: number,
     maxExtraGuest: number,
-    cancellationPolicy: ObjectId
+    cancellationPolicy: ObjectId,
+    property: ObjectId,
 
 }
 const RatePlanSchema = new Schema<IRatePlan>({
@@ -31,8 +32,15 @@ const RatePlanSchema = new Schema<IRatePlan>({
         type: mongoose.Schema.Types.ObjectId,
         // ref: "settings"
     },
-    date: Date,
-    status: { type: String, enum: ["active", "inactive"] },
+    property: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "property"
+    },
+    date: {
+        from: Date,
+        to: Date
+    },
+    status: { type: String, enum: ["active", "inactive"], default: "inactive" },
 
 }, Utils.returnSchemaOption());
 
