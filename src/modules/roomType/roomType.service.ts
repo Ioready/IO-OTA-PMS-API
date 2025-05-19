@@ -36,9 +36,44 @@ class RoomTypeService {
         if (!roomType) throw new NotFoundResponse('roomType:failure.delete')
         return { roomType };
     }
+    
     listRoomType = async (req: Request) => {
+        const query: any = req.query;
+        if (query.searchText) {
+            const regExp = Utils.returnRegExp(query.searchText);
+            query["$or"] = [
+                { name: regExp },
+                { "manager.name": regExp },
+            ];
+            delete query.searchText;
+        }
+        const pipeline = [
+            // Utils.lookupSelectedField("users", "manager", "_id", { _id: 1, fullName: 1 }, "manager"),
+            // Utils.unwind("$manager"),
+            Utils.lookupField("rooms", "_id", "roomType", "rooms"),
+            { $match: query },
 
-        const roomTypes = await Model.find(RoomTypeModel, req.query, { type: 1, maxGuest: 1, rate: 1, status: 1 });
+            {
+                $addFields: {
+                    totalrooms: {
+                        $size: "$rooms"
+                    }
+                }
+            }
+        ];
+        const projection = {
+            _id: 1,
+            name: 1,
+            type: 1,
+            maxGuest: 1,
+            rate: 1,
+            status: 1,
+            totalrooms: 1,
+        }
+        let pageLimit = Utils.returnPageLimit(query);
+        const roomTypes = await Model.aggregate(RoomTypeModel, pipeline, projection, pageLimit)
+
+        // const roomTypes = await Model.find(RoomTypeModel, req.query, { type: 1, maxGuest: 1, rate: 1, status: 1 });
         if (!roomTypes) throw new NotFoundResponse('roomType:failure.delete')
         return { roomTypes: roomTypes.data, total: roomTypes.total }
     }

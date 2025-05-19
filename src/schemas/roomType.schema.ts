@@ -1,10 +1,11 @@
 import mongoose, { ObjectId, Schema } from "mongoose";
 import { Utils } from "../lib/utils";
+import { CommonStatus } from "../resources";
 
 
 interface IRoomType extends Document {
     property: ObjectId,
-    name:string,
+    name: string,
     type: string,
     maxGuest: number,
     maxChild: number,
@@ -22,7 +23,7 @@ const roomTypeSchema = new Schema<IRoomType>({
         type: mongoose.Schema.Types.ObjectId,
         ref: "property"
     },
-    name: { type:String, required: [true, "Name is required"] },
+    name: { type: String, required: [true, "Name is required"] },
     type: String,
     maxGuest: Number,
     maxChild: Number,
@@ -33,7 +34,7 @@ const roomTypeSchema = new Schema<IRoomType>({
     description: String,
     images: [String],
     amenities: Object,
-    status: String,
+    status: { type: String, enum: [CommonStatus.ACTIVE, CommonStatus.INACTIVE], default: CommonStatus.ACTIVE },
 }, Utils.returnSchemaOption());
 
 const RoomTypeModel = mongoose.model("roomtype", roomTypeSchema);

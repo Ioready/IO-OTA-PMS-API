@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import asyncHandler from '../../middleware/async'
-import { UserModel } from '../../schemas'
+import { DeviceModel, UserModel } from '../../schemas'
 import { ForbiddenResponse, UnauthorizedResponse } from 'http-errors-response-ts/lib'
 import { CheckPropertyUrl, Msg } from '../../resources'
 import { Utils } from '../../lib/utils'
@@ -33,9 +33,9 @@ export const protect = asyncHandler(
 				throw new UnauthorizedResponse(Msg.user404);
 			}
 
-			const device: any = await UserModel.findOne({ deviceId: deviceId });
+			const device: any = await DeviceModel.findOne({ deviceId: deviceId });
 
-			if (!device) {
+			if (!device) {				
 				throw new UnauthorizedResponse(Msg.invalidCred);
 			}
 

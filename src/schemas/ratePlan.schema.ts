@@ -1,5 +1,6 @@
 import mongoose, { Schema, ObjectId } from "mongoose";
 import { Utils } from "../lib/utils";
+import { CommonStatus } from "../resources";
 
 interface IRatePlan extends Document {
     name: string,
@@ -40,7 +41,7 @@ const RatePlanSchema = new Schema<IRatePlan>({
         from: Date,
         to: Date
     },
-    status: { type: String, enum: ["active", "inactive"], default: "inactive" },
+    status: { type: String, enum: [CommonStatus.ACTIVE, CommonStatus.INACTIVE], default: CommonStatus.ACTIVE },
 
 }, Utils.returnSchemaOption());
 
