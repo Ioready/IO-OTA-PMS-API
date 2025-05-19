@@ -25,7 +25,7 @@ i18next.use(Backend).init({
   lng: 'en',
   fallbackLng: 'en',
   preload: ['en', 'tr'],
-  ns: [ModuleName.USER, ModuleName.PROPERTY, ModuleName.ROLE, ModuleName.FLOOR, ModuleName.ROOM_TYPE,ModuleName.RATE_PLAN],
+  ns: [ModuleName.USER, ModuleName.PROPERTY, ModuleName.ROLE, ModuleName.FLOOR, ModuleName.ROOM_TYPE,ModuleName.RATE_PLAN,ModuleName.RECENT_SEARCH],
   defaultNS: ModuleName.USER,
   backend: {
     loadPath: path.join(__dirname, './locales/{{lng}}/{{ns}}.json')
