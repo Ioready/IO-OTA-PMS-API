@@ -55,6 +55,12 @@ class RoomService {
             query["roomType._id"] = Utils.returnObjectId(query.roomType);
             delete query.roomType
         }
+         if (query.floor) {
+            query["floor._id"] = Utils.returnObjectId(query.floor);
+            delete query.floor
+         }
+        console.log(query);
+        
         const pipeline = [
             Utils.lookupSelectedField("roomtypes", "roomType", "_id", { _id: 1, name: 1 }),
             Utils.unwind("$roomType"),
