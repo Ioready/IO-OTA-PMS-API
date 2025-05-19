@@ -3,20 +3,23 @@ import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
 import { FloorModel } from '../../schemas';
 import { Model } from '../../lib/model';
+import { Utils } from '../../lib/utils';
 
 class FloorService {
 
     // @ts-ignore
     createFloor = async (req: Request, res: Response) => {
-
-        const floor = await FloorModel.create(req.body);
+        const data = req.body;
+        await Utils.addPropertyId(data, req)
+        const floor = await FloorModel.create(data);
         if (!floor) throw new ConflictResponse('floor:failure.create')
         return { floor }
     }
 
     editFloor = async (req: Request) => {
-
-        const floor = await Model.findOneAndUpdate(FloorModel, { _id: req.params.id }, req.body);
+        const floorId = req.params.id;
+        await this.getFloor(floorId)
+        const floor = await Model.findOneAndUpdate(FloorModel, { _id: floorId }, req.body);
         if (!floor) throw new NotFoundResponse('floor:failure.update')
         return floor
     }

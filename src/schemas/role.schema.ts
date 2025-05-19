@@ -6,6 +6,7 @@ interface IRole extends Document {
   name: string;
   access: any;
   description: string;
+  type: string,
   status: string;
   groupId: any;
   isDeleted: boolean;
@@ -15,6 +16,7 @@ const RoleSchema = new Schema<IRole>(
     name: String,
     access: Object,
     description: String,
+    type: String,
     groupId: { type: mongoose.Schema.Types.ObjectId },
     isDeleted: { type: Boolean, default: false },
     status: {

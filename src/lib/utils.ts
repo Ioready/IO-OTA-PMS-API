@@ -255,6 +255,10 @@ class UtilsClass {
     })
   }
 
+  addPropertyId = async (data: any, req: Request) => {    
+    data.property = req.user.currentProperty;
+  }
+
 
 
 }

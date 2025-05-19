@@ -4,6 +4,7 @@ import { UserModel } from "../../schemas";
 import { UserType } from "../../resources";
 import { Model } from "../../lib/model";
 import { Utils } from "../../lib/utils";
+import RoleService from "../role/role.service";
 
 
 class UserRoleService {
@@ -16,7 +17,10 @@ class UserRoleService {
         const exEmail = await UserModel.findOne({ email: data.email });
         if (exEmail) throw new ConflictResponse('user:failure.emailExist');
 
-        // const role = await UserModel.create(data);
+        const checkRole = await RoleService.getRole(data.role);
+        if (!checkRole) throw new NotFoundResponse('role:failure.detail');
+
+        if (checkRole.type === UserType.HOUSEKEEPING) data.type = UserType.HOUSEKEEPING
         const user = new UserModel(data);
         const savedUser = await user.save({ validateBeforeSave: false });
         if (!savedUser) throw new ConflictResponse('user:failure.create');
@@ -33,7 +37,7 @@ class UserRoleService {
     }
 
     getUserRole = async (id: any) => {
-        const user = await Model.findOne(UserModel, { _id: id });
+        const user = await Model.findOne(UserModel, { _id: id }, { fullName: 1, role: 1, properties: 1, email: 1, });
         if (!user) throw new NotFoundResponse('user:failure.detail');
         return { user };
     }
@@ -50,7 +54,7 @@ class UserRoleService {
         query.isDeleted = false;
         const projection: any = {
             _id: 1,
-            name: 1,
+            fullName: 1,
             status: 1,
             phone: 1,
             email: 1,
@@ -66,7 +70,7 @@ class UserRoleService {
         if (query.searchText) {
             const regExp = Utils.returnRegExp(query.searchText);
             query["$or"] = [
-                { name: regExp },
+                { fullName: regExp },
                 { "role.name": regExp },
                 { "property.name": regExp },
             ];
@@ -74,9 +78,9 @@ class UserRoleService {
         }
 
         const pipeline = [
-            { $match: query },
             Utils.lookupSelectedField("roles", "role", "_id", { _id: 1, name: 1 }),
             Utils.unwind("$role"),
+            { $match: query },
             {
                 $addFields: {
                     objectProperties: {

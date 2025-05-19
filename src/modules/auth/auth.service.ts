@@ -1,5 +1,5 @@
 
-import { ConflictResponse, ForbiddenResponse, GoneResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
+import { ConflictResponse, GoneResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
 import { DeviceModel, TokenModel, UserModel } from '../../schemas';
 import { LoginType, Msg } from '../../resources';

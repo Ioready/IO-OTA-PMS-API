@@ -1,5 +1,5 @@
 
-import { Controller, Delete, Get, GoneResponse, Post } from '../../lib/decorators';
+import { Controller, Delete, Get, Post } from '../../lib/decorators';
 import { use } from '../../lib/decorators/use';
 import { Responder } from '../../lib/responder';
 import { protect } from './auth.middleware';
