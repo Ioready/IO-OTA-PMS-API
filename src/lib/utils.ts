@@ -145,10 +145,11 @@ class UtilsClass {
 
   // }
 
-    setCookies = async (name: any, value: any, expiry: any, res: Response) => {
+  setCookies = async (name: any, value: any, expiry: any, res: Response) => {
     res.cookie(name, value, {
       httpOnly: true,
       sameSite: 'lax',
+      secure: false,
       maxAge: expiry
     });
 
@@ -264,7 +265,7 @@ class UtilsClass {
     })
   }
 
-  addPropertyId = async (data: any, req: Request) => {    
+  addPropertyId = async (data: any, req: Request) => {
     data.property = req.user.currentProperty;
   }
 
