@@ -32,10 +32,11 @@ export const protect = asyncHandler(
 			if (!user) {
 				throw new UnauthorizedResponse(Msg.user404);
 			}
+			console.log(deviceId);
 
 			const device: any = await DeviceModel.findOne({ deviceId: deviceId });
-
-			if (!device) {				
+			console.log(device);
+			if (!device) {
 				throw new UnauthorizedResponse(Msg.invalidCred);
 			}
 
@@ -45,6 +46,9 @@ export const protect = asyncHandler(
 			if (checkProperty.redirectUrl === CheckPropertyUrl.PROPERTY) throw new ForbiddenResponse('property:failure.add')
 			next();
 		} catch (err) {
+			if (err instanceof ForbiddenResponse) {
+				throw err;
+			}
 			if (err.name === 'TokenExpiredError') {
 				throw new ForbiddenResponse('user:failure.tokenExpired')
 			} else {
