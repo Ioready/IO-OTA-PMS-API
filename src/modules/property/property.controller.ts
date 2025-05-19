@@ -18,7 +18,7 @@ class PropertyController {
     }
 
     @Patch("/:id")
-    @use(protect)
+    // @use(protect)
     async editProperty(req: Request, res: Response) {
         const result = await PropertyService.editProperty(req);
         if (result) Responder.sendSuccessMessage('property:success.update', res)
@@ -34,7 +34,7 @@ class PropertyController {
     }
 
     @Get("/:id")
-    @use(protect)
+    // @use(protect)
     async getProperty(req: Request, res: Response) {
         const property = await PropertyService.getProperty(req.params.id);
         if (property) Responder.sendSuccessData({ property }, 'property:success.detail', res)
