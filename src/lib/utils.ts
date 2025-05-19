@@ -138,7 +138,7 @@ class UtilsClass {
   setCookies = async (name: any, value: any, expiry: any, res: Response) => {
     res.cookie(name, value, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       secure: config.app.env === "prouction",
       maxAge: expiry
     });
