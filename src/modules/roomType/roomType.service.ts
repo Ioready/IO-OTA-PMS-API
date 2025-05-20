@@ -1,9 +1,9 @@
 import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
-import { RoomTypeModel } from '../../schemas/roomType.schema';
 import { Model } from '../../lib/model';
 import { Utils } from '../../lib/utils';
 import { CommonStatus } from '../../resources';
+import { RoomTypeModel } from '../../schemas';
 
 
 

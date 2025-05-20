@@ -8,11 +8,11 @@
     "mapping": "Rate plan mapping updated"
   },
   "failure": {
-    "create": "Unable to create Rate plan ",
-    "update": "Unable to update Rate plan ",
+    "create": "Unable to create rate plan",
+    "update": "Unable to update rate plan",
     "detail": "Rate plan not found",
-    "delete": "Unable to delete Rate plan ",
-    "list": "Unable to get Rate plan",
+    "delete": "Unable to delete rate plan ",
+    "list": "Unable to get rate plan",
     "mapping": "Unable to update rate plan mapping"
   }
 }

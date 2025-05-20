@@ -2,8 +2,8 @@ import { ConflictResponse, GoneResponse, NotFoundResponse } from "../../lib/deco
 import { Request, Response } from "express";
 import { ModuleName,} from "../../resources";
 import { Model } from "../../lib/model";
-import { RecentSearchaModel } from "../../schemas/recentSearch.schema";
 import { Utils } from "../../lib/utils";
+import { RecentSearchaModel } from "../../schemas";
 
 class RecentSearchService {
     // @ts-ignore

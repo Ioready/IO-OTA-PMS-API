@@ -19,9 +19,10 @@ class AuthService {
     // @ts-ignore
     createUser = async (req: Request, res: Response) => {
         const data = req.body;
-        const exUser = await UserModel.findOne({ email: data.email })
+        const exUser = await UserModel.findOne({ email: data.email, accountCreated: true })
         if (exUser) throw new ConflictResponse('user:failure.email')
 
+        await UserModel.deleteMany({ email: data.email, accountCreated: false })
         data.groupId = await Utils.newObjectId()
         const user = await UserModel.create(data);
         if (!user) throw new ConflictResponse('user:failure.create')
@@ -35,7 +36,7 @@ class AuthService {
         let validateErr: any = bodyValidation(["email", "password"], req, res)
         if (!validateErr) return;
 
-        const user: any = await UserModel.findOne({ email: data.email }).select("+password");
+        const user: any = await UserModel.findOne({ email: data.email, accountCreated: true }).select("+password");
         if (!user || !user.password) {
             throw new UnauthorizedResponse('user:failure.invalidCred');
         }
@@ -76,7 +77,7 @@ class AuthService {
     }
 
     resendOtp = async (req: Request) => {
-        const user: any = await UserModel.findOne({ email: req.body.email });
+        const user: any = await UserModel.findOne({ email: req.body.email, accountCreated: true });
         if (!user) throw new NotFoundResponse('user:failure.account')
         return this.sendOtp(user)
     }
@@ -102,7 +103,7 @@ class AuthService {
 
     forgotPassword = async (req: Request, type: string) => {
 
-        const user: any = await UserModel.findOne({ email: req.body.email });
+        const user: any = await UserModel.findOne({ email: req.body.email, accountCreated: true });
         if (!user) throw new NotFoundResponse('user:failure.account')
         Utils.generateTokenAndMail(user, type)
         return true;
@@ -138,7 +139,7 @@ class AuthService {
         let validateErr: any = bodyValidation(["email", "otp"], req, res)
         if (!validateErr) return;
 
-        const user: any = await UserModel.findOne({ email: email });
+        const user: any = await UserModel.findOne({ email: email, accountCreated: true });
         if (!user) throw new NotFoundResponse('user:failure.account')
 
         if (user.otp != otp) throw new NotFoundResponse('user:failure.invalidOtp')
@@ -164,7 +165,7 @@ class AuthService {
 
             const user: any = await UserModel.findOne({ _id: id });
             if (!user) throw new NotFoundResponse('user:failure.account')
-            
+
             const accessToken = await Utils.generateToken(user, deviceId, res);
             return accessToken;
 

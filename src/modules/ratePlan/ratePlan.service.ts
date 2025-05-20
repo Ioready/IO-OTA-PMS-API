@@ -1,10 +1,10 @@
 import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
 
-import { RatePlanModel } from '../../schemas/ratePlan.schema';
 import { Model } from '../../lib/model';
 import { Utils } from '../../lib/utils';
 import { CommonStatus } from '../../resources';
+import { RatePlanModel } from '../../schemas';
 
 class RatePlanService {
 

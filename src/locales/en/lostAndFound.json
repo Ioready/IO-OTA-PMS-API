@@ -1,0 +1,18 @@
+{
+  "success": {
+    "create": "Lost and found created",
+    "update": "Lost and found updated",
+    "detail": "Lost and found",
+    "delete": "Lost and found deleted",
+    "list": "Lost and found",
+    "mapping": "Lost and found mapping updated"
+  },
+  "failure": {
+    "create": "Unable to create lost and found",
+    "update": "Unable to update lost and found",
+    "detail": "Lost and found not found",
+    "delete": "Unable to delete lost and found",
+    "list": "Unable to get lost and found",
+    "mapping": "Unable to update lost and found mapping"
+  }
+}

@@ -4,8 +4,8 @@
     "list": "Recent Search"
   },
   "failure": {
-    "create": "Unable to create Recent Search ",
-    "list": "Unable to get Recent Search ",
+    "create": "Unable to create recent search ",
+    "list": "Unable to get recent search ",
     "typeInvalid": "Recent search type invalid"
   }
 }

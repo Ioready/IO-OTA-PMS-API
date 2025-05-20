@@ -5,3 +5,8 @@ export * from './role.schema'
 export * from './floor.schema'
 export * from './token.schema';
 export * from './device.schema';
+export * from './lostAndFound.schema';
+export * from './ratePlan.schema';
+export * from './recentSearch.schema';
+export * from './room.schema';
+export * from './roomType.schema';

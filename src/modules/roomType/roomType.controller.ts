@@ -20,7 +20,7 @@ class RoomTypeController {
 
     @Patch("/:id")
     @use(checkProperty)
-
+    @use(protect)
     async editRoomType(req: Request, res: Response) {
         const result = await RoomTypeService.editRoomType(req);
         if (result) Responder.sendSuccessMessage('roomType:success.update', res);
