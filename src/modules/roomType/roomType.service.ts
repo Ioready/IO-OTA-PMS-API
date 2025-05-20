@@ -3,6 +3,7 @@ import { Request, Response } from "express"
 import { RoomTypeModel } from '../../schemas/roomType.schema';
 import { Model } from '../../lib/model';
 import { Utils } from '../../lib/utils';
+import { CommonStatus } from '../../resources';
 
 
 
@@ -36,7 +37,7 @@ class RoomTypeService {
         if (!roomType) throw new NotFoundResponse('roomType:failure.delete')
         return { roomType };
     }
-    
+
     listRoomType = async (req: Request) => {
         const query: any = req.query;
         if (query.searchText) {
@@ -76,6 +77,23 @@ class RoomTypeService {
         // const roomTypes = await Model.find(RoomTypeModel, req.query, { type: 1, maxGuest: 1, rate: 1, status: 1 });
         if (!roomTypes) throw new NotFoundResponse('roomType:failure.delete')
         return { roomTypes: roomTypes.data, total: roomTypes.total }
+    }
+
+
+
+    getAllRoomTypes = async (req: Request) => {
+        const query: any = req.query;
+        if (query.searchText) {
+            const regExp = Utils.returnRegExp(query.searchText);
+            query["$or"] = [
+                { name: regExp },
+            ];
+            delete query.searchText;
+        }
+        query.status = CommonStatus.ACTIVE;
+        const roomTypes = await Model.findAll(RoomTypeModel, query, { name: 1, code: 1 },)
+        if (!roomTypes) throw new NotFoundResponse('ratePlan:failure.list')
+        return { roomTypes }
     }
 
 }

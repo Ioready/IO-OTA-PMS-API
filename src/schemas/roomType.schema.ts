@@ -37,6 +37,6 @@ const roomTypeSchema = new Schema<IRoomType>({
     status: { type: String, enum: [CommonStatus.ACTIVE, CommonStatus.INACTIVE], default: CommonStatus.ACTIVE },
 }, Utils.returnSchemaOption());
 
-const RoomTypeModel = mongoose.model("roomtype", roomTypeSchema);
+const RoomTypeModel = mongoose.model("room_type", roomTypeSchema);
 
 export { IRoomType, RoomTypeModel };

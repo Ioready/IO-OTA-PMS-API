@@ -14,7 +14,8 @@
         "tokenExpired": "Token expired",
         "tokenVerified": "Token verified",
         "profile": "Profile",
-        "logout": "Logout Successful"
+        "logout": "Logout Successful",
+        "changePwd": "Password changed"
     },
     "failure": {
         "invalidCred": "Invalid Login credentials",
@@ -35,6 +36,9 @@
         "account": "Account not found",
         "detail": "User not found",
         "profile": "Profile not found",
-        "tokenExpired": "Token expired"
+        "tokenExpired": "Token expired",
+        "oldPwd": "Old password is incorrect",
+        "sameAsPwd": "New password must be different from old password"
+        
     }
 }

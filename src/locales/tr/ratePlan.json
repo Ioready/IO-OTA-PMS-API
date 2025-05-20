@@ -1,0 +1,18 @@
+{
+    "success": {
+        "create": "Fiyat planı oluşturuldu",
+        "update": "Fiyat planı güncellendi",
+        "detail": "Fiyat planı",
+        "delete": "Fiyat planı silindi",
+        "list": "Fiyat planı",
+        "mapping": "Fiyat planı eşlemesi güncellendi"
+    },
+    "failure": {
+        "create": "Fiyat planı oluşturulamadı",
+        "update": "Fiyat planı güncellenemedi",
+        "detail": "Fiyat planı bulunamadı",
+        "delete": "Fiyat planı silinemedi",
+        "list": "Fiyat planı alınamadı",
+        "mapping": "Fiyat planı eşlemesi güncellenemedi"
+    }
+}
