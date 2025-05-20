@@ -121,7 +121,8 @@ class AuthService {
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
-        user.setPassword = false;
+        user.setPassword = true;
+        user.accountCreated = true;
         await user.save({ validateBeforeSave: false });
         await this.sendOtp(user);
         await DeviceModel.deleteMany({ user: user._id })
