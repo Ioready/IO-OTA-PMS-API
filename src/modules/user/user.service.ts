@@ -1,7 +1,7 @@
 import { BadRequestResponse, NotFoundResponse } from "http-errors-response-ts/lib";
 import { Utils } from "../../lib/utils";
 import { bodyValidation } from "../../middleware/validation";
-import { UserModel } from "../../schemas";
+import { DeviceModel, UserModel } from "../../schemas";
 import { Request, Response } from "express";
 
 class UserService {
@@ -24,6 +24,9 @@ class UserService {
 
         user.password = await Utils.encryptPassword(newPassword);
         await user.save({ validateBeforeSave: false });
+        
+        await DeviceModel.deleteMany({ user: user._id, deviceId: { $ne: req.deviceId } })
+
         return user;
 
     }

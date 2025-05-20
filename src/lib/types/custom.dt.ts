@@ -4,6 +4,7 @@ declare namespace Express {
 			[key: string]: string
 		},
 		language?: string;
+		deviceId?: string
 	}
 }
 

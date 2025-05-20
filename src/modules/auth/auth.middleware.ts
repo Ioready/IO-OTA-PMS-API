@@ -40,6 +40,7 @@ export const protect = asyncHandler(
 			}
 
 			req.user = user; // Attach user to request
+			req.deviceId = deviceId;
 			await Utils.updateKeepsignToken(req.user, decoded.deviceId, res)
 			next();
 		} catch (err) {
