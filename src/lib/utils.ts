@@ -89,17 +89,18 @@ class UtilsClass {
 
   generateTokenAndMail = async (user: any, type: any) => {
     var set: string, expiry: any, template: any;
-    if (type === "forgot") set = "set-password";
-    if (type === "create-password" || type === "create") set = "create-password";
 
-    if (type === "create-password") {
+
+    if (type === "create-password" || type === "create") {
       expiry = config.jwt.oneDay;
       template = config.zeptoMail.template.create;
+      set = "create-password";
       // login.loginLink = `${config.url.base}/en/admin/login`
     }
     else {
       expiry = config.jwt.fifteenMins;
       template = config.zeptoMail.template.forgot;
+      set = "set-password";
     }
     const token = this.getSignedJwtToken({ id: user._id, type: set }, expiry);
     await TokenModel.deleteMany({ user: user.id, type })
@@ -138,7 +139,7 @@ class UtilsClass {
   setCookies = async (name: any, value: any, expiry: any, res: Response) => {
     res.cookie(name, value, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       secure: true,
       maxAge: expiry
     });
@@ -264,7 +265,7 @@ class UtilsClass {
     })
   }
 
-  addPropertyId = async (data: any, req: Request) => {    
+  addPropertyId = async (data: any, req: Request) => {
     data.property = req.user.currentProperty;
   }
 
