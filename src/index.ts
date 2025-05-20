@@ -3,7 +3,7 @@ import cors from "cors";
 import 'dotenv/config';
 import { AppRouter } from "./AppRouter";
 import 'colors'
-import rateLimit from 'express-rate-limit';
+// import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 import "./modules/auth/auth.controller";
 import './modules/ticket/ticket.controller'
