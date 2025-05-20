@@ -135,24 +135,24 @@ class UtilsClass {
 
   }
 
-  // setCookies = async (name: any, value: any, expiry: any, res: Response) => {
-  //   res.cookie(name, value, {
-  //     httpOnly: true,
-  //     sameSite: 'none',
-  //     secure: config.app.env === "prouction",
-  //     maxAge: expiry
-  //   });
-
-  // }
-
-    setCookies = async (name: any, value: any, expiry: any, res: Response) => {
+  setCookies = async (name: any, value: any, expiry: any, res: Response) => {
     res.cookie(name, value, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: 'strict',
+      secure: true,
       maxAge: expiry
     });
 
   }
+
+  //   setCookies = async (name: any, value: any, expiry: any, res: Response) => {
+  //   res.cookie(name, value, {
+  //     httpOnly: true,
+  //     sameSite: 'lax',
+  //     maxAge: expiry
+  //   });
+
+  // }
 
   updateKeepsignToken = async (user: any, deviceId: any, res: Response) => {
     const device = await DeviceModel.findOne({ deviceId: deviceId });

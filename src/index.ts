@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParser())
 
 app.use(cors({
-	origin: 'http://localhost:5000', // your frontend origin
+	origin: ['http://localhost:5000', 'https://otelsoft.vercel.app'],// your frontend origin
 	credentials: true
 }));
 app.use(setLanguage);
