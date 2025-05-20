@@ -69,6 +69,8 @@ class UtilsClass {
 
   // @ts-ignore
   generateToken = async (user: any, deviceId: any, res: Response) => {
+    console.log({ "222": deviceId });
+
 
     const tokens = await this.generateTokens({
       id: user._id,
@@ -161,7 +163,8 @@ class UtilsClass {
       const tokens = await this.generateTokens({
         id: user._id,
         type: user.type,
-        role: user.role
+        role: user.role,
+        deviceId
       });
       var cookieExpiry: any;
       if (device.keepMeSigned) cookieExpiry = config.cookie.oneDay

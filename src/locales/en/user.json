@@ -15,7 +15,8 @@
         "tokenVerified": "Token verified",
         "profile": "Profile",
         "logout": "Logout Successful",
-        "changePwd": "Password changed"
+        "changePwd": "Password changed",
+        "refresh": "Refresh Token"
     },
     "failure": {
         "invalidCred": "Invalid Login credentials",

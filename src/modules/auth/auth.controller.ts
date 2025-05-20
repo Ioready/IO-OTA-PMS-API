@@ -79,7 +79,7 @@ class AuthController {
     @Post("/refresh-token")
     async refreshToken(req: Request, res: Response) {
         const result: any = await AuthService.refreshToken(req, res);
-        if (result) Responder.sendSuccessData({ accessToken: result.accessToken }, 'user:success.login', res);
+        if (result) Responder.sendSuccessData({ accessToken: result.accessToken }, 'user:success.refresh', res);
     }
 
     @Get("/me")

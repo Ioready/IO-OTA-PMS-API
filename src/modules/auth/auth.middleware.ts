@@ -23,7 +23,7 @@ export const protect = asyncHandler(
 
 
 		try {
-			
+
 			// Verify token
 			const decoded: any = Utils.verifyToken(token)
 			const { id, deviceId } = (decoded as { id: string, deviceId: string });
@@ -34,6 +34,7 @@ export const protect = asyncHandler(
 			}
 
 			const device: any = await DeviceModel.findOne({ deviceId: deviceId });
+
 			if (!device) {
 				throw new UnauthorizedResponse(Msg.invalidCred);
 			}
@@ -42,6 +43,7 @@ export const protect = asyncHandler(
 			await Utils.updateKeepsignToken(req.user, decoded.deviceId, res)
 			next();
 		} catch (err) {
+
 			if (err instanceof ForbiddenResponse) {
 				throw err;
 			}

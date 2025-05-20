@@ -164,7 +164,8 @@ class AuthService {
 
             const user: any = await UserModel.findOne({ _id: id });
             if (!user) throw new NotFoundResponse('user:failure.account')
-            const accessToken = Utils.generateToken(user, deviceId, res);
+            
+            const accessToken = await Utils.generateToken(user, deviceId, res);
             return accessToken;
 
 

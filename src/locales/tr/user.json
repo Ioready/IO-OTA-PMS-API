@@ -15,7 +15,8 @@
         "tokenVerified": "Jeton doğrulandı",
         "profile": "Profil",
         "logout": "Logout başarılı",
-        "changePwd": "Şifre değiştirildi"
+        "changePwd": "Şifre değiştirildi",
+        "refresh": "Refresh Token"
     },
     "failure": {
         "invalidCred": "Geçersiz giriş bilgileri",
