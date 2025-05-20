@@ -105,7 +105,7 @@ class UtilsClass {
     const token = this.getSignedJwtToken({ id: user._id, type: set }, expiry);
     await TokenModel.deleteMany({ user: user.id, type })
     await TokenModel.create({ token, user: user.id, type })
-    const url = `${config.url.base}/token-verify?token=${token}`;
+    const url = `${config.url.base}/${globalThis.currentReq?.language}/admin/token-verify?token=${token}`;
     //send mail
     ZohoApi.sendMailTemplate(user.email, user.fullName, template, { product: "Otlesoft", link: url, name: user.fullName })
 

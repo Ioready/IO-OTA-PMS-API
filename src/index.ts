@@ -35,16 +35,16 @@ const port = config.app.port || 8080;
 DBconnection()
 
 // Rate limiting
-const limiter = rateLimit({
-	windowMs: 10 * 60 * 1000, // 10 mins
-	max: 100, // 100 request per 10 mins
-	handler: (_req, _res, next) => {
-		const error: any = new Error("Too many requests, please try again later.");
-		error.statusCode = 429;
-		next(error);
-	}
-})
-app.use(limiter)
+// const limiter = rateLimit({
+// 	windowMs: 10 * 60 * 1000, // 10 mins
+// 	max: 100, // 100 request per 10 mins
+// 	handler: (_req, _res, next) => {
+// 		const error: any = new Error("Too many requests, please try again later.");
+// 		error.statusCode = 429;
+// 		next(error);
+// 	}
+// })
+// app.use(limiter)
 
 app.use((req, _res, next) => {
 	globalThis.currentReq = req;
