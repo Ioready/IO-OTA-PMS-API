@@ -4,7 +4,7 @@ import { Responder } from '../../lib/responder';
 import { Request, Response } from "express"
 import PropertyService from './property.service';
 import { use } from '../../lib/decorators/use';
-import { protect } from '../auth/auth.middleware';
+import { checkProperty, protect } from '../auth/auth.middleware';
 
 @Controller("/property")
 // @ts-ignore
@@ -18,7 +18,7 @@ class PropertyController {
     }
 
     @Patch("/:id")
-    // @use(protect)
+    @use(protect)
     async editProperty(req: Request, res: Response) {
         const result = await PropertyService.editProperty(req);
         if (result) Responder.sendSuccessMessage('property:success.update', res)
@@ -26,6 +26,7 @@ class PropertyController {
 
 
     @Get("/all")
+    @use(checkProperty)
     @use(protect)
     // @ts-ignore
     async getAllProperties(req: Request, res: Response) {
@@ -34,13 +35,14 @@ class PropertyController {
     }
 
     @Get("/:id")
-    // @use(protect)
+    @use(protect)
     async getProperty(req: Request, res: Response) {
         const property = await PropertyService.getProperty(req.params.id);
         if (property) Responder.sendSuccessData({ property }, 'property:success.detail', res)
     }
 
     @Get("/")
+    @use(checkProperty)
     @use(protect)
     async getProperties(req: Request, res: Response) {
         const result = await PropertyService.getProperties(req);
@@ -48,8 +50,9 @@ class PropertyController {
     }
 
     @Patch("/switch/:id")
+    @use(checkProperty)
     @use(protect)
-    async switchProperty(req: Request, res: Response) {        
+    async switchProperty(req: Request, res: Response) {
         const result = await PropertyService.switchProperty(req.params.id, req.user.id);
         if (result) Responder.sendSuccessMessage('property:success.switch', res)
     }

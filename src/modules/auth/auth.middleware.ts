@@ -23,7 +23,7 @@ export const protect = asyncHandler(
 
 
 		try {
-
+			
 			// Verify token
 			const decoded: any = Utils.verifyToken(token)
 			const { id, deviceId } = (decoded as { id: string, deviceId: string });
@@ -32,18 +32,14 @@ export const protect = asyncHandler(
 			if (!user) {
 				throw new UnauthorizedResponse(Msg.user404);
 			}
-			console.log(deviceId);
 
 			const device: any = await DeviceModel.findOne({ deviceId: deviceId });
-			console.log(device);
 			if (!device) {
 				throw new UnauthorizedResponse(Msg.invalidCred);
 			}
 
 			req.user = user; // Attach user to request
 			await Utils.updateKeepsignToken(req.user, decoded.deviceId, res)
-			const checkProperty = await Utils.checkProperty(user);
-			if (checkProperty.redirectUrl === CheckPropertyUrl.PROPERTY) throw new ForbiddenResponse('property:failure.add')
 			next();
 		} catch (err) {
 			if (err instanceof ForbiddenResponse) {
@@ -65,3 +61,13 @@ export const protect = asyncHandler(
 // 		next()
 // 	}
 // }
+
+
+export const checkProperty = asyncHandler(
+	async (req: Request, _res: Response, next: NextFunction) => {
+		const user = req.user;
+		const checkProperty = await Utils.checkProperty(user);
+		if (checkProperty.redirectUrl === CheckPropertyUrl.PROPERTY) throw new ForbiddenResponse('property:failure.add')
+		next();
+	}
+)

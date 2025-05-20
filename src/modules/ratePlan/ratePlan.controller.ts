@@ -2,7 +2,7 @@ import { Controller, Post, Patch, Get, Delete } from "../../lib/decorators";
 import { Responder } from "../../lib/responder";
 import { Request, Response } from "express";
 import RatePlanService from "./ratePlan.service";
-import { protect } from "../auth/auth.middleware";
+import { checkProperty, protect } from "../auth/auth.middleware";
 import { use } from "../../lib/decorators/use";
 
 
@@ -12,6 +12,7 @@ import { use } from "../../lib/decorators/use";
 class RatePlanController {
 
     @Post("/")
+    @use(checkProperty)
     @use(protect)
     async createRatePlan(req: Request, res: Response) {
         const result = await RatePlanService.createRatePlan(req, res);
@@ -19,6 +20,7 @@ class RatePlanController {
     }
 
     @Patch("/:id")
+    @use(checkProperty)
     @use(protect)
     async editRatePlan(req: Request, res: Response) {
         const result = await RatePlanService.editRatePlan(req);
@@ -26,12 +28,15 @@ class RatePlanController {
     }
 
     @Get("/:id")
+    @use(checkProperty)
     @use(protect)
     async detailRatePlan(req: Request, res: Response) {
         const result = await RatePlanService.detailRatePlan(req.params.id);
         if (result) Responder.sendSuccessData(result, 'ratePlan:success.detail', res);
     }
+
     @Delete("/:id")
+    @use(checkProperty)
     @use(protect)
     async deleteRatePlan(req: Request, res: Response) {
         const result = await RatePlanService.deleteRatePlan(req.params.id);
@@ -39,6 +44,7 @@ class RatePlanController {
     }
 
     @Get("/")
+    @use(checkProperty)
     @use(protect)
     async ratePlans(req: Request, res: Response) {
         const result = await RatePlanService.ratePlans(req);

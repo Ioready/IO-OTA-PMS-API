@@ -5,13 +5,14 @@ import { Responder } from '../../lib/responder';
 import { Request, Response } from "express"
 import FloorService from './floor.service';
 import { use } from '../../lib/decorators/use';
-import { protect } from '../auth/auth.middleware';
+import { checkProperty, protect } from '../auth/auth.middleware';
 
 @Controller("/floor")
 // @ts-ignore
 class FloorController {
 
     @Post("/")
+    @use(checkProperty)
     @use(protect)
     async createFloor(req: Request, res: Response) {
         const result = await FloorService.createFloor(req, res);
@@ -19,6 +20,7 @@ class FloorController {
     }
 
     @Patch("/:id")
+    @use(checkProperty)
     @use(protect)
     async editFloor(req: Request, res: Response) {
         const result = await FloorService.editFloor(req);
@@ -26,6 +28,7 @@ class FloorController {
     }
 
     @Get("/:id")
+    @use(checkProperty)
     @use(protect)
     async getFloor(req: Request, res: Response) {
         const floor = await FloorService.getFloor(req.params.id);
@@ -33,6 +36,7 @@ class FloorController {
     }
 
     @Get("/")
+    @use(checkProperty)
     @use(protect)
     async getFloors(req: Request, res: Response) {
         const result = await FloorService.getFloors(req);
@@ -40,6 +44,7 @@ class FloorController {
     }
 
     @Delete("/:id")
+    @use(checkProperty)
     @use(protect)
     async deleteFloor(req: Request, res: Response) {
         const Floor = await FloorService.deleteFloor(req.params.id);

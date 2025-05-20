@@ -4,19 +4,22 @@ import { Request, Response } from "express";
 
 import RoomService from "./room.service";
 import { use } from "../../lib/decorators/use";
-import { protect } from "../auth/auth.middleware";
+import { checkProperty, protect } from "../auth/auth.middleware";
 
 @Controller("/room")
 // @ts-ignore
 class RoomController {
 
     @Post("/")
+    @use(checkProperty)
     @use(protect)
     async createRoom(req: Request, res: Response) {
         const result = await RoomService.createRoom(req, res);
         if (result) Responder.sendSuccessCreatedMessage('room:success.create', res);
     }
+    
     @Patch("/:id")
+    @use(checkProperty)
     @use(protect)
     async editRoom(req: Request, res: Response) {
         const result = await RoomService.editRoom(req);
@@ -24,6 +27,7 @@ class RoomController {
     }
 
     @Get("/:id")
+    @use(checkProperty)
     @use(protect)
     async detailRoom(req: Request, res: Response) {
         const result = await RoomService.detailRoom(req.params.id);
@@ -31,6 +35,7 @@ class RoomController {
     }
 
     @Delete("/:id")
+    @use(checkProperty)
     @use(protect)
     async deleteRoom(req: Request, res: Response) {
         const result = await RoomService.deleteRoom(req.params.id);
@@ -38,10 +43,12 @@ class RoomController {
     }
 
     @Get("/")
-        async listRoomType(req: Request, res: Response) {
-            const result = await RoomService.getRooms(req);
-            if (result) Responder.sendSuccessData(result,'room:success.list', res);
-        }
+    @use(checkProperty)
+    @use(protect)
+    async listRoomType(req: Request, res: Response) {
+        const result = await RoomService.getRooms(req);
+        if (result) Responder.sendSuccessData(result, 'room:success.list', res);
+    }
 
 
 }
