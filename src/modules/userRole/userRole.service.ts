@@ -81,26 +81,24 @@ class UserRoleService {
             Utils.lookupSelectedField("roles", "role", "_id", { _id: 1, name: 1 }),
             Utils.unwind("$role"),
             { $match: query },
-            {
-                $addFields: {
-                    objectProperties: {
-                        $map: {
-                            input: "$properties",
-                            as: "prop",
-                            in: { $toObjectId: "$$prop" }
-                        }
-                    }
-                }
-            },
-            Utils.lookupSelectedField("properties", "objectProperties", "_id", { _id: 1, name: 1 }, "property"),
+            // {
+            //     $addFields: {
+            //         objectProperties: {
+            //             $map: {
+            //                 input: "$properties",
+            //                 as: "prop",
+            //                 in: { $toObjectId: "$$prop" }
+            //             }
+            //         }
+            //     }
+            // },
+            Utils.lookupSelectedField("properties", "properties", "_id", { _id: 1, name: 1 }, "property"),
             Utils.unwind("$property")
         ];
 
 
         let pageLimit = Utils.returnPageLimit(query);
         const users = await Model.aggregate(UserModel, pipeline, projection, pageLimit)
-
-
 
         if (!users) throw new NotFoundResponse('user:failure.list');
         return { users: users.data, total: users.total };

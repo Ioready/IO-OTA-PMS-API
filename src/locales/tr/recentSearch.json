@@ -1,0 +1,12 @@
+{
+  "success": {
+    "create": "Son arama oluşturuldu",
+    "list": "Son arama"
+  },
+  "failure": {
+    "create": "Son arama oluşturulamadı",
+    "list": "Son arama alınamadı",
+    "typeInvalid": "Son arama türü geçersiz"
+  }
+}
+

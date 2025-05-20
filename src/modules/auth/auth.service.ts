@@ -36,8 +36,6 @@ class AuthService {
         if (!validateErr) return;
 
         const user: any = await UserModel.findOne({ email: data.email }).select("+password");
-        if (!user) throw new UnauthorizedResponse('user:failure.invalidCred')
-
         if (!user || !user.password) {
             throw new UnauthorizedResponse('user:failure.invalidCred');
         }

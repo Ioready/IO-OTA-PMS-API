@@ -53,7 +53,7 @@ const UserSchema = new Schema<IUser>({
     phone: Utils.returnPhoneSchema(),
     currentProperty: { type: mongoose.Schema.Types.ObjectId, ref: "property", },
     referralSource: { type: String, required: [true, "Please select how you heard about us"] },
-    properties: [String],
+    properties: [{ type: mongoose.Schema.Types.ObjectId, ref: 'property' }],
     setPassword: { type: Boolean, default: false },
     status: { type: String, default: CommonStatus.ACTIVE },
 

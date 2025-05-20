@@ -20,10 +20,18 @@ class RoomTypeController {
 
     @Patch("/:id")
     @use(checkProperty)
-    @use(protect)
+
     async editRoomType(req: Request, res: Response) {
         const result = await RoomTypeService.editRoomType(req);
         if (result) Responder.sendSuccessMessage('roomType:success.update', res);
+    }
+
+    @Get("/")
+    @use(checkProperty)
+    @use(protect)
+    async getAllRoomTypes(req: Request, res: Response) {
+        const result = await RoomTypeService.getAllRoomTypes(req);
+        if (result) Responder.sendSuccessData(result, 'roomType:success.list', res);
     }
 
     @Get("/:id")

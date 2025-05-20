@@ -3,43 +3,76 @@ import { Request, Response } from "express"
 
 import { RatePlanModel } from '../../schemas/ratePlan.schema';
 import { Model } from '../../lib/model';
-
-
+import { Utils } from '../../lib/utils';
+import { CommonStatus } from '../../resources';
 
 class RatePlanService {
 
     // @ts-ignore
     createRatePlan = async (req: Request, res: Response) => {
-
-        const room = await RatePlanModel.create(req.body);
-        if (!room) throw new ConflictResponse('ratePlan:failure.create')
-        return { room }
+        const data = req.body;
+        await Utils.addPropertyId(data, req);
+        const ratePlan = await RatePlanModel.create(data);
+        if (!ratePlan) throw new ConflictResponse('ratePlan:failure.create')
+        return { ratePlan }
     }
 
     editRatePlan = async (req: Request) => {
-        const roomId = req.params.id
-        await this.detailRatePlan(roomId)
-        const roomType = await Model.findOneAndUpdate(RatePlanModel, { _id: roomId }, req.body);
-        if (!roomType) throw new NotFoundResponse('ratePlan:failure.update')
-        return { roomType };
+        const ratePlanId = req.params.id
+        await this.detailRatePlan(ratePlanId)
+        const ratePlan = await Model.findOneAndUpdate(RatePlanModel, { _id: ratePlanId }, req.body);
+        if (!ratePlan) throw new NotFoundResponse('ratePlan:failure.update')
+        return { ratePlan };
     }
 
     detailRatePlan = async (id: any) => {
-        const roomType = await Model.findOne(RatePlanModel, { _id: id });
-        if (!roomType) throw new NotFoundResponse('ratePlan:failure.detail')
-        return { roomType };
+        const ratePlan = await Model.findOne(RatePlanModel, { _id: id });
+        if (!ratePlan) throw new NotFoundResponse('ratePlan:failure.detail')
+        return { ratePlan };
     }
+
     deleteRatePlan = async (id: any) => {
         await this.detailRatePlan(id)
-        const roomType = await Model.findOneAndDelete(RatePlanModel, { _id: id });
-        if (!roomType) throw new NotFoundResponse('ratePlan:failure.delete')
-        return { roomType };
+        const ratePlan = await Model.findOneAndDelete(RatePlanModel, { _id: id });
+        if (!ratePlan) throw new NotFoundResponse('ratePlan:failure.delete')
+        return { ratePlan };
     }
-    ratePlans = async (req: Request) => {
-        const query = req.query;
-        const ratePlans = await Model.find(RatePlanModel ,query ,{name:1,code:1,status:1 ,updatedAt:1})
-    if (!ratePlans) throw new NotFoundResponse('ratePlan:failure.detail')
-        return { ratePlans };
+
+    getRatePlans = async (req: Request) => {
+        const query: any = req.query;
+        if (query.searchText) {
+            const regExp = Utils.returnRegExp(query.searchText);
+            query["$or"] = [
+                { name: regExp },
+            ];
+            delete query.searchText;
+        }
+        const ratePlans = await Model.find(RatePlanModel, query, { name: 1, code: 1, status: 1, updatedAt: 1 })
+        if (!ratePlans) throw new NotFoundResponse('ratePlan:failure.list')
+        return { ratePlans: ratePlans.data, total: ratePlans.total }
+    }
+
+    getAllRatePlans = async (req: Request) => {
+        const query: any = req.query;
+        if (query.searchText) {
+            const regExp = Utils.returnRegExp(query.searchText);
+            query["$or"] = [
+                { name: regExp },
+            ];
+            delete query.searchText;
+        }
+        query.status = CommonStatus.ACTIVE;
+        const ratePlans = await Model.findAll(RatePlanModel, query, { name: 1, code: 1, mappedRoomTypes: 1 },)
+        if (!ratePlans) throw new NotFoundResponse('ratePlan:failure.list')
+        return { ratePlans }
+    }
+
+    addRatePlanMapping = async (req: Request) => {
+        const ratePlanId = req.params.id
+        await this.detailRatePlan(ratePlanId)
+        const ratePlan = await Model.findOneAndUpdate(RatePlanModel, { _id: ratePlanId }, req.body);
+        if (!ratePlan) throw new NotFoundResponse('ratePlan:failure.mapping')
+        return { ratePlan };
     }
 
 

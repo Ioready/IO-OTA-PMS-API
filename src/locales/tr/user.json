@@ -14,7 +14,8 @@
         "tokenExpired": "Jetonun süresi doldu",
         "tokenVerified": "Jeton doğrulandı",
         "profile": "Profil",
-        "logout": "Logout başarılı"
+        "logout": "Logout başarılı",
+        "changePwd": "Şifre değiştirildi"
     },
     "failure": {
         "invalidCred": "Geçersiz giriş bilgileri",
@@ -34,6 +35,8 @@
         "roleName": "Rol adı zaten mevcut",
         "account": "Hesap bulunamadı",
         "detail": "Kullanıcı bulunamadı",
-        "profile": "Profil bulunamadı"
+        "profile": "Profil bulunamadı",
+        "oldPwd": "Eski şifre yanlış",
+        "sameAsPwd": "Yeni şifre eski şifreyle aynı olamaz"
     }
 }

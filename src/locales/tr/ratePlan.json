@@ -1,0 +1,18 @@
+{
+    "success": {
+        "create": "Oran planı oluşturuldu",
+        "update": "Oran planı güncellendi",
+        "detail": "Oran planı",
+        "delete": "Oran planı silindi",
+        "list": "Oran planı",
+        "mapping": "Oran planı eşlemesi güncellendi"
+    },
+    "failure": {
+        "create": "Oran planı oluşturulamadı",
+        "update": "Oran planı güncellenemedi",
+        "detail": "Oran planı bulunamadı",
+        "delete": "Oran planı silinemedi",
+        "list": "Oran planı alınamadı",
+        "mapping": "Oran planı eşlemesi güncellenemedi"
+    }
+}

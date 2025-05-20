@@ -26,7 +26,8 @@ export enum ModuleName {
   FLOOR = "floor",
   ROOM_TYPE = "roomType",
   RATE_PLAN = "ratePlan",
-  ROOM = "room"
+  ROOM = "room",
+  RECENT_SEARCH ="recentSearch"
 }
 
 export enum CheckPropertyUrl {

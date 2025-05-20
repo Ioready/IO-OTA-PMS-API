@@ -27,6 +27,14 @@ class RatePlanController {
         if (result) Responder.sendSuccessMessage('ratePlan:success.update', res);
     }
 
+    @Get("/")
+    @use(checkProperty)
+    @use(protect)
+    async getAllRatePlans(req: Request, res: Response) {
+        const result = await RatePlanService.getAllRatePlans(req);
+        if (result) Responder.sendSuccessData(result, 'ratePlan:success.detail', res);
+    }
+
     @Get("/:id")
     @use(checkProperty)
     @use(protect)
@@ -47,8 +55,16 @@ class RatePlanController {
     @use(checkProperty)
     @use(protect)
     async ratePlans(req: Request, res: Response) {
-        const result = await RatePlanService.ratePlans(req);
+        const result = await RatePlanService.getRatePlans(req);
         if (result) Responder.sendSuccessData(result, 'ratePlan:success.detail', res);
+    }
+
+    @Patch("/:id/mapping")
+    @use(checkProperty)
+    @use(protect)
+    async addRatePlanMapping(req: Request, res: Response) {
+        const result = await RatePlanService.addRatePlanMapping(req);
+        if (result) Responder.sendSuccessMessage('ratePlan:success.mapping', res);
     }
 
 }
