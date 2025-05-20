@@ -4,7 +4,7 @@ import { Responder } from "../../lib/responder";
 import { Request, Response } from "express";
 
 import { use } from "../../lib/decorators/use";
-import { protect } from "../auth/auth.middleware";
+import { checkProperty, protect } from "../auth/auth.middleware";
 import userRoleService from "./userRole.service";
 
 
@@ -15,6 +15,7 @@ import userRoleService from "./userRole.service";
 class UserRoleController {
 
     @Post("/")
+    @use(checkProperty)
     @use(protect)
     async createUserRole(req: Request, res: Response) {
         const result = await userRoleService.createUserRole(req);
@@ -22,6 +23,7 @@ class UserRoleController {
     }
 
     @Get("/housekeeping")
+    @use(checkProperty)
     @use(protect)
     async listHousekeeping(req: Request, res: Response) {
         const result = await userRoleService.listHousekeeping(req)
@@ -29,6 +31,7 @@ class UserRoleController {
     }
 
     @Patch("/:id")
+    @use(checkProperty)
     @use(protect)
     async editUserRole(req: Request, res: Response) {
         const result = await userRoleService.editUserRole(req);
@@ -37,6 +40,7 @@ class UserRoleController {
     }
 
     @Get("/:id")
+    @use(checkProperty)
     @use(protect)
     async getUserRole(req: Request, res: Response) {
         console.log("sss");
@@ -45,6 +49,7 @@ class UserRoleController {
         if (result) Responder.sendSuccessData(result, 'user:success.list', res);
     }
     @Delete("/:id")
+    @use(checkProperty)
     @use(protect)
     async deleteUserRole(req: Request, res: Response) {
         const result = await userRoleService.deleteUserRole(req.params.id);
@@ -52,8 +57,9 @@ class UserRoleController {
     }
 
     @Get("/")
+    @use(checkProperty)
     @use(protect)
-    async listUserRole(req: Request, res: Response) {        
+    async listUserRole(req: Request, res: Response) {
         const result = await userRoleService.listUserRole(req)
         if (result) Responder.sendSuccessData(result, 'user:success.list', res);
     }

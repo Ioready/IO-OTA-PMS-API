@@ -33,6 +33,8 @@ class FloorService {
 
     // @ts-ignore
     getFloors = async (req: Request) => {
+        console.log("ssss");
+        
         const query: any = req.query;
 
         if (query.searchText) {

@@ -29,6 +29,7 @@ class AuthService {
 
         return user
     }
+
     login = async (req: Request, res: Response) => {
         const data = req.body;
         let validateErr: any = bodyValidation(["email", "password"], req, res)
@@ -37,8 +38,13 @@ class AuthService {
         const user: any = await UserModel.findOne({ email: data.email }).select("+password");
         if (!user) throw new UnauthorizedResponse('user:failure.invalidCred')
 
-        let hashPass = await Utils.comparePassword(data.password, user.password);
+        if (!user || !user.password) {
+            throw new UnauthorizedResponse('user:failure.invalidCred');
+        }
+
+        let hashPass = await Utils.comparePassword(data?.password, user?.password);
         if (!hashPass) throw new UnauthorizedResponse('user:failure.invalidCred')
+
         await Utils.setCookies('keepMeSigned', data.keepMeSigned ?? false, config.cookie.oneHour, res);
         return this.sendOtp(user)
     }
@@ -116,6 +122,7 @@ class AuthService {
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
+        user.setPassword = false;
         await user.save({ validateBeforeSave: false });
         await this.sendOtp(user);
         await DeviceModel.deleteMany({ user: user._id })
