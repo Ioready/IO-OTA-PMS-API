@@ -1,4 +1,4 @@
-import { BadGatewayResponse, BadRequestResponse, NotFoundResponse } from "http-errors-response-ts/lib";
+import { BadRequestResponse, NotFoundResponse } from "http-errors-response-ts/lib";
 import { Utils } from "../../lib/utils";
 import { bodyValidation } from "../../middleware/validation";
 import { UserModel } from "../../schemas";

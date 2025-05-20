@@ -1,9 +1,7 @@
 import { ConflictResponse, GoneResponse, NotFoundResponse } from "../../lib/decorators";
 import { Request, Response } from "express";
-
-import { CommonStatus, ModuleName, Msg, } from "../../resources";
+import { ModuleName,} from "../../resources";
 import { Model } from "../../lib/model";
-
 import { RecentSearchaModel } from "../../schemas/recentSearch.schema";
 import { Utils } from "../../lib/utils";
 
