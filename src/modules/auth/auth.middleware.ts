@@ -30,7 +30,7 @@ export const protect = asyncHandler(
 			const user: any = await UserModel.findById(id);
 
 			if (!user) {
-				throw new UnauthorizedResponse(Msg.user404);
+				throw new UnauthorizedResponse(Msg.invalidCred);
 			}
 
 			const device: any = await DeviceModel.findOne({ deviceId: deviceId });
@@ -45,7 +45,7 @@ export const protect = asyncHandler(
 			next();
 		} catch (err) {
 
-			if (err instanceof ForbiddenResponse) {
+			if (err instanceof ForbiddenResponse || err instanceof UnauthorizedResponse) {
 				throw err;
 			}
 			if (err.name === 'TokenExpiredError') {
