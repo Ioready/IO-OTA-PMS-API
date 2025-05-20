@@ -1,0 +1,16 @@
+{
+  "success": {
+    "create": "Oda oluşturuldu",
+    "update": "Oda güncellendi",
+    "detail": "Oda",
+    "delete": "Oda silindi",
+    "list": "Oda"
+  },
+  "failure": {
+    "create": "Oda oluşturulamadı",
+    "update": "Oda güncellenemedi",
+    "detail": "Oda bulunamadı",
+    "delete": "Oda silinemedi",
+    "list": "Oda alınamadı"
+  }
+}

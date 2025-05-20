@@ -1,0 +1,11 @@
+{
+  "success": {
+    "create": "Recent Search created",
+    "list": "Recent Search"
+  },
+  "failure": {
+    "create": "Unable to create Recent Search ",
+    "list": "Unable to get Recent Search ",
+    "typeInvalid": "Recent search type invalid"
+  }
+}
