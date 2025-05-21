@@ -1,0 +1,16 @@
+{
+  "success": {
+    "create": "task created",
+    "update": "task updated",
+    "detail": "task",
+    "list": "task",
+    "delete": "task deleted"
+  },
+  "failure": {
+    "create": "Unable to create task",
+    "update": "Unable to update task",
+    "detail": "task not found",
+    "list": "Unable to get task",
+    "delete": "Unable to delete task"
+  }
+}
