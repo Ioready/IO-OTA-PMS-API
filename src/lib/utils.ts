@@ -300,5 +300,9 @@ class UtilsClass {
     query.property = req.user.currentProperty;
   }
 
+  trimDataAndLower = (value: any) => {
+    return value.trim().toLowerCase()
+  }
+
 }
 export const Utils = new UtilsClass();
