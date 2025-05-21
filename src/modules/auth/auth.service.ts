@@ -54,7 +54,7 @@ class AuthService {
         try {
             const { token: rawToken, type: checkType } = req.query;
             const token = await TokenModel.findOne({ token: rawToken });
-            if (!token) throw new NotFoundResponse('user:failure.invalidToken')
+            if (!token) throw new GoneResponse('user:failure.invalidToken')
             const decoded = Utils.verifyToken(rawToken);
             const { id, type } = (decoded as { id: string, type: string });
 
