@@ -3,7 +3,7 @@ import { use } from "../../lib/decorators/use";
 import { Responder } from "../../lib/responder";
 import { Request, Response } from "express";
 import lodash from 'lodash';
-import { protect } from "../auth/auth.middleware";
+import { checkProperty, protect } from "../auth/auth.middleware";
 import UserService from "./user.service";
 
 @Controller("/user")
@@ -21,7 +21,8 @@ class UserController {
             'role',
             'loginType',
             'setPassword',
-            "_id"
+            "_id",
+            'currentProperty'
         ]);
 
         if (user)
@@ -35,4 +36,13 @@ class UserController {
         const result = await UserService.changePassword(req, res);
         if (result) Responder.sendSuccessCreatedMessage('user:success.changePwd', res)
     }
+
+    @Get("/all")
+    @use(checkProperty)
+    @use(protect)
+    async listUserRole(req: Request, res: Response) {
+        const result = await UserService.getAllUsers(req)
+        if (result) Responder.sendSuccessData(result, 'user:success.list', res);
+    }
+
 }   
