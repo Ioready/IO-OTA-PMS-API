@@ -22,8 +22,10 @@ class UserRoleService {
 
         if (checkRole.type === UserType.HOUSEKEEPING) data.type = UserType.HOUSEKEEPING
         const user = new UserModel(data);
+        
         const savedUser = await user.save({ validateBeforeSave: false });
         if (!savedUser) throw new ConflictResponse('user:failure.create');
+        Utils.generateTokenAndMail(user, "create")
         return savedUser;
     }
 

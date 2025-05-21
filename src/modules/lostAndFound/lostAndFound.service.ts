@@ -2,7 +2,6 @@ import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
 import { Model } from '../../lib/model';
 import { Utils } from '../../lib/utils';
-import { CommonStatus } from '../../resources';
 import { LostAndFoundModel } from '../../schemas';
 
 
@@ -48,53 +47,27 @@ class LostAndFoundService {
             ];
             delete query.searchText;
         }
+        await Utils.getPropertyId(query, req)
         const pipeline = [
-            // Utils.lookupSelectedField("users", "manager", "_id", { _id: 1, fullName: 1 }, "manager"),
-            // Utils.unwind("$manager"),
-            Utils.lookupField("rooms", "_id", "LostAndFound", "rooms"),
+            Utils.lookupSelectedField("users", "reportPerson", "_id", { _id: 1, fullName: 1 }, "reportPerson"),
+            Utils.unwind("$reportPerson"),
+            Utils.lookupSelectedField("rooms", "room", "_id", { _id: 1, roomNumber: 1 }, "room"),
+            Utils.unwind("$room"),
             { $match: query },
-
-            {
-                $addFields: {
-                    totalrooms: {
-                        $size: "$rooms"
-                    }
-                }
-            }
         ];
         const projection = {
             _id: 1,
-            name: 1,
-            type: 1,
-            maxGuest: 1,
-            rate: 1,
+            item: 1,
+            room: 1,
+            reportPerson: 1,
             status: 1,
-            totalrooms: 1,
+            createdAt: 1,
         }
+        
         let pageLimit = Utils.returnPageLimit(query);
-        const LostAndFounds = await Model.aggregate(LostAndFoundModel, pipeline, projection, pageLimit)
-
-        // const LostAndFounds = await Model.find(LostAndFoundModel, req.query, { type: 1, maxGuest: 1, rate: 1, status: 1 });
-        if (!LostAndFounds) throw new NotFoundResponse('LostAndFound:failure.delete')
-        return { LostAndFounds: LostAndFounds.data, total: LostAndFounds.total }
+        const lostAndFounds = await Model.aggregate(LostAndFoundModel, pipeline, projection, pageLimit)
+        if (!lostAndFounds) throw new NotFoundResponse('LostAndFound:failure.delete')
+        return { lostAndFounds: lostAndFounds.data, total: lostAndFounds.total }
     }
-
-
-
-    getAllLostAndFounds = async (req: Request) => {
-        const query: any = req.query;
-        if (query.searchText) {
-            const regExp = Utils.returnRegExp(query.searchText);
-            query["$or"] = [
-                { name: regExp },
-            ];
-            delete query.searchText;
-        }
-        query.status = CommonStatus.ACTIVE;
-        const LostAndFounds = await Model.findAll(LostAndFoundModel, query, { name: 1, code: 1 },)
-        if (!LostAndFounds) throw new NotFoundResponse('ratePlan:failure.list')
-        return { LostAndFounds }
-    }
-
 }
 export default new LostAndFoundService();

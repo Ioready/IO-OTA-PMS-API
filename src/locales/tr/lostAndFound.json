@@ -1,0 +1,16 @@
+{
+    "success": {
+        "create": "Kayıp ve bulunan oluşturuldu",
+        "update": "Kayıp ve bulunan güncellendi",
+        "detail": "Kayıp ve bulunan detayı",
+        "delete": "Kayıp ve bulunan silindi",
+        "list": "Kayıp ve bulunan listesi"
+    },
+    "failure": {
+        "create": "Kayıp ve bulunan oluşturulamadı",
+        "update": "Kayıp ve bulunan güncellenemedi",
+        "detail": "Kayıp ve bulunan bulunamadı",
+        "delete": "Kayıp ve bulunan silinemedi",
+        "list": "Kayıp ve bulunan alınamadı"
+    }
+}

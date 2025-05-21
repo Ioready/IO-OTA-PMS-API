@@ -35,3 +35,17 @@ export enum CheckPropertyUrl {
   DASHBOARD = "dashboard",
   PROPERTY = "property"
 }
+
+export enum LostAndFoundStatus {
+  FOUND = "found",
+  RETURNED = "returned",
+  UNCLAIMED = "unclaimed"
+}
+
+export enum RoomStatus {
+  DIRTY = "dirty",
+  DEEP_CLEAN = "deep-clean",
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  COMPLETED = "completed",
+}

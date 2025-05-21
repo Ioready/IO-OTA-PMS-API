@@ -1,14 +1,15 @@
 import mongoose, { Schema, ObjectId } from "mongoose";
 import { Utils } from "../lib/utils";
+import { LostAndFoundStatus } from "../resources";
 
 interface ILostAndFound extends Document {
     item: string,
     room: ObjectId,
-    assignTo: ObjectId,
+    reportPerson: ObjectId,
     property: ObjectId,
     attachment: any,
     remarks: string
-    status: string,
+    status: any,
 }
 const LostAndFoundSchema = new Schema<ILostAndFound>({
     item: String,
@@ -16,7 +17,7 @@ const LostAndFoundSchema = new Schema<ILostAndFound>({
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     },
-    assignTo: {
+    reportPerson: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     },
@@ -26,7 +27,7 @@ const LostAndFoundSchema = new Schema<ILostAndFound>({
     },
     attachment: [String],
     remarks: String,
-    status: String,
+    status: {type: String, default: LostAndFoundStatus.FOUND, enum: Object.values(LostAndFoundStatus)},
 }, Utils.returnSchemaOption());
 
 const LostAndFoundModel = mongoose.model("lost_found", LostAndFoundSchema);

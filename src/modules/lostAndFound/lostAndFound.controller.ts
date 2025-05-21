@@ -30,7 +30,7 @@ class LostAndFoundController {
     @use(checkProperty)
     @use(protect)
     async getAllLostAndFounds(req: Request, res: Response) {
-        const result = await LostAndFoundService.getAllLostAndFounds(req);
+        const result = await LostAndFoundService.getLostAndFounds(req);
         if (result) Responder.sendSuccessData(result, 'lostAndFound:success.list', res);
     }
 

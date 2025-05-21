@@ -292,5 +292,13 @@ class UtilsClass {
     return RoleModel.create(obj)
   }
 
+  addGroupId = async (query: any, req: any) => {
+    query.groupId = req.user.groupId;
+  }
+
+  getPropertyId = async (query: any, req: Request) => {
+    query.property = req.user.currentProperty;
+  }
+
 }
 export const Utils = new UtilsClass();
