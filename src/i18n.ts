@@ -34,7 +34,8 @@ i18next.use(Backend).init({
     ModuleName.RATE_PLAN,
     ModuleName.ROOM,
     ModuleName.RECENT_SEARCH,
-    ModuleName.LOST_FOUND
+    ModuleName.LOST_FOUND,
+    ModuleName.TASK,
   ],
   defaultNS: ModuleName.USER,
   backend: {

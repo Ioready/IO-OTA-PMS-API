@@ -40,6 +40,12 @@ class TaskController {
             const result = await taskService.deleteTask(req.params.id);
             if (result) Responder.sendSuccessMessage('task:success.delete', res);
         }
-
+      @Get("/")
+        
+        @use(protect)
+        async getAllTask(req: Request, res: Response) {
+            const result = await taskService.getAllTask(req);
+            if (result) Responder.sendSuccessData(result, 'task:success.list', res);
+        }
 
 }

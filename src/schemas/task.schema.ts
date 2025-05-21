@@ -2,16 +2,17 @@ import mongoose, { Schema, ObjectId } from "mongoose";
 import { Utils } from "../lib/utils";
 
 interface ITask extends Document {
-    
+
     room: ObjectId,
     assignTo: ObjectId,
     priority: ObjectId,
-     property: ObjectId,
+    property: ObjectId,
     notes: any,
+    date: any,
     status: string,
 }
 const TaskSchema = new Schema<ITask>({
-    
+
     room: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "room"
@@ -22,16 +23,20 @@ const TaskSchema = new Schema<ITask>({
     },
     priority: {
         type: String,
-        enum:["low","normal","high"]
+        enum: ["low", "normal", "high"]
     },
     property: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "property",
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "property",
+    },
     notes: String,
-    status:{
+    date: {
+        from: String,
+        to: String
+    },
+    status: {
         type: String,
-        enum:["dirty","deep clean","inspect","completed"]
+        enum: ["dirty", "deep clean", "inspect", "completed"]
     },
 }, Utils.returnSchemaOption());
 
