@@ -14,7 +14,7 @@ class LostAndFoundController {
     @use(checkProperty)
     @use(protect)
     async createLostAndFound(req: Request, res: Response) {
-        const result = await LostAndFoundService.createLostAndFound(req, res);
+        const result = await LostAndFoundService.createLostAndFound(req);
         if (result) Responder.sendSuccessCreatedMessage('lostAndFound:success.create', res);
     }
 

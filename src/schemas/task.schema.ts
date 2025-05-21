@@ -6,6 +6,7 @@ interface ITask extends Document {
     room: ObjectId,
     assignTo: ObjectId,
     priority: ObjectId,
+     property: ObjectId,
     notes: any,
     status: string,
 }
@@ -23,6 +24,10 @@ const TaskSchema = new Schema<ITask>({
         type: String,
         enum:["low","normal","high"]
     },
+    property: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "property",
+        },
     notes: String,
     status:{
         type: String,

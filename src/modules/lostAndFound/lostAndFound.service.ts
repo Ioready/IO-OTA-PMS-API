@@ -9,8 +9,8 @@ import { LostAndFoundModel } from '../../schemas';
 
 class LostAndFoundService {
 
-    // @ts-ignore
-    createLostAndFound = async (req: Request, res: Response) => {
+
+    createLostAndFound = async (req: Request) => {
         const data = req.body
         await Utils.addPropertyId(data, req)
         const lostAndFound = await LostAndFoundModel.create(data);
