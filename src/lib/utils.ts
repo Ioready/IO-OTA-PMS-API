@@ -272,8 +272,8 @@ class UtilsClass {
 
   initialRoleCreated = async (data: any) => {
     const groupId = data.groupId;
-    const adminObj = { groupId, type: UserType.ADMIN }
-    const houseObj = { groupId, type: UserType.HOUSEKEEPING };
+    const adminObj = { groupId, type: UserType.ADMIN, name: "Admin" }
+    const houseObj = { groupId, type: UserType.HOUSEKEEPING, name: "House keeping" };
     var adminRole: any;
     adminRole = await this.RoleFind(adminObj);
     if (!adminRole)
