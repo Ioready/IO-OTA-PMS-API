@@ -1,7 +1,7 @@
 
 import { BadRequestResponse, ConflictResponse, GoneResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
-import { DeviceModel, RoleModel, TokenModel, UserModel } from '../../schemas';
+import { DeviceModel, TokenModel, UserModel } from '../../schemas';
 import { LoginType, Msg } from '../../resources';
 import { Utils } from '../../lib/utils';
 import { config } from '../../config/env.config';
