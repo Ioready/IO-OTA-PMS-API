@@ -1,14 +1,14 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { config } from '../config/env.config';
-import { DeviceModel, PropertyModel, TokenModel, UserModel } from '../schemas';
+import { DeviceModel, PropertyModel, RoleModel, TokenModel, UserModel } from '../schemas';
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from "express"
 import axios from 'axios';
 import { ZohoApi } from '../utils/zohoApi';
 import { Model } from './model';
-import { CheckPropertyUrl } from '../resources';
+import { CheckPropertyUrl, UserType } from '../resources';
 class UtilsClass {
   constructor() { }
 
@@ -270,7 +270,27 @@ class UtilsClass {
     data.property = req.user.currentProperty;
   }
 
+  initialRoleCreated = async (data: any) => {
+    const groupId = data.groupId;
+    const adminObj = { groupId, type: UserType.ADMIN }
+    const houseObj = { groupId, type: UserType.HOUSEKEEPING };
+    var adminRole: any;
+    adminRole = await this.RoleFind(adminObj);
+    if (!adminRole)
+      adminRole = await this.RoleCreate(adminObj)
+    const houseRole = await this.RoleFind(houseObj);
+    if (!houseRole)
+      await this.RoleCreate(houseObj)
+    data.role = adminRole._id;
+  }
 
+  RoleFind = (obj: any) => {
+    return Model.findOne(RoleModel, obj)
+  }
+
+  RoleCreate = (obj: any) => {
+    return RoleModel.create(obj)
+  }
 
 }
 export const Utils = new UtilsClass();

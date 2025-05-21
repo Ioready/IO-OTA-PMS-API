@@ -21,7 +21,8 @@ class UserController {
             'role',
             'loginType',
             'setPassword',
-            "_id"
+            "_id",
+            'currentProperty'
         ]);
 
         if (user)

@@ -1,7 +1,7 @@
 
 import { BadRequestResponse, ConflictResponse, GoneResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
-import { DeviceModel, TokenModel, UserModel } from '../../schemas';
+import { DeviceModel, RoleModel, TokenModel, UserModel } from '../../schemas';
 import { LoginType, Msg } from '../../resources';
 import { Utils } from '../../lib/utils';
 import { config } from '../../config/env.config';
@@ -23,9 +23,16 @@ class AuthService {
         const exUser = await UserModel.findOne({ email: data.email.toLowerCase(), accountCreated: true })
         if (exUser) throw new ConflictResponse('user:failure.email')
 
-        await UserModel.deleteMany({ email: data.email, accountCreated: false })
+        const obj = { email: data.email, accountCreated: false }
+        // const notRegister = await UserModel.findOne(obj)
+        // if (notRegister) {
+        //     await TokenModel.deleteMany(notRegister._id)
+        //     await RoleModel.deleteMany(notRegister.groupId)
+        // }
+        await UserModel.deleteMany(obj)
         data.groupId = await Utils.newObjectId()
         const user = await UserModel.create(data);
+        // await Utils.initialRoleCreated(data);
         if (!user) throw new ConflictResponse('user:failure.create')
         Utils.generateTokenAndMail(user, "create")
 
