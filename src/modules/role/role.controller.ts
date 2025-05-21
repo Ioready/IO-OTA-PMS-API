@@ -29,8 +29,6 @@ class RoleController {
   @use(checkProperty)
   @use(protect)
   async getAllRoles(req: Request, res: Response) {
-    console.log("here");
-
     const result = await RoleService.getAllRoles(req);
     if (result) Responder.sendSuccessData(result, 'role:success.list', res);
   }

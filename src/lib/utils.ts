@@ -59,9 +59,9 @@ class UtilsClass {
   }
 
   generateVerificationCode = () => {
-    var digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    var digits = "0123456789";
     let OTP = "";
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
       OTP += digits[Math.floor(Math.random() * 10)];
     }
     return OTP;
@@ -69,8 +69,6 @@ class UtilsClass {
 
   // @ts-ignore
   generateToken = async (user: any, deviceId: any, res: Response) => {
-    console.log({ "222": deviceId });
-
 
     const tokens = await this.generateTokens({
       id: user._id,
