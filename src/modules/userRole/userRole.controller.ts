@@ -43,7 +43,6 @@ class UserRoleController {
     @use(checkProperty)
     @use(protect)
     async getUserRole(req: Request, res: Response) {
-        console.log("sss");
 
         const result = await userRoleService.getUserRole(req.params.id);
         if (result) Responder.sendSuccessData(result, 'user:success.list', res);

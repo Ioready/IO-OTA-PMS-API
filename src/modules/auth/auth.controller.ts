@@ -66,7 +66,7 @@ class AuthController {
 
     @Post("/resent-link")
     async ResendLink(req: Request, res: Response) {
-        const result: any = await AuthService.forgotPassword(req, "create");
+        const result: any = await AuthService.createResendLink(req, "create");
         if (result) Responder.sendSuccessMessage('user:success.createPassLinkMail', res)
     }
 

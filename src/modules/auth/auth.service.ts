@@ -1,5 +1,5 @@
 
-import { ConflictResponse, GoneResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
+import { BadRequestResponse, ConflictResponse, GoneResponse, NotFoundResponse, UnauthorizedResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
 import { DeviceModel, TokenModel, UserModel } from '../../schemas';
 import { LoginType, Msg } from '../../resources';
@@ -7,6 +7,7 @@ import { Utils } from '../../lib/utils';
 import { config } from '../../config/env.config';
 import { CONSTANTS } from '../../lib/constants';
 import { bodyValidation } from '../../middleware/validation';
+import { ZohoApi } from '../../utils/zohoApi';
 class AuthService {
     // @ts-ignore
     getUser(req, res) {
@@ -19,7 +20,7 @@ class AuthService {
     // @ts-ignore
     createUser = async (req: Request, res: Response) => {
         const data = req.body;
-        const exUser = await UserModel.findOne({ email: data.email, accountCreated: true })
+        const exUser = await UserModel.findOne({ email: data.email.toLowerCase(), accountCreated: true })
         if (exUser) throw new ConflictResponse('user:failure.email')
 
         await UserModel.deleteMany({ email: data.email, accountCreated: false })
@@ -36,7 +37,7 @@ class AuthService {
         let validateErr: any = bodyValidation(["email", "password"], req, res)
         if (!validateErr) return;
 
-        const user: any = await UserModel.findOne({ email: data.email, accountCreated: true }).select("+password");
+        const user: any = await UserModel.findOne({ email: data.email.toLowerCase(), accountCreated: true }).select("+password");
         if (!user || !user.password) {
             throw new UnauthorizedResponse('user:failure.invalidCred');
         }
@@ -53,7 +54,7 @@ class AuthService {
         try {
             const { token: rawToken, type: checkType } = req.query;
             const token = await TokenModel.findOne({ token: rawToken });
-            if (!token) throw new NotFoundResponse('user:failure.invalidToken')
+            if (!token) throw new GoneResponse('user:failure.invalidToken')
             const decoded = Utils.verifyToken(rawToken);
             const { id, type } = (decoded as { id: string, type: string });
 
@@ -84,14 +85,15 @@ class AuthService {
 
     sendOtp = async (user: any) => {
         var otp: string;
-        if (config.app.env === "development")
-            otp = CONSTANTS.defaultOtp;
-        else otp = Utils.generateVerificationCode()
+        // if (config.app.env === "development")
+        //     otp = CONSTANTS.defaultOtp;
+        // else otp = Utils.generateVerificationCode()
+        otp = Utils.generateVerificationCode()
         user.otp = otp;
         user.otpExpiry = Date.now() + CONSTANTS.otpExpiry;
         await user.save({ validateBeforeSave: false });
 
-        // ZohoApi.sendMailTemplate(user.email, user.fullName, config.zeptoMail.template.otp, { OTP: otp, product: "Otlesoft" })
+        ZohoApi.sendMailTemplate(user.email, user.fullName, config.zeptoMail.template.otp, { OTP: otp, product: "Otlesoft" })
 
         // return user;
         // const token = Utils.getSignedJwtToken({ id: user._id, role: user.role }, config.jwt.expiresIn);
@@ -116,8 +118,13 @@ class AuthService {
         let validateErr: any = bodyValidation(["email", "password"], req, res)
         if (!validateErr) return;
 
-        const user: any = await UserModel.findOne({ email: email });
+        const user: any = (await UserModel.findOne({ email: email }).select("+password"));
         if (!user) throw new NotFoundResponse('user:failure.account')
+
+        if (user.password) {
+            let checkPwd = await Utils.comparePassword(password, user?.password);
+            if (checkPwd) throw new BadRequestResponse('user:failure.sameAsPwd')
+        }
 
         user.password = await Utils.encryptPassword(password);
         user.isVerified = true;
@@ -145,8 +152,8 @@ class AuthService {
 
         if (user.otp != otp) throw new NotFoundResponse('user:failure.invalidOtp')
         if (user.otpExpiry < new Date()) throw new GoneResponse('user:failure.otp')
-        // user.otp = "";
-        // user.otpExpiry = "";
+        user.otp = "";
+        user.otpExpiry = "";
         user.lastLogin = new Date();
 
         await user.save({ validateBeforeSave: false });
@@ -217,6 +224,16 @@ class AuthService {
             await Utils.updateKeepsignToken(user, deviceId, res)
             return tokenDoc;
         }
+
+    }
+
+    createResendLink = async (req: Request, type: string) => {
+
+        const user: any = await UserModel.findOne({ email: req.body.email });
+        if (!user) throw new NotFoundResponse('user:failure.account')
+        if (user.accountCreated) throw new NotFoundResponse('user:failure.alreadyAcc')
+        Utils.generateTokenAndMail(user, type)
+        return true;
 
     }
 

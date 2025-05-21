@@ -39,7 +39,7 @@
         "profile": "Profile not found",
         "tokenExpired": "Token expired",
         "oldPwd": "Old password is incorrect",
-        "sameAsPwd": "New password must be different from old password"
-        
+        "sameAsPwd": "New password must be different from old password",
+        "alreadyAcc": "Already account created"
     }
 }
