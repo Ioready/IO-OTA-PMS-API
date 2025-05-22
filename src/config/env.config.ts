@@ -55,4 +55,10 @@ export const config = {
             create: process.env.TEMP_CREATE,
         }
     },
+    cloudinary: {
+        name: process.env.CLOUDINARY_NAME,
+        apiKey: process.env.CLOUDINARY_API_KEY,
+        secret: process.env.CLOUDINARY_API_SECRET,
+        path: process.env.IMG_PATH
+    }
 };

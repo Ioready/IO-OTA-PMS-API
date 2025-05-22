@@ -21,6 +21,7 @@ interface IUser extends Document {
     phone: any
     currentProperty: ObjectId,
     referralSource: any,
+    otherReferralSource: any,
     properties: any,
     setPassword: boolean,
     accountCreated: boolean,
@@ -57,6 +58,7 @@ const UserSchema = new Schema<IUser>({
     properties: [{ type: mongoose.Schema.Types.ObjectId, ref: 'property' }],
     setPassword: { type: Boolean, default: false },
     accountCreated: { type: Boolean, default: false },
+    otherReferralSource: String,
     status: { type: String, default: CommonStatus.ACTIVE },
 
 }, Utils.returnSchemaOption());

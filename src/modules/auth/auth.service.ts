@@ -20,7 +20,9 @@ class AuthService {
     // @ts-ignore
     createUser = async (req: Request, res: Response) => {
         const data = req.body;
-        const exUser = await UserModel.findOne({ email: data.email.toLowerCase(), accountCreated: true })
+
+        data.email = Utils.trimDataAndLower(data.email)
+        const exUser = await UserModel.findOne({ email: data.email, accountCreated: true })
         if (exUser) throw new ConflictResponse('user:failure.email')
 
         const obj = { email: data.email, accountCreated: false }
@@ -41,10 +43,12 @@ class AuthService {
 
     login = async (req: Request, res: Response) => {
         const data = req.body;
+        data.email = Utils.trimDataAndLower(data.email)
+
         let validateErr: any = bodyValidation(["email", "password"], req, res)
         if (!validateErr) return;
 
-        const user: any = await UserModel.findOne({ email: data.email.toLowerCase(), accountCreated: true }).select("+password");
+        const user: any = await UserModel.findOne({ email: data.email, accountCreated: true }).select("+password");
         if (!user || !user.password) {
             throw new UnauthorizedResponse('user:failure.invalidCred');
         }
@@ -61,7 +65,7 @@ class AuthService {
         try {
             const { token: rawToken, type: checkType } = req.query;
             const token = await TokenModel.findOne({ token: rawToken });
-            if (!token) throw new GoneResponse('user:failure.invalidToken')
+            if (!token) throw new GoneResponse('user:failure.tokenExpired')
             const decoded = Utils.verifyToken(rawToken);
             const { id, type } = (decoded as { id: string, type: string });
 
@@ -79,7 +83,7 @@ class AuthService {
             if (err.name === 'TokenExpiredError') {
                 throw new GoneResponse('user:failure.tokenExpired')
             } else {
-                throw new NotFoundResponse('user:failure.invalidToken')
+                throw new GoneResponse('user:failure.tokenExpired')
             }
         }
     }
@@ -112,7 +116,7 @@ class AuthService {
 
     forgotPassword = async (req: Request, type: string) => {
 
-        const user: any = await UserModel.findOne({ email: req.body.email, accountCreated: true });
+        const user: any = await UserModel.findOne({ email: Utils.trimDataAndLower(req.body.email), accountCreated: true });
         if (!user) throw new NotFoundResponse('user:failure.account')
         Utils.generateTokenAndMail(user, type)
         return true;
@@ -120,31 +124,48 @@ class AuthService {
     }
 
     setPassword = async (req: Request, res: Response) => {
-        const { email, password } = req.body;
+        try {
+            const { email, password } = req.body;
+            const { token: rawToken } = req.query;
 
-        let validateErr: any = bodyValidation(["email", "password"], req, res)
-        if (!validateErr) return;
+            const token = await TokenModel.findOne({ token: rawToken });
+            if (!token)  throw new GoneResponse('user:failure.tokenExpired')
+            
 
-        const user: any = (await UserModel.findOne({ email: email }).select("+password"));
-        if (!user) throw new NotFoundResponse('user:failure.account')
+            await Utils.verifyToken(rawToken);
 
-        if (user.password) {
-            let checkPwd = await Utils.comparePassword(password, user?.password);
-            if (checkPwd) throw new BadRequestResponse('user:failure.sameAsPwd')
+            let validateErr: any = bodyValidation(["email", "password"], req, res)
+            if (!validateErr) return;
+
+            const user: any = (await UserModel.findOne({ email: Utils.trimDataAndLower(email) }).select("+password"));
+            if (!user) throw new NotFoundResponse('user:failure.account')
+
+            if (user.password) {
+                let checkPwd = await Utils.comparePassword(password, user?.password);
+                if (checkPwd) throw new BadRequestResponse('user:failure.sameAsPwd')
+            }
+
+            user.password = await Utils.encryptPassword(password);
+            user.isVerified = true;
+            user.setPassword = true;
+            user.accountCreated = true;
+            await user.save({ validateBeforeSave: false });
+            await this.sendOtp(user);
+            await DeviceModel.deleteMany({ user: user._id })
+             await TokenModel.deleteOne({ token: rawToken })
+            // const deviceId = await Utils.createDevice(user, req, res);
+
+            // const tokenDoc = Utils.generateToken(user, res);
+            // await Utils.updateKeepsignToken(user, deviceId, res)
+            return user;
+        } catch (err) {
+            if (err.name === 'TokenExpiredError') {
+                throw new GoneResponse('user:failure.tokenExpired')
+            }
+            if (err instanceof GoneResponse || err instanceof NotFoundResponse || err instanceof BadRequestResponse) {
+                throw err;
+            }
         }
-
-        user.password = await Utils.encryptPassword(password);
-        user.isVerified = true;
-        user.setPassword = true;
-        user.accountCreated = true;
-        await user.save({ validateBeforeSave: false });
-        await this.sendOtp(user);
-        await DeviceModel.deleteMany({ user: user._id })
-        // const deviceId = await Utils.createDevice(user, req, res);
-
-        // const tokenDoc = Utils.generateToken(user, res);
-        // await Utils.updateKeepsignToken(user, deviceId, res)
-        return user;
     }
 
 
@@ -154,7 +175,7 @@ class AuthService {
         let validateErr: any = bodyValidation(["email", "otp"], req, res)
         if (!validateErr) return;
 
-        const user: any = await UserModel.findOne({ email: email, accountCreated: true });
+        const user: any = await UserModel.findOne({ email: Utils.trimDataAndLower(email), accountCreated: true });
         if (!user) throw new NotFoundResponse('user:failure.account')
 
         if (user.otp != otp) throw new NotFoundResponse('user:failure.invalidOtp')
@@ -237,7 +258,7 @@ class AuthService {
 
     createResendLink = async (req: Request, type: string) => {
 
-        const user: any = await UserModel.findOne({ email: req.body.email });
+        const user: any = await UserModel.findOne({ email: Utils.trimDataAndLower(req.body.email) });
         if (!user) throw new NotFoundResponse('user:failure.account')
         if (user.accountCreated) throw new NotFoundResponse('user:failure.alreadyAcc')
         Utils.generateTokenAndMail(user, type)

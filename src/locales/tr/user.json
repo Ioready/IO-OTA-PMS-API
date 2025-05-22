@@ -1,22 +1,22 @@
 {
     "success": {
-        "login": "Giriş başarılı",
+        "login": "Giriş Başarılı",
         "create": "Kullanıcı oluşturuldu",
         "update": "Kullanıcı güncellendi",
         "list": "Kullanıcılar",
         "delete": "Kullanıcı rolü silindi",
         "detail": "Kullanıcı",
-        "housekeepings": "Kat hizmetleri",
-        "sentMail": "OTP başarıyla e-posta adresinize gönderildi",
+        "housekeepings": "Temizlik işlemleri",
+        "sentMail": "OTP e-postanıza başarıyla gönderildi",
         "password": "Şifre başarıyla ayarlandı",
-        "sentLinkMail": "Şifre sıfırlama bağlantısı başarıyla e-posta adresinize gönderildi",
-        "createPassLinkMail": "Şifre oluşturma bağlantısı başarıyla e-posta adresinize gönderildi",
-        "tokenExpired": "Jetonun süresi doldu",
-        "tokenVerified": "Jeton doğrulandı",
+        "sentLinkMail": "Şifre sıfırlama bağlantısı e-postanıza başarıyla gönderildi",
+        "createPassLinkMail": "Şifre oluşturma bağlantısı e-postanıza başarıyla gönderildi",
+        "tokenExpired": "Bağlantının süresi doldu",
+        "tokenVerified": "Bağlantı doğrulandı",
         "profile": "Profil",
-        "logout": "Logout başarılı",
+        "logout": "Çıkış Başarılı",
         "changePwd": "Şifre değiştirildi",
-        "refresh": "Refresh Token"
+        "refresh": "Yenileme Jetonu"
     },
     "failure": {
         "invalidCred": "Geçersiz giriş bilgileri",
@@ -26,18 +26,20 @@
         "emailExist": "E-posta zaten mevcut",
         "update": "Kullanıcı güncellenemedi",
         "delete": "Kullanıcı rolü silinemedi",
-        "housekeepings": "Kat hizmetleri alınamadı",
-        "invalidToken": "Geçersiz jeton",
+        "housekeepings": "Temizlik işlemleri alınamadı",
+        "invalidToken": "Geçersiz bağlantı",
         "invalidOtp": "Geçersiz OTP",
         "refresh": "Yenileme jetonu gerekli",
         "invalid": "Geçersiz veya süresi dolmuş yenileme jetonu",
         "otp": "OTP'nin süresi doldu",
-        "sentMail": "OTP e-postanıza gönderilemedi.",
+        "sentMail": "OTP e-postanıza gönderilemedi",
         "roleName": "Rol adı zaten mevcut",
         "account": "Hesap bulunamadı",
         "detail": "Kullanıcı bulunamadı",
         "profile": "Profil bulunamadı",
+        "tokenExpired": "Bağlantının süresi doldu",
         "oldPwd": "Eski şifre yanlış",
-        "sameAsPwd": "Yeni şifre eski şifreyle aynı olamaz"
+        "sameAsPwd": "Yeni şifre eski şifreyle aynı olmamalı",
+        "alreadyAcc": "Zaten hesap oluşturulmuş"
     }
 }

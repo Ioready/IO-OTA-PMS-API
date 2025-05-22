@@ -30,8 +30,8 @@ export enum ModuleName {
   RECENT_SEARCH = "recentSearch",
   LOST_FOUND = "lostAndFound",
   TASK = "task",
-  CANCEL_POLICY ="cancelPolicy"
-
+  CANCEL_POLICY ="cancelPolicy",
+  IMAGE = "image"
 }
 
 export enum CheckPropertyUrl {

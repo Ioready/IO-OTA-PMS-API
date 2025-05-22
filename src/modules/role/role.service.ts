@@ -1,7 +1,7 @@
 import { ConflictResponse, NotFoundResponse } from "../../lib/decorators";
 import { Request, Response } from "express";
 import { RoleModel, UserModel } from "../../schemas";
-import { CommonStatus, } from "../../resources";
+import { CommonStatus, UserType, } from "../../resources";
 import { Model } from "../../lib/model";
 import { Utils } from "../../lib/utils";
 
@@ -41,7 +41,9 @@ class RoleService {
 
   getRoles = async (req: Request) => {
     const query: any = req.query;
-
+    await Utils.addGroupId(query, req);
+    query.type = { $ne: UserType.ADMIN };
+    // query.status = CommonStatus.ACTIVE;
     if (query.searchText) {
       const regExp = Utils.returnRegExp(query.searchText);
       query["$or"] = [
@@ -88,7 +90,9 @@ class RoleService {
 
   getAllRoles = async (req: Request) => {
     const query = req.query;
-    query.status = CommonStatus.ACTIVE
+    query.status = CommonStatus.ACTIVE;
+    query.type = { $ne: UserType.ADMIN };
+    await Utils.addGroupId(query, req)
     const roles = await Model.findAll(RoleModel, query, { _id: 1, name: 1 }, { sort: { _id: -1 } });
     if (!roles) throw new NotFoundResponse('role:failure.list');
     return { roles };

@@ -189,18 +189,19 @@ class UtilsClass {
     };
     var redirectUrl = CheckPropertyUrl.PROPERTY, propertyId = null;
     if (user.type === "admin") {
-
       const property: any = await PropertyModel.find(obj)
       if (property.length === 1) {
         if (property[0].step === 6)
           redirectUrl = CheckPropertyUrl.DASHBOARD;
         else propertyId = property[0]._id;
       }
-      else {
+      else if (property.length === 0) {
+
         const property = await PropertyModel.create({ groupId: user.groupId, step: 1 });
         propertyId = property._id;
         await Model.findOneAndUpdate(UserModel, { _id: user.id }, { currentProperty: propertyId })
       }
+      else redirectUrl = CheckPropertyUrl.DASHBOARD;
     }
     else redirectUrl = CheckPropertyUrl.DASHBOARD;
     return { redirectUrl, propertyId: propertyId };
@@ -272,8 +273,8 @@ class UtilsClass {
 
   initialRoleCreated = async (data: any) => {
     const groupId = data.groupId;
-    const adminObj = { groupId, type: UserType.ADMIN }
-    const houseObj = { groupId, type: UserType.HOUSEKEEPING };
+    const adminObj = { groupId, type: UserType.ADMIN, name: "Admin" }
+    const houseObj = { groupId, type: UserType.HOUSEKEEPING, name: "House keeping" };
     var adminRole: any;
     adminRole = await this.RoleFind(adminObj);
     if (!adminRole)
@@ -298,6 +299,10 @@ class UtilsClass {
 
   getPropertyId = async (query: any, req: Request) => {
     query.property = req.user.currentProperty;
+  }
+
+  trimDataAndLower = (value: any) => {
+    return value.trim().toLowerCase()
   }
 
 }
