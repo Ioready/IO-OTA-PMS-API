@@ -1,5 +1,6 @@
 import mongoose, { Schema, ObjectId } from "mongoose";
 import { Utils } from "../lib/utils";
+import { RoomStatus } from "../resources";
 
 interface ITask extends Document {
 
@@ -36,7 +37,7 @@ const TaskSchema = new Schema<ITask>({
     },
     status: {
         type: String,
-        enum: ["dirty", "deep clean", "inspect", "completed"]
+        enum: Object.values(RoomStatus)
     },
 }, Utils.returnSchemaOption());
 

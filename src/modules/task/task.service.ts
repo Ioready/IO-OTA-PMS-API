@@ -1,12 +1,8 @@
 import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
-
 import { Utils } from '../../lib/utils';
 import { TaskModel } from '../../schemas';
 import { Model } from '../../lib/model';
-
-
-
 
 
 
@@ -75,8 +71,6 @@ class TaskService {
         if (!tasks) throw new NotFoundResponse('task:failure.list')
         return { tasks: tasks.data, total: tasks.total }
     }
-
-
 
 
 }

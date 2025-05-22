@@ -36,6 +36,7 @@ i18next.use(Backend).init({
     ModuleName.RECENT_SEARCH,
     ModuleName.LOST_FOUND,
     ModuleName.TASK,
+    ModuleName.CANCEL_POLICY,
   ],
   defaultNS: ModuleName.USER,
   backend: {

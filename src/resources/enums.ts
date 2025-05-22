@@ -30,6 +30,7 @@ export enum ModuleName {
   RECENT_SEARCH = "recentSearch",
   LOST_FOUND = "lostAndFound",
   TASK = "task",
+  CANCEL_POLICY ="cancelPolicy"
 
 }
 
@@ -50,4 +51,13 @@ export enum RoomStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
   COMPLETED = "completed",
+}
+
+export enum CancelPolicy {
+  CUSTOM = "custom",
+  ENTIRE_AMOUNT = "amount",
+  PERCENTAGE = "percentage",
+  NO_PENALTY = "no-penalty",
+  NIGHT = "night",
+
 }
