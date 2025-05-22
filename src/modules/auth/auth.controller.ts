@@ -54,7 +54,10 @@ class AuthController {
     @Post("/set-password")
     async setPassword(req: Request, res: Response) {
         const result: any = await AuthService.setPassword(req, res);
+        console.log(result);
+
         if (result) Responder.sendSuccessMessage('user:success.sentMail', res);
+
         else Responder.sendSuccessMessage('user:failure.sentMail', res)
     }
 

@@ -51,7 +51,7 @@ export const protect = asyncHandler(
 			if (err.name === 'TokenExpiredError') {
 				throw new ForbiddenResponse('user:failure.tokenExpired')
 			} else {
-				throw new UnauthorizedResponse('user:failure.invalidToken')
+				throw err;
 			}
 		}
 	}

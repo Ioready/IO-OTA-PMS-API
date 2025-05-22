@@ -65,7 +65,7 @@ class AuthService {
         try {
             const { token: rawToken, type: checkType } = req.query;
             const token = await TokenModel.findOne({ token: rawToken });
-            if (!token) throw new GoneResponse('user:failure.invalidToken')
+            if (!token) throw new GoneResponse('user:failure.tokenExpired')
             const decoded = Utils.verifyToken(rawToken);
             const { id, type } = (decoded as { id: string, type: string });
 
@@ -124,31 +124,51 @@ class AuthService {
     }
 
     setPassword = async (req: Request, res: Response) => {
-        const { email, password } = req.body;
+        try {
+            const { email, password } = req.body;
+            const { token: rawToken } = req.query;
+            console.log(rawToken);
 
-        let validateErr: any = bodyValidation(["email", "password"], req, res)
-        if (!validateErr) return;
+            const token = await TokenModel.findOne({ token: rawToken });
+            if (!token)  throw new GoneResponse('user:failure.tokenExpired')
+            
 
-        const user: any = (await UserModel.findOne({ email: Utils.trimDataAndLower(email) }).select("+password"));
-        if (!user) throw new NotFoundResponse('user:failure.account')
+            const decoded = Utils.verifyToken(rawToken);
+            console.log({ decoded });
 
-        if (user.password) {
-            let checkPwd = await Utils.comparePassword(password, user?.password);
-            if (checkPwd) throw new BadRequestResponse('user:failure.sameAsPwd')
+            let validateErr: any = bodyValidation(["email", "password"], req, res)
+            if (!validateErr) return;
+
+            const user: any = (await UserModel.findOne({ email: Utils.trimDataAndLower(email) }).select("+password"));
+            if (!user) throw new NotFoundResponse('user:failure.account')
+
+            if (user.password) {
+                let checkPwd = await Utils.comparePassword(password, user?.password);
+                if (checkPwd) throw new BadRequestResponse('user:failure.sameAsPwd')
+            }
+
+            user.password = await Utils.encryptPassword(password);
+            user.isVerified = true;
+            user.setPassword = true;
+            user.accountCreated = true;
+            await user.save({ validateBeforeSave: false });
+            await this.sendOtp(user);
+            await DeviceModel.deleteMany({ user: user._id })
+             await TokenModel.deleteOne({ token: rawToken })
+            // const deviceId = await Utils.createDevice(user, req, res);
+
+            // const tokenDoc = Utils.generateToken(user, res);
+            // await Utils.updateKeepsignToken(user, deviceId, res)
+            return user;
+        } catch (err) {
+
+            if (err.name === 'TokenExpiredError') {
+                throw new GoneResponse('user:failure.tokenExpired')
+            }
+            if (err instanceof GoneResponse) {
+                throw err;
+            }
         }
-
-        user.password = await Utils.encryptPassword(password);
-        user.isVerified = true;
-        user.setPassword = true;
-        user.accountCreated = true;
-        await user.save({ validateBeforeSave: false });
-        await this.sendOtp(user);
-        await DeviceModel.deleteMany({ user: user._id })
-        // const deviceId = await Utils.createDevice(user, req, res);
-
-        // const tokenDoc = Utils.generateToken(user, res);
-        // await Utils.updateKeepsignToken(user, deviceId, res)
-        return user;
     }
 
 
