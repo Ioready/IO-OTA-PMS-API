@@ -83,7 +83,7 @@ class AuthService {
             if (err.name === 'TokenExpiredError') {
                 throw new GoneResponse('user:failure.tokenExpired')
             } else {
-                throw new NotFoundResponse('user:failure.invalidToken')
+                throw new GoneResponse('user:failure.tokenExpired')
             }
         }
     }
@@ -127,14 +127,12 @@ class AuthService {
         try {
             const { email, password } = req.body;
             const { token: rawToken } = req.query;
-            console.log(rawToken);
 
             const token = await TokenModel.findOne({ token: rawToken });
             if (!token)  throw new GoneResponse('user:failure.tokenExpired')
             
 
-            const decoded = Utils.verifyToken(rawToken);
-            console.log({ decoded });
+            await Utils.verifyToken(rawToken);
 
             let validateErr: any = bodyValidation(["email", "password"], req, res)
             if (!validateErr) return;
