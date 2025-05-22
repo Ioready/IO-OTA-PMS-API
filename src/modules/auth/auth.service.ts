@@ -159,11 +159,12 @@ class AuthService {
             // await Utils.updateKeepsignToken(user, deviceId, res)
             return user;
         } catch (err) {
+console.log(err);
 
             if (err.name === 'TokenExpiredError') {
                 throw new GoneResponse('user:failure.tokenExpired')
             }
-            if (err instanceof GoneResponse) {
+            if (err instanceof GoneResponse || err instanceof NotFoundResponse || err instanceof BadRequestResponse) {
                 throw err;
             }
         }
