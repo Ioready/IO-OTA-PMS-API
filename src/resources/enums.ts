@@ -28,7 +28,8 @@ export enum ModuleName {
   RATE_PLAN = "ratePlan",
   ROOM = "room",
   RECENT_SEARCH = "recentSearch",
-  LOST_FOUND = "lostAndFound"
+  LOST_FOUND = "lostAndFound",
+  IMAGE = "image"
 }
 
 export enum CheckPropertyUrl {

@@ -1,0 +1,11 @@
+{
+    "success": {
+        "signature": "Signature",
+        "delete": "Image deleted"
+    },
+    "failure": {
+        "delete": "Unable to delete image",
+        "detail": "Image not found",
+        "invalid": "Invalid data"
+    }
+}

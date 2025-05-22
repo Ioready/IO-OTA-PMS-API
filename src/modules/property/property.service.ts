@@ -24,7 +24,7 @@ class PropertyService {
         return property
     }
 
-    getProperty = async (id: any) => {        
+    getProperty = async (id: any) => {
         const property = await Model.findOne(PropertyModel, { _id: id });
         if (!property) throw new NotFoundResponse('property:failure.detail')
         return property
@@ -32,12 +32,14 @@ class PropertyService {
 
     getProperties = async (req: Request) => {
         const query: any = req.query;
+        await Utils.addGroupId(query, req)
         let projection: any;
         projection = {
             name: 1,
             ownerInfo: 1,
             address: 1,
-            room: 1
+            room: 1,
+            step: 1
         }
         if (query.searchText) {
             const regExp = Utils.returnRegExp(query.searchText);
@@ -49,7 +51,7 @@ class PropertyService {
             ];
             delete query.searchText;
         }
-        query.step = 6;
+        // query.step = 6;
         const properties = await Model.find(PropertyModel, query, projection);
         if (!properties) throw new NotFoundResponse('property:failure.list')
         return { properties: properties.data, total: properties.total }
@@ -62,7 +64,10 @@ class PropertyService {
     }
 
     switchProperty = async (id: any, userId: any) => {
-        await this.getProperty(id)
+        const prop = await this.getProperty(id)
+        if (prop.step != 6) {
+            throw new NotFoundResponse('property:failure.switch')
+        }
         const property = await Model.findOneAndUpdate(UserModel, { _id: userId }, { currentProperty: id });
         if (!property) throw new NotFoundResponse('property:failure.switch')
         return property

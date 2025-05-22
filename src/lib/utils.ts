@@ -189,18 +189,19 @@ class UtilsClass {
     };
     var redirectUrl = CheckPropertyUrl.PROPERTY, propertyId = null;
     if (user.type === "admin") {
-
       const property: any = await PropertyModel.find(obj)
       if (property.length === 1) {
         if (property[0].step === 6)
           redirectUrl = CheckPropertyUrl.DASHBOARD;
         else propertyId = property[0]._id;
       }
-      else {
+      else if (property.length === 0) {
+
         const property = await PropertyModel.create({ groupId: user.groupId, step: 1 });
         propertyId = property._id;
         await Model.findOneAndUpdate(UserModel, { _id: user.id }, { currentProperty: propertyId })
       }
+      else redirectUrl = CheckPropertyUrl.DASHBOARD;
     }
     else redirectUrl = CheckPropertyUrl.DASHBOARD;
     return { redirectUrl, propertyId: propertyId };
