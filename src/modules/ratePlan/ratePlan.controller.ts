@@ -27,7 +27,7 @@ class RatePlanController {
         if (result) Responder.sendSuccessMessage('ratePlan:success.update', res);
     }
 
-    @Get("/")
+    @Get("/all")
     @use(checkProperty)
     @use(protect)
     async getAllRatePlans(req: Request, res: Response) {

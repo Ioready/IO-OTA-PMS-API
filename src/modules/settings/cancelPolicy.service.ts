@@ -32,6 +32,7 @@ class CancelPolicyService {
     }
     listCancelPolicy = async (req: Request) => {
         const query: any = req.query;
+        await Utils.getPropertyId(query,req)
         if (query.searchText) {
             const regExp = Utils.returnRegExp(query.searchText);
             query["$or"] = [
@@ -44,6 +45,13 @@ class CancelPolicyService {
         const cancelPolicy = await Model.find(CancelPolicyModel, query, { name: 1, type: 1, description: 1, status: 1 });
         if (!cancelPolicy) throw new NotFoundResponse('cancelPolicy:failure.list')
         return { cancelPolicy }
+    }
+
+    deleteCancelPolicy = async (id: any) => {
+        await this.detailCancelPolicy(id)
+        const cancelPolicy = await Model.findOneAndDelete(CancelPolicyModel, { _id: id });
+        if (!cancelPolicy) throw new NotFoundResponse('cancelPolicy:failure.delete')
+        return { cancelPolicy };
     }
 
 

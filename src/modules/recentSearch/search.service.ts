@@ -24,7 +24,7 @@ class RecentSearchService {
 
 
     getRecentSearch = async () => {
-
+        
         const recentSearch = await Model.findAll(RecentSearchaModel, {}, { name: 1, type: 1 }, { limit: 3, sort: { _id: -1 } });
         if (!recentSearch) throw new NotFoundResponse('recentSearch:failure.list');
         return { recentSearch };

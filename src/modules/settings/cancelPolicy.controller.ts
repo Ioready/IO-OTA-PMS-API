@@ -42,5 +42,12 @@ class CancelPolicyController {
         if (result) Responder.sendSuccessData(result, 'cancelPolicy:success.list', res);
     }
 
+    @Delete("/:id")
+        @use(checkProperty)
+        @use(protect)
+        async deleteCancelPolicy(req: Request, res: Response) {
+            const result = await cancelPolicyService.deleteCancelPolicy(req.params.id);
+            if (result) Responder.sendSuccessMessage('cancelPolicy:success.delete', res);
+        }
 
 }

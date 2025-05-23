@@ -39,6 +39,7 @@ class TaskService {
 
     getAllTask = async (req: Request) => {
         const query: any = req.query;
+        await Utils.getPropertyId(query,req)
         if (query.searchText) {
             const regExp = Utils.returnRegExp(query.searchText);
             query["$or"] = [
