@@ -22,8 +22,14 @@ class FloorService {
 
     editFloor = async (req: Request) => {
         const floorId = req.params.id;
+        const data = req.body;
         await this.getFloor(floorId)
-        const floor = await Model.findOneAndUpdate(FloorModel, { _id: floorId }, req.body);
+        if (data?.manager) {
+            const manager = await Model.findOne(UserModel, { _id: data?.manager })
+            if (!manager) throw new NotFoundResponse('user:failure.manager')
+        }
+
+        const floor = await Model.findOneAndUpdate(FloorModel, { _id: floorId }, data);
         if (!floor) throw new NotFoundResponse('floor:failure.update')
         return floor
     }
@@ -84,10 +90,10 @@ class FloorService {
         const query: any = req.query;
         query.isDeleted = false;
         await Utils.getPropertyId(query, req)
-        
+
         const floors = await Model.findAll(FloorModel, query, { _id: 1, name: 1 }, { sort: { _id: -1 } })
         if (!floors) throw new NotFoundResponse('user:failure.list');
-        return floors ;
+        return floors;
     }
 
 }
