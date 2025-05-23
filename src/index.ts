@@ -17,6 +17,9 @@ import "./modules/ratePlan/ratePlan.controller"
 import "./modules/recentSearch/search.controller"
 import "./modules/user/user.controller"
 import "./modules/lostAndFound/lostAndFound.controller"
+import "./modules/task/task.controller"
+import "./modules/settings/cancelPolicy.controller"
+import "./modules/cloudinary/cloudinary.controller"
 import errorHandler from "./middleware/error";
 import DBconnection from "./config/db";
 import { config } from "./config/env.config";

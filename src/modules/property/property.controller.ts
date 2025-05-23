@@ -21,7 +21,7 @@ class PropertyController {
     @use(protect)
     async editProperty(req: Request, res: Response) {
         const result = await PropertyService.editProperty(req);
-        if (result) Responder.sendSuccessMessage('property:success.update', res)
+        if (result.property) Responder.sendSuccessMessage(result.msg, res)
     }
 
 

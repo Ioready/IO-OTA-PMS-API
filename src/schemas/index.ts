@@ -10,3 +10,4 @@ export * from './ratePlan.schema';
 export * from './recentSearch.schema';
 export * from './room.schema';
 export * from './roomType.schema';
+export * from './task.schema';

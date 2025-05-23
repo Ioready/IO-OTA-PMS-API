@@ -28,7 +28,10 @@ export enum ModuleName {
   RATE_PLAN = "ratePlan",
   ROOM = "room",
   RECENT_SEARCH = "recentSearch",
-  LOST_FOUND = "lostAndFound"
+  LOST_FOUND = "lostAndFound",
+  TASK = "task",
+  CANCEL_POLICY ="cancelPolicy",
+  IMAGE = "image"
 }
 
 export enum CheckPropertyUrl {
@@ -48,4 +51,13 @@ export enum RoomStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
   COMPLETED = "completed",
+}
+
+export enum CancelPolicy {
+  CUSTOM = "custom",
+  ENTIRE_AMOUNT = "amount",
+  PERCENTAGE = "percentage",
+  NO_PENALTY = "no-penalty",
+  NIGHT = "night",
+
 }

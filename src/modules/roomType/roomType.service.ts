@@ -20,14 +20,18 @@ class RoomTypeService {
 
     editRoomType = async (req: Request) => {
         const roomTypeId = req.params.id
-        await this.detailRoomType(roomTypeId)
+        await this.detailRoomType(req.params.id)
         const roomType = await Model.findOneAndUpdate(RoomTypeModel, { _id: roomTypeId }, req.body);
         if (!roomType) throw new NotFoundResponse('roomType:failure.update')
         return { roomType };
     }
 
     detailRoomType = async (id: any) => {
+        console.log("hiii");
+        
         const roomType = await Model.findOne(RoomTypeModel, { _id: id });
+        console.log(roomType);
+        
         if (!roomType) throw new NotFoundResponse('roomType:failure.detail')
         return { roomType };
     }
@@ -40,11 +44,11 @@ class RoomTypeService {
 
     listRoomType = async (req: Request) => {
         const query: any = req.query;
+        await Utils.getPropertyId(query,req)
         if (query.searchText) {
             const regExp = Utils.returnRegExp(query.searchText);
             query["$or"] = [
                 { name: regExp },
-                { "manager.name": regExp },
             ];
             delete query.searchText;
         }
@@ -83,6 +87,7 @@ class RoomTypeService {
 
     getAllRoomTypes = async (req: Request) => {
         const query: any = req.query;
+        await Utils.getPropertyId(query, req)
         if (query.searchText) {
             const regExp = Utils.returnRegExp(query.searchText);
             query["$or"] = [

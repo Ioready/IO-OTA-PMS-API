@@ -1,5 +1,5 @@
 import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
-import { Request, Response } from "express"
+import { Request } from "express"
 import { Model } from '../../lib/model';
 import { Utils } from '../../lib/utils';
 import { LostAndFoundModel } from '../../schemas';
@@ -8,8 +8,8 @@ import { LostAndFoundModel } from '../../schemas';
 
 class LostAndFoundService {
 
-    // @ts-ignore
-    createLostAndFound = async (req: Request, res: Response) => {
+
+    createLostAndFound = async (req: Request) => {
         const data = req.body
         await Utils.addPropertyId(data, req)
         const lostAndFound = await LostAndFoundModel.create(data);

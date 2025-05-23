@@ -1,0 +1,19 @@
+{
+  "success": {
+    "create": "Cancel policy created",
+    "update": "Cancel policy updated",
+    "detail": "Cancel policy",
+    "list": "Cancel policy",
+    "delete": "Cancel policy deleted"
+  },
+  "failure": {
+    "create": "Unable to create Cancel policy",
+    "update": "Unable to update Cancel policy",
+    "detail": "Cancel policy not found",
+    "list": "Unable to get Cancel policy",
+    "delete": "Unable to delete Cancel policy",
+    "percentage":"Percentage is required",
+    "custom": "Both number of day before and percentage is required"
+  }
+}
+

@@ -26,7 +26,7 @@ class RoomTypeController {
         if (result) Responder.sendSuccessMessage('roomType:success.update', res);
     }
 
-    @Get("/")
+    @Get("/all")
     @use(checkProperty)
     @use(protect)
     async getAllRoomTypes(req: Request, res: Response) {
@@ -52,6 +52,7 @@ class RoomTypeController {
 
     @Get("/")
     @use(checkProperty)
+    @use(protect)
     async listRoomType(req: Request, res: Response) {
         const result = await RoomTypeService.listRoomType(req);
         if (result) Responder.sendSuccessData(result, 'roomType:success.list', res);

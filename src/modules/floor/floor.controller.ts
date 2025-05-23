@@ -26,6 +26,14 @@ class FloorController {
         const result = await FloorService.editFloor(req);
         if (result) Responder.sendSuccessMessage('floor:success.update', res)
     }
+    
+     @Get("/all")
+    @use(checkProperty)
+    @use(protect)
+    async getAllFloors(req: Request, res: Response) {
+        const floors = await FloorService.getAllFloors(req);
+        if (floors) Responder.sendSuccessData({ floors }, 'floor:success.list', res)
+    }
 
     @Get("/:id")
     @use(checkProperty)

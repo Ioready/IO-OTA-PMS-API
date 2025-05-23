@@ -138,7 +138,7 @@ class ModelClass {
     }
 
     findAll = async <T>(schemaModel: any, query: any, projection: any, options: mongoose.QueryOptions<T> = {}) => {
-
+        
         return await schemaModel.find(query, projection, {
             ...options,
         })

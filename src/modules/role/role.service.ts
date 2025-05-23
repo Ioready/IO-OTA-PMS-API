@@ -90,9 +90,11 @@ class RoleService {
 
   getAllRoles = async (req: Request) => {
     const query = req.query;
+    
     query.status = CommonStatus.ACTIVE;
     query.type = { $ne: UserType.ADMIN };
     await Utils.addGroupId(query, req)
+
     const roles = await Model.findAll(RoleModel, query, { _id: 1, name: 1 }, { sort: { _id: -1 } });
     if (!roles) throw new NotFoundResponse('role:failure.list');
     return { roles };
