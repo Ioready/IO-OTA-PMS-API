@@ -1,5 +1,5 @@
 
-import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
+import { ConflictResponse, ForbiddenResponse, NotFoundResponse } from '../../lib/decorators';
 import { Request, Response } from "express"
 import { PropertyModel, UserModel } from '../../schemas';
 import { Model } from '../../lib/model';
@@ -19,9 +19,22 @@ class PropertyService {
     }
 
     editProperty = async (req: Request) => {
-        const property = await Model.findOneAndUpdate(PropertyModel, { _id: req.params.id }, req.body);
-        if (!property) throw new NotFoundResponse('property:failure.detail')
-        return property
+        const propId = req.params.id, data = req.body;
+        const prop = await this.getProperty(propId);
+        var currentStep = prop.step;
+        var msg = (data.step === 1 && currentStep === 1) ? 'property:success.create' : 'property:success.update';
+
+        if (currentStep === 6 || currentStep >= data.step) {
+            delete data.step;
+        } else {
+            let cs: any, errHas: boolean = true;;
+            cs = currentStep === data.step ? currentStep : currentStep + 1;
+            if (cs === data.step) errHas = false;
+            if (errHas) throw new ForbiddenResponse(`property:failure.update`)
+        }
+        const property = await Model.findOneAndUpdate(PropertyModel, { _id: propId }, data);
+        if (!property) throw new NotFoundResponse('property:failure.update')
+        return { property, msg }
     }
 
     getProperty = async (id: any) => {

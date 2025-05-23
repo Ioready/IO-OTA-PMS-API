@@ -298,7 +298,7 @@ class UtilsClass {
   }
 
   getPropertyId = async (query: any, req: Request) => {
-    query.property = req.user.currentProperty;
+    query.property = req.user.currentProperty;    
   }
 
   trimDataAndLower = (value: any) => {

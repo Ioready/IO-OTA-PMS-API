@@ -40,6 +40,7 @@
         "tokenExpired": "Link has expired",
         "oldPwd": "Old password is incorrect",
         "sameAsPwd": "New password must be different from old password",
-        "alreadyAcc": "Already account created"
+        "alreadyAcc": "Already account created",
+        "manager": "Manager not found"
     }
 }
