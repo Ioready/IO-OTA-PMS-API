@@ -53,6 +53,14 @@ class CancelPolicyService {
         if (!cancelPolicy) throw new NotFoundResponse('cancelPolicy:failure.delete')
         return { cancelPolicy };
     }
+    getAllCancelPolicy = async (req: Request) => {
+        const query = req.query;
+        query.status = CommonStatus.ACTIVE;
+        await Utils.addGroupId(query, req)
+        const cancelPolicy = await Model.findAll(CancelPolicyModel, query, { _id: 1, name: 1 }, { sort: { _id: -1 } });
+        if (!cancelPolicy) throw new NotFoundResponse('cancelPolicy:failure.list');
+        return { cancelPolicy };
+      };
 
 
 }

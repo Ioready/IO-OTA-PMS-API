@@ -26,6 +26,14 @@ class CancelPolicyController {
         if (result) Responder.sendSuccessMessage('cancelPolicy:success.update', res);
     }
 
+    @Get("/all")
+    @use(checkProperty)
+    @use(protect)
+    async getAllCancelPolicy(req: Request, res: Response) {
+        const result = await cancelPolicyService.getAllCancelPolicy(req);
+        if (result) Responder.sendSuccessData(result, 'cancelPolicy:success.list', res);
+    }
+
     @Get("/:id")
     @use(checkProperty)
     @use(protect)
@@ -43,11 +51,12 @@ class CancelPolicyController {
     }
 
     @Delete("/:id")
-        @use(checkProperty)
-        @use(protect)
-        async deleteCancelPolicy(req: Request, res: Response) {
-            const result = await cancelPolicyService.deleteCancelPolicy(req.params.id);
-            if (result) Responder.sendSuccessMessage('cancelPolicy:success.delete', res);
-        }
+    @use(checkProperty)
+    @use(protect)
+    async deleteCancelPolicy(req: Request, res: Response) {
+        const result = await cancelPolicyService.deleteCancelPolicy(req.params.id);
+        if (result) Responder.sendSuccessMessage('cancelPolicy:success.delete', res);
+    }
+
 
 }
