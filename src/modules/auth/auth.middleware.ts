@@ -28,7 +28,8 @@ export const protect = asyncHandler(
 			const decoded: any = Utils.verifyToken(token)
 			const { id, deviceId } = (decoded as { id: string, deviceId: string });
 			const user: any = await UserModel.findById(id);
-
+      
+	   
 			if (!user) {
 				throw new UnauthorizedResponse(Msg.invalidCred);
 			}
