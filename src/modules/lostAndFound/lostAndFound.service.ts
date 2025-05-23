@@ -1,5 +1,5 @@
 import { ConflictResponse, NotFoundResponse } from '../../lib/decorators';
-import { Request, Response } from "express"
+import { Request } from "express"
 import { Model } from '../../lib/model';
 import { Utils } from '../../lib/utils';
 import { LostAndFoundModel } from '../../schemas';
